@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">AndroidQuestionsApp</string>
+    <string name="no_valid_login">Неправильний логін або пароль</string>
+    <string name="clear" />
+    <string name="input_login">Введіть логін</string>
+    <string name="input_password">Введіть пароль</string>
+    <string name="registration">Зареєструватися</string>
+    <string name="authorization">Увійти</string>
+
 </resources>
