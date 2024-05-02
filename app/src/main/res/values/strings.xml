@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">AndroidQuestionsApp</string>
+    <string name="in_valid">Невірний логін або пароль</string>
+    <string name="in_valid_email">Невірний формат пошти</string>
+    <string name="valid" />
+    <string name="input_login">Введіть логін</string>
+    <string name="input_password">Введіть пароль</string>
+    <string name="input_email">Введіть пошту</string>
+    <string name="sign_up">Зареєструватися</string>
+    <string name="sign_in">Увійти</string>
+    <string name="question_junior">Junior</string>
+    <string name="question_middle">Middle</string>
+    <string name="question_senior">Senior</string>
+    <string name="button_next">Далі</string>
+    <string name="button_back">Назад</string>
+    <string name="result">Результат</string>
+
 </resources>
