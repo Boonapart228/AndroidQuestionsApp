@@ -1,2 +1,0 @@
-package com.balan.androidquestionsapp.presentation.registration_screen.components
-

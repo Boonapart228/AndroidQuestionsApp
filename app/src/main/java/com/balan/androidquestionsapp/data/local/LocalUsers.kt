@@ -1,8 +1,21 @@
 package com.balan.androidquestionsapp.data.local
 
-import com.balan.androidquestionsapp.domain.model.Users
+import com.balan.androidquestionsapp.domain.models.QuestionsScore
+import com.balan.androidquestionsapp.domain.models.Users
 
-val localUsers: List<Users> = listOf(
-    Users(login = "Kolya", password = "123", email = "email1@gmail.com"),
-    Users(login = "Dima", password = "546", email = "email2@gmail.com")
+val localUsers: MutableList<Users> = mutableListOf(
+    Users(
+        name = "Kolya", password = "123", email = "balan@gmail.com", QuestionsScore(
+            junior = 10,
+            middle = 6,
+            senior = 10
+        )
+    ),
+    Users(
+        name = "Dima", password = "546", email = "email@gmail.com", QuestionsScore(
+            junior = 0,
+            middle = 0,
+            senior = 0
+        )
+    )
 )
