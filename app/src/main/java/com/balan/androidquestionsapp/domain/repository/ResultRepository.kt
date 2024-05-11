@@ -1,6 +1,8 @@
 package com.balan.androidquestionsapp.domain.repository
 
+import com.balan.androidquestionsapp.domain.models.QuestionLevel
+
 interface ResultRepository {
-    fun getQuestionSize(): Int
-    fun getQuestionScore(): Int
+    fun getQuestionSize(question : QuestionLevel): Int
+    fun getQuestionScore(question : QuestionLevel): Int?
 }

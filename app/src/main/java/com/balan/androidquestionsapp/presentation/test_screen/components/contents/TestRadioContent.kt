@@ -27,7 +27,7 @@ import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
-fun TestRadio(
+fun TestRadioContent(
     title: String,
     selectedAnswer: Answer?,
     answers: List<Answer>,
@@ -62,7 +62,7 @@ fun TestRadio(
                 fontSize = LocalDimen.current.questionTitleTextSize,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight)) // Add space between text and answers
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16)) // Add space between text and answers
             answers.forEach { answer ->
                 Row(
                     modifier = Modifier
@@ -79,7 +79,7 @@ fun TestRadio(
                         selected = selectedAnswer == answer,
                         onClick = { onSelectedAnswerClick(answer) }
                     )
-                    Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth))
+                    Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
                     Text(
                         text = answer.title,
                         modifier = Modifier.fillMaxWidth()
@@ -97,7 +97,7 @@ fun TestRadio(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewRadio() {
-    TestRadio(
+    TestRadioContent(
         modifier = Modifier,
         selectedAnswer = Answer(true, "2"),
         answers = listOf(

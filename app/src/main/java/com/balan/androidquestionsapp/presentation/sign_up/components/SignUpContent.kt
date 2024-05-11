@@ -47,7 +47,7 @@ fun SignUpContent(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = { TopBar(onSignInClick = onSignInClick,
+        topBar = { TopBar(onClick = onSignInClick,
             imageVector = Icons.Filled.ArrowBack) }
     ) {
         Box(modifier = Modifier.padding(it))
@@ -70,7 +70,7 @@ fun SignUpContent(
                 ) {
                     Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop64))
 
-                    SignUpOutlineTextField(
+                    SignUpTextField(
                         value = state.email,
                         label = R.string.input_email,
                         onValueChange = setEmail,
@@ -79,7 +79,7 @@ fun SignUpContent(
 
                     Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
 
-                    SignUpOutlineTextField(
+                    SignUpTextField(
                         value = state.password,
                         label = R.string.input_password,
                         onValueChange = setPassword,
@@ -88,7 +88,7 @@ fun SignUpContent(
 
                     Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
 
-                    SignUpOutlineTextField(
+                    SignUpTextField(
                         value = state.name,
                         label = R.string.input_login,
                         onValueChange = setLogin,
@@ -119,7 +119,7 @@ fun SignUpContent(
 
 
 @Composable
-fun SignUpOutlineTextField(
+fun SignUpTextField(
     value: String,
     label: Int,
     onValueChange: (String) -> Unit,

@@ -12,19 +12,19 @@ import com.balan.androidquestionsapp.presentation.sign_up.components.SignUpViewM
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel,
-    navigateSignIn: () -> Unit
+    navigateToSignIn: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
-                is SignUpNavigationEvent.NavigationSignIn -> navigateSignIn()
+                is SignUpNavigationEvent.NavigationToSignIn -> navigateToSignIn()
             }
         }
     }
     SignUpContent(
         state = state,
-        setLogin = viewModel::setLogin,
+        setLogin = viewModel::setName,
         setPassword = viewModel::setPassword,
         setEmail = viewModel::setEmail,
         onSignUpClick = viewModel::onSignUpClick,

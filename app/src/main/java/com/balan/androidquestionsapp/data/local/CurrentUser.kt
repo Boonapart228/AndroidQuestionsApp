@@ -1,6 +1,6 @@
 package com.balan.androidquestionsapp.data.local
 
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
-import com.balan.androidquestionsapp.domain.models.Users
+import com.balan.androidquestionsapp.domain.models.User
 
-var currentUser = Users("", "", "", QuestionsScore(junior = 0, middle = 0, senior = 0))
+var currentUser = User("", "", "", QuestionsScore(junior = null, middle = null, senior = null))

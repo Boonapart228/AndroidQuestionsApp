@@ -1,10 +1,9 @@
 package com.balan.androidquestionsapp.data
 
-import android.util.Log
 import com.balan.androidquestionsapp.data.local.currentUser
 import com.balan.androidquestionsapp.data.local.localUsers
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
-import com.balan.androidquestionsapp.domain.models.Users
+import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.repository.AuthRepository
 
@@ -13,7 +12,6 @@ class AuthRepositoryImpl : AuthRepository {
         val user = localUsers.find { it.name == login && it.password == password }
         user?.let {
             currentUser = it
-            Log.d("Creat","$currentUser")
             return true
         }
         return false
@@ -21,7 +19,7 @@ class AuthRepositoryImpl : AuthRepository {
 
 
     override fun signUp(login: String, password: String, email: String): Validation {
-        val newUser = Users(
+        val newUser = User(
             name = login,
             password = password,
             email = email,
@@ -32,7 +30,7 @@ class AuthRepositoryImpl : AuthRepository {
         return signUpResult
     }
 
-    private fun isEmailAvailableForRegistration(newUser: Users): Validation {
+    private fun isEmailAvailableForRegistration(newUser: User): Validation {
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newUser.email).matches()) {
             return Validation.INVALID_EMAIL
         }
@@ -43,5 +41,5 @@ class AuthRepositoryImpl : AuthRepository {
         return Validation.VALID
     }
 
-
+    override fun adminAccess(password: String): Boolean = password == "qwe"
 }

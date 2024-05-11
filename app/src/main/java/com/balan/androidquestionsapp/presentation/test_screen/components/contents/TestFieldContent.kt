@@ -27,7 +27,7 @@ import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
-fun TestField(
+fun TestFieldContent(
     title: String,
     answer: String,
     setAnswer: (String) -> Unit,
@@ -83,5 +83,5 @@ fun TestField(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewTextField() {
-    TestField(title = "", answer = "", setAnswer = { }, modifier = Modifier)
+    TestFieldContent(title = "", answer = "", setAnswer = { }, modifier = Modifier)
 }

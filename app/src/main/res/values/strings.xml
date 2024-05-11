@@ -2,6 +2,7 @@
     <string name="app_name">AndroidQuestionsApp</string>
     <string name="in_valid">Невірний логін або пароль</string>
     <string name="in_valid_email">Невірний формат пошти</string>
+    <string name="in_valid_admin_password">Невірний пароль</string>
     <string name="valid" />
     <string name="input_login">Введіть логін</string>
     <string name="input_password">Введіть пароль</string>
@@ -14,5 +15,6 @@
     <string name="button_next">Далі</string>
     <string name="button_back">Назад</string>
     <string name="result">Результат</string>
+    <string name="results_panel">панель результатів</string>
 
 </resources>

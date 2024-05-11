@@ -6,4 +6,6 @@ enum class Screens(val screen: String) {
     MAIN("MainScreen"),
     TEST("TestScreen"),
     RESULT("ResultScreen"),
+    ADMIN("AdminScreen"),
+    SCORE("ScoreScreen"),
 }

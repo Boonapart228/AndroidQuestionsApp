@@ -9,14 +9,16 @@ import com.balan.androidquestionsapp.presentation.main_screen.components.MainVie
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    navigationTest: () -> Unit,
-    navigationSignIn: () -> Unit
+    navigateToTest: () -> Unit,
+    navigateToSignIn: () -> Unit,
+    navigateToAdmin: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
-                is MainNavigationEvent.NavigationTest -> navigationTest()
-                is MainNavigationEvent.NavigationSignIn -> navigationSignIn()
+                is MainNavigationEvent.NavigationToTest -> navigateToTest()
+                is MainNavigationEvent.NavigationToSignIn -> navigateToSignIn()
+                is MainNavigationEvent.NavigationToAdmin -> navigateToAdmin()
             }
         }
     }
@@ -25,5 +27,8 @@ fun MainScreen(
         onTestMiddleClick = viewModel::onTestMiddleClick,
         onTestSeniorClick = viewModel::onTestSeniorClick,
         onSignInClick = viewModel::onSignInClick,
-    )
+        onAdminJuniorDoubleClick = viewModel::onAdminJuniorDoubleClick,
+        onAdminMiddleDoubleClick = viewModel::onAdminMiddleDoubleClick,
+        onAdminSeniorDoubleClick = viewModel::onAdminDoubleSeniorClick,
+        )
 }

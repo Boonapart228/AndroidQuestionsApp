@@ -21,7 +21,7 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    onSignInClick: () -> Unit,
+    onClick: () -> Unit,
     imageVector: ImageVector,
 ) {
     TopAppBar(
@@ -32,7 +32,7 @@ fun TopBar(
         ),
         title = {},
         navigationIcon = {
-            IconButton(onClick = onSignInClick) {
+            IconButton(onClick = onClick) {
                 Icon(
                     imageVector = imageVector,
                     contentDescription = null,

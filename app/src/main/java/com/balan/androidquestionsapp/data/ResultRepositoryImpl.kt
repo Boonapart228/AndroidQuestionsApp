@@ -1,7 +1,5 @@
 package com.balan.androidquestionsapp.data
 
-import android.util.Log
-import com.balan.androidquestionsapp.data.local.currentQuestionLevel
 import com.balan.androidquestionsapp.data.local.currentUser
 import com.balan.androidquestionsapp.data.local.juniorQuestion
 import com.balan.androidquestionsapp.data.local.middleQuestion
@@ -12,25 +10,24 @@ import com.balan.androidquestionsapp.domain.repository.ResultRepository
 import com.google.gson.Gson
 
 class ResultRepositoryImpl() : ResultRepository {
-    override fun getQuestionSize(): Int {
+    override fun getQuestionSize(question: QuestionLevel): Int {
         val gson = Gson()
-        val json = when (currentQuestionLevel) {
+        val json = when (question) {
             QuestionLevel.JUNIOR -> juniorQuestion
             QuestionLevel.MIDDLE -> middleQuestion
             QuestionLevel.SENIOR -> seniorQuestion
+            else -> juniorQuestion
         }
-        val sizeQuestion = gson.fromJson(json, Array<QuestionsItem>::class.java).toList()
-        return sizeQuestion.size
+        return gson.fromJson(json, Array<QuestionsItem>::class.java).size
     }
 
-    override fun getQuestionScore(): Int {
-        Log.d("Creat", "!!! ${currentUser.questions.junior}")
-        Log.d("Creat", "!!! ${currentUser.email}")
 
-        return when (currentQuestionLevel) {
-            QuestionLevel.JUNIOR -> currentUser.questions.junior
-            QuestionLevel.MIDDLE -> currentUser.questions.middle
-            QuestionLevel.SENIOR -> currentUser.questions.senior
+    override fun getQuestionScore(question: QuestionLevel): Int? {
+        return when (question) {
+            QuestionLevel.JUNIOR -> currentUser.question.junior
+            QuestionLevel.MIDDLE -> currentUser.question.middle
+            QuestionLevel.SENIOR -> currentUser.question.senior
+            else -> 0
         }
     }
 }

@@ -37,7 +37,7 @@ import com.balan.androidquestionsapp.ui.theme.LocalProperty
 @Composable
 fun SignInContent(
     state  : SignInState,
-    setLogin: (String) -> Unit,
+    setName: (String) -> Unit,
     setPassword: (String) -> Unit,
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
@@ -63,7 +63,7 @@ fun SignInContent(
                 Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop64))
                 OutlinedTextField(
                     value = state.name,
-                    onValueChange = setLogin,
+                    onValueChange = setName,
                     textStyle = TextStyle(
                         textAlign = TextAlign.Center,
                         fontSize = LocalDimen.current.outlinedTextSize,
@@ -157,7 +157,7 @@ fun SignInContent(
 fun SignInScreenPreview() {
     SignInContent(
         state = SignInState(),
-        setLogin = {},
+        setName = {},
         setPassword = {},
         onSignInClick = {},
         onSignUpClick = {},

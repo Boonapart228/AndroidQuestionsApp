@@ -5,7 +5,7 @@ import com.balan.androidquestionsapp.domain.models.QuestionsItem
 
 data class TestState(
     val questions: List<QuestionsItem> = listOf(),
-    val index: Int = 0,
+    val questionNumber: Int = 0,
     val selectedRadioAnswer: Answer? = null,
     val selectedCheckAnswer: List<Answer> = emptyList(),
     val writtenAnswer: String = "",

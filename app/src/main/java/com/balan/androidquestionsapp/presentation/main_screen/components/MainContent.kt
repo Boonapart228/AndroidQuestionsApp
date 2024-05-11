@@ -1,7 +1,8 @@
 package com.balan.androidquestionsapp.presentation.main_screen.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,12 +35,15 @@ fun MainContent(
     onTestMiddleClick: () -> Unit,
     onTestSeniorClick: () -> Unit,
     onSignInClick: () -> Unit,
+    onAdminJuniorDoubleClick: () -> Unit,
+    onAdminMiddleDoubleClick: () -> Unit,
+    onAdminSeniorDoubleClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             TopBar(
-                onSignInClick = onSignInClick,
+                onClick = onSignInClick,
                 imageVector = Icons.Filled.ArrowBack
             )
         }
@@ -58,27 +62,38 @@ fun MainContent(
 
                 Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll32))
                 MainButton(
-                    text = R.string.question_junior,
-                    onClick = onTestJuniorClick
+                    messageResource = R.string.question_junior,
+                    onClick = onTestJuniorClick,
+                    onAdminDoubleClick = onAdminJuniorDoubleClick
                 )
                 Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll32))
-                MainButton(text = R.string.question_middle, onClick = onTestMiddleClick)
+                MainButton(
+                    messageResource = R.string.question_middle,
+                    onClick = onTestMiddleClick,
+                    onAdminDoubleClick = onAdminMiddleDoubleClick
+                )
                 Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll32))
-                MainButton(text = R.string.question_senior, onClick = onTestSeniorClick)
+                MainButton(
+                    messageResource = R.string.question_senior,
+                    onClick = onTestSeniorClick,
+                    onAdminDoubleClick = onAdminSeniorDoubleClick
+                )
             }
         }
     }
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainButton(text: Int, onClick: () -> Unit) {
+fun MainButton(messageResource: Int, onAdminDoubleClick: () -> Unit, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.clickable {
-            onClick()
-        }
+        modifier = Modifier.combinedClickable(
+            onClick = onClick,
+            onDoubleClick = onAdminDoubleClick
+        )
     ) {
         Button(
             onClick = {},
@@ -94,7 +109,7 @@ fun MainButton(text: Int, onClick: () -> Unit) {
             )
         ) {}
         Text(
-            text = stringResource(id = text),
+            text = stringResource(id = messageResource),
             fontSize = LocalDimen.current.textSizeQuestion
         )
     }
@@ -112,6 +127,10 @@ fun MainContentPreview() {
         onTestMiddleClick = { },
         onTestSeniorClick = { },
         onSignInClick = {},
-        modifier = Modifier
+
+        modifier = Modifier,
+        onAdminJuniorDoubleClick = { },
+        onAdminMiddleDoubleClick = { },
+        onAdminSeniorDoubleClick = { }
     )
 }

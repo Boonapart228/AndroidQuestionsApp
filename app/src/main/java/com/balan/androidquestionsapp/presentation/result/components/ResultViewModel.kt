@@ -1,8 +1,10 @@
 package com.balan.androidquestionsapp.presentation.result.components
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.repository.ResultRepository
+import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResultViewModel @Inject constructor(
-    private val resultRepository: ResultRepository
+    private val resultRepository: ResultRepository,
+    private val userSession: UserSession
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<ResultState> = MutableStateFlow(ResultState())
@@ -25,22 +28,24 @@ class ResultViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     init {
-        getQuestionSize()
-        getQuestionScore()
+        setQuestionSize()
+        setQuestionScore()
     }
 
-    private fun getQuestionSize() {
+    private fun setQuestionSize() {
+        val question = userSession.getLevel()
         _state.update {
             it.copy(
-                size = resultRepository.getQuestionSize()
+                questionSize = resultRepository.getQuestionSize(question)
             )
         }
     }
 
-    private fun getQuestionScore() {
+    private fun setQuestionScore() {
+        val question = userSession.getLevel()
         _state.update {
             it.copy(
-                score = resultRepository.getQuestionScore()
+                score = resultRepository.getQuestionScore(question)
             )
         }
     }
@@ -48,7 +53,7 @@ class ResultViewModel @Inject constructor(
 
     fun onMainClick() {
         viewModelScope.launch {
-            _event.emit(ResultNavigationEvent.NavigationMenu)
+            _event.emit(ResultNavigationEvent.NavigationToMenu)
         }
     }
 }

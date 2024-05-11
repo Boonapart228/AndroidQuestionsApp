@@ -27,7 +27,7 @@ import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
-fun TestCheck(
+fun TestCheckContent(
     title: String,
     modifier: Modifier = Modifier,
     selectedAnswers: List<Answer>,
@@ -69,7 +69,7 @@ fun TestCheck(
                     fontSize = LocalDimen.current.questionTitleTextSize,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight)) // Add space between text and answers
+                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16)) // Add space between text and answers
                 answers.forEach { answer ->
                     val selected = answer in selectedAnswers
                     Row(
@@ -89,7 +89,7 @@ fun TestCheck(
                                 uncheckedColor = Color.Black
                             )
                         )
-                        Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth))
+                        Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
                         Text(
                             text = answer.title,
                             modifier = Modifier
@@ -108,7 +108,7 @@ fun TestCheck(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewCheck() {
-    TestCheck(
+    TestCheckContent(
         title = "",
         modifier = Modifier,
         selectedAnswers = emptyList(),

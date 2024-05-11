@@ -11,22 +11,21 @@ import com.balan.androidquestionsapp.presentation.result.components.ResultViewMo
 
 @Composable
 fun ResultScreen(
-    navigateMain: () -> Unit,
+    navigateToMain: () -> Unit,
     viewModel: ResultViewModel
 ) {
 
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
-                is ResultNavigationEvent.NavigationMenu -> navigateMain()
+                is ResultNavigationEvent.NavigationToMenu -> navigateToMain()
             }
         }
     }
     val state by viewModel.state.collectAsState()
     ResultContent(
+        state = state,
         textResult = R.string.result,
-        score = state.score,
-        size = state.size,
         onMainClick = viewModel::onMainClick
     )
 }

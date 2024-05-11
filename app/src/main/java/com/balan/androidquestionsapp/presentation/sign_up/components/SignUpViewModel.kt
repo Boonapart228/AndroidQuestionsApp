@@ -28,9 +28,9 @@ class SignUpViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
 
-    fun setLogin(login: String) {
+    fun setName(name: String) {
         _state.update {
-            it.copy(name = login)
+            it.copy(name = name)
         }
     }
 
@@ -48,7 +48,7 @@ class SignUpViewModel @Inject constructor(
 
     fun onSignInClick() {
         viewModelScope.launch {
-            _event.emit(SignUpNavigationEvent.NavigationSignIn)
+            _event.emit(SignUpNavigationEvent.NavigationToSignIn)
         }
     }
 
@@ -70,7 +70,7 @@ class SignUpViewModel @Inject constructor(
                     }
                 )
             }
-            if (signUpResult == Validation.VALID) _event.emit(SignUpNavigationEvent.NavigationSignIn)
+            if (signUpResult == Validation.VALID) _event.emit(SignUpNavigationEvent.NavigationToSignIn)
         }
     }
 

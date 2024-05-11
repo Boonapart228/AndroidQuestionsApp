@@ -22,13 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.balan.androidquestionsapp.ui.theme.Background
+import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarTestScreen(
     count: Int,
-    size : Int,
+    size: Int,
     onMainClick: () -> Unit
 ) {
     Column(
@@ -49,16 +50,18 @@ fun TopBarTestScreen(
                 ) {
                     Text(
                         text = "$count/$size",
-                        modifier = Modifier.padding(top = 4.dp),
+                        modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop4),
                         textAlign = TextAlign.Center,
-                        fontSize = 32.sp
+                        fontSize = LocalDimen.current.textSize32
                     )
                 }
             },
             navigationIcon = {
                 IconButton(onClick = onMainClick) {
-                    Icon(Icons.Filled.ArrowBack, null,
-                        modifier = Modifier.size(64.dp))
+                    Icon(
+                        Icons.Filled.ArrowBack, null,
+                        modifier = Modifier.size(LocalDimen.current.iconSize64)
+                    )
                 }
             }
         )
@@ -71,5 +74,5 @@ fun TopBarTestScreen(
 )
 @Composable
 fun PreviewTopBar() {
-    TopBarTestScreen(count = 0,size = 4,onMainClick ={})
+    TopBarTestScreen(count = 0, size = 4, onMainClick = {})
 }

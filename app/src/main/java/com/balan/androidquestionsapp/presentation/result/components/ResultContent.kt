@@ -24,9 +24,8 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
 fun ResultContent(
+    state: ResultState,
     textResult: Int,
-    score: Int,
-    size: Int,
     modifier: Modifier = Modifier,
     onMainClick: () -> Unit
 ) {
@@ -54,7 +53,7 @@ fun ResultContent(
             )
             Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll32))
             Text(
-                "$score/$size",
+                "${state.score}/${state.questionSize}",
                 fontSize = LocalDimen.current.textSize64
             )
         }
@@ -67,5 +66,5 @@ fun ResultContent(
 )
 @Composable
 fun PreviewResultContent() {
-    ResultContent(score = 10, textResult = R.string.result, onMainClick = {}, size = 10)
+    ResultContent(textResult = R.string.result, onMainClick = {}, state = ResultState())
 }

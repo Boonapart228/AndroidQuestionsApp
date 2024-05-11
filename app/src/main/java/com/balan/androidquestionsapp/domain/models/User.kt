@@ -1,8 +1,8 @@
 package com.balan.androidquestionsapp.domain.models
 
-data class Users(
+data class User(
     val name: String,
     val password: String,
     val email: String,
-    val questions : QuestionsScore
+    val question : QuestionsScore
 )

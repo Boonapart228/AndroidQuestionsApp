@@ -11,23 +11,23 @@ import com.balan.androidquestionsapp.presentation.test_screen.components.TestVie
 @Composable
 fun TestScreen(
     viewModel: TestViewModel,
-    navigateMain: () -> Unit,
-    navigateResult : () -> Unit
+    navigateToMain: () -> Unit,
+    navigateToResult : () -> Unit
 ) {
 
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
-                is TestNavigationEvent.NavigationMenu -> navigateMain()
-                is TestNavigationEvent.NavigationResult -> navigateResult()
+                is TestNavigationEvent.NavigationToMenu -> navigateToMain()
+                is TestNavigationEvent.NavigationToResult -> navigateToResult()
             }
         }
     }
     val state by viewModel.state.collectAsState()
     TestContent(
         state = state,
-        onIndexPlusClick = viewModel::indexPlus,
-        onIndexMinusClick = viewModel::indexMinus,
+        onIndexPlusClick = viewModel::nextQuestion,
+        onIndexMinusClick = viewModel::previousQuestion,
         onSelectedRadioAnswerClick = viewModel::onAnswerRadioButtonClick,
         onSelectedCheckAnswerClick = viewModel::onAnswerCheckButtonClick,
         onMainClick = viewModel::onMainClick,
