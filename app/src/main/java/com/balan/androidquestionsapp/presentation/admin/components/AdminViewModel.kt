@@ -31,8 +31,12 @@ class AdminViewModel @Inject constructor(
 
     fun onScoreClick() {
         viewModelScope.launch {
-            val access = authRepository.adminAccess(_state.value.password)
-            if (access) _event.emit(AdminNavigationEvent.NavigationToScore) else _state.update { it.copy(inValidPassword =  Validation.INVALID_ADMIN_PASSWORD) }
+            val adminAccess = authRepository.adminAccess(_state.value.password)
+            if (adminAccess) {
+                _event.emit(AdminNavigationEvent.NavigationToScore)
+            } else {
+                _state.update { it.copy(validPassword = Validation.INVALID_ADMIN_PASSWORD) }
+            }
         }
     }
 

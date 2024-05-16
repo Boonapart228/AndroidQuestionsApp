@@ -2,6 +2,7 @@ package com.balan.androidquestionsapp.presentation.score.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 import com.balan.androidquestionsapp.domain.user.UserSession
@@ -42,7 +43,7 @@ class ScoreViewModel @Inject constructor(
 
     private fun update() {
         _state.update {
-            it.copy(users = scoreRepository.getUsers().toMutableList())
+            it.copy(users = userSession.getUsers().toMutableList())
         }
     }
 
@@ -65,7 +66,7 @@ class ScoreViewModel @Inject constructor(
     }
 
     fun sortByName() {
-        scoreRepository.sortByName(_state.value.level)
+        scoreRepository.sortByName()
         update()
     }
 
@@ -74,5 +75,17 @@ class ScoreViewModel @Inject constructor(
             _event.emit(ScoreNavigationEvent.NavigationToMain)
         }
     }
+
+    fun getScore(user: User): Int? {
+        return when (userSession.getLevel()) {
+            QuestionLevel.JUNIOR -> user.question.junior
+            QuestionLevel.MIDDLE -> user.question.middle
+            QuestionLevel.SENIOR -> user.question.senior
+            QuestionLevel.DEFAULT -> 0
+        }
+    }
+
+    fun isTestPassed(score: Int?) = if (score == null) false else score >= 7
+
 
 }

@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
+import com.balan.androidquestionsapp.domain.models.TestType
+import com.balan.androidquestionsapp.presentation.main_screen.model.mainButtons
 import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.ButtonColor
@@ -31,13 +33,9 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
 fun MainContent(
-    onTestJuniorClick: () -> Unit,
-    onTestMiddleClick: () -> Unit,
-    onTestSeniorClick: () -> Unit,
     onSignInClick: () -> Unit,
-    onAdminJuniorDoubleClick: () -> Unit,
-    onAdminMiddleDoubleClick: () -> Unit,
-    onAdminSeniorDoubleClick: () -> Unit,
+    onTestClick: (TestType) -> Unit,
+    onTestDoubleClick: (TestType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -61,23 +59,14 @@ fun MainContent(
             ) {
 
                 Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll32))
-                MainButton(
-                    messageResource = R.string.question_junior,
-                    onClick = onTestJuniorClick,
-                    onAdminDoubleClick = onAdminJuniorDoubleClick
-                )
-                Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll32))
-                MainButton(
-                    messageResource = R.string.question_middle,
-                    onClick = onTestMiddleClick,
-                    onAdminDoubleClick = onAdminMiddleDoubleClick
-                )
-                Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll32))
-                MainButton(
-                    messageResource = R.string.question_senior,
-                    onClick = onTestSeniorClick,
-                    onAdminDoubleClick = onAdminSeniorDoubleClick
-                )
+                mainButtons.forEach { (testType, messageResId) ->
+                    MainButton(
+                        messageResId = messageResId,
+                        onClick = { onTestClick(testType) },
+                        onAdminDoubleClick = { onTestDoubleClick(testType) }
+                    )
+                    Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll32))
+                }
             }
         }
     }
@@ -86,7 +75,7 @@ fun MainContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainButton(messageResource: Int, onAdminDoubleClick: () -> Unit, onClick: () -> Unit) {
+fun MainButton(messageResId: Int, onAdminDoubleClick: () -> Unit, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -96,7 +85,7 @@ fun MainButton(messageResource: Int, onAdminDoubleClick: () -> Unit, onClick: ()
         )
     ) {
         Button(
-            onClick = {},
+            onClick = { return@Button },
             modifier = Modifier
                 .padding(LocalDimen.current.buttonCirclePaddingAll)
                 .size(LocalDimen.current.buttonCircleSize)
@@ -109,7 +98,7 @@ fun MainButton(messageResource: Int, onAdminDoubleClick: () -> Unit, onClick: ()
             )
         ) {}
         Text(
-            text = stringResource(id = messageResource),
+            text = stringResource(id = messageResId),
             fontSize = LocalDimen.current.textSizeQuestion
         )
     }
@@ -123,14 +112,7 @@ fun MainButton(messageResource: Int, onAdminDoubleClick: () -> Unit, onClick: ()
 @Composable
 fun MainContentPreview() {
     MainContent(
-        onTestJuniorClick = { },
-        onTestMiddleClick = { },
-        onTestSeniorClick = { },
         onSignInClick = {},
-
-        modifier = Modifier,
-        onAdminJuniorDoubleClick = { },
-        onAdminMiddleDoubleClick = { },
-        onAdminSeniorDoubleClick = { }
+        modifier = Modifier, onTestClick = { }, onTestDoubleClick = { },
     )
 }

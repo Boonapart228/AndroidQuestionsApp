@@ -14,6 +14,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -22,10 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
@@ -36,11 +42,13 @@ import com.balan.androidquestionsapp.ui.theme.LocalProperty
 
 @Composable
 fun SignInContent(
-    state  : SignInState,
-    setName: (String) -> Unit,
-    setPassword: (String) -> Unit,
+    state: SignInState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
+    onShowPasswordClick: () -> Unit,
+    isFieldsNotEmpty: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -62,15 +70,15 @@ fun SignInContent(
             ) {
                 Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop64))
                 OutlinedTextField(
-                    value = state.name,
-                    onValueChange = setName,
+                    value = state.email,
+                    onValueChange = onEmailChange,
                     textStyle = TextStyle(
                         textAlign = TextAlign.Center,
                         fontSize = LocalDimen.current.outlinedTextSize,
                     ),
                     label = {
                         Text(
-                            text = stringResource(id = R.string.input_login),
+                            text = stringResource(id = R.string.input_email),
                             modifier = Modifier.fillMaxWidth(),
                             fontSize = LocalDimen.current.textSize24,
                             textAlign = TextAlign.Center
@@ -85,13 +93,13 @@ fun SignInContent(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
-                    )
+                    ),
                 )
 
                 Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
                 OutlinedTextField(
                     value = state.password,
-                    onValueChange = setPassword,
+                    onValueChange = onPasswordChange,
                     textStyle = TextStyle(
                         textAlign = TextAlign.Center,
                         fontSize = LocalDimen.current.outlinedTextSize
@@ -113,14 +121,34 @@ fun SignInContent(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
-                    )
+                    ),
+                    trailingIcon = {
+                        if (state.showPassword) {
+                                IconButton(onClick = onShowPasswordClick) {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_visibility_off_24),
+                                        contentDescription = null
+                                    )
+                                }
+                        } else {
+                            IconButton(
+                                onClick = onShowPasswordClick
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_visibility_24),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    },
+                    visualTransformation = if (state.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 )
                 Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
                 Button(
                     onClick = onSignInClick,
                     modifier = Modifier.width(LocalDimen.current.buttonWidth),
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    enabled = !(state.name.isEmpty() && state.password.isEmpty())
+                    enabled = isFieldsNotEmpty(),
                 ) {
                     Text(
                         text = stringResource(id = R.string.sign_in), color = Color.Black,
@@ -136,7 +164,7 @@ fun SignInContent(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = state.validation.text))
+                Text(text = stringResource(id = state.validation.textResId))
                 TextButton(onClick = onSignUpClick) {
                     Text(
                         text = stringResource(id = R.string.sign_up),
@@ -157,9 +185,12 @@ fun SignInContent(
 fun SignInScreenPreview() {
     SignInContent(
         state = SignInState(),
-        setName = {},
-        setPassword = {},
+        onEmailChange = {},
+        onPasswordChange = {},
         onSignInClick = {},
         onSignUpClick = {},
+        isFieldsNotEmpty = { false },
+        onShowPasswordClick = {}
+
     )
 }

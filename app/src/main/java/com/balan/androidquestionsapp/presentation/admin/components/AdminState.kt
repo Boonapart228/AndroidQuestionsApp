@@ -4,5 +4,5 @@ import com.balan.androidquestionsapp.domain.models.Validation
 
 data class AdminState(
     val password: String = "",
-    val inValidPassword: Validation = Validation.VALID
+    val validPassword: Validation = Validation.VALID
 )

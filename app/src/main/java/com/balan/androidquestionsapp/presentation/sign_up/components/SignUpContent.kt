@@ -39,16 +39,21 @@ import com.balan.androidquestionsapp.ui.theme.LocalProperty
 @Composable
 fun SignUpContent(
     state: SignUpState,
-    setLogin: (String) -> Unit,
-    setPassword: (String) -> Unit,
-    setEmail: (String) -> Unit,
+    onLoginChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
     onSignUpClick: () -> Unit,
     onSignInClick: () -> Unit,
+    isFieldsNotEmpty: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = { TopBar(onClick = onSignInClick,
-            imageVector = Icons.Filled.ArrowBack) }
+        topBar = {
+            TopBar(
+                onClick = onSignInClick,
+                imageVector = Icons.Filled.ArrowBack
+            )
+        }
     ) {
         Box(modifier = Modifier.padding(it))
         Column(
@@ -73,7 +78,7 @@ fun SignUpContent(
                     SignUpTextField(
                         value = state.email,
                         label = R.string.input_email,
-                        onValueChange = setEmail,
+                        onValueChange = onEmailChange,
                         imeAction = ImeAction.Next
                     )
 
@@ -82,7 +87,7 @@ fun SignUpContent(
                     SignUpTextField(
                         value = state.password,
                         label = R.string.input_password,
-                        onValueChange = setPassword,
+                        onValueChange = onPasswordChange,
                         imeAction = ImeAction.Next
                     )
 
@@ -91,7 +96,7 @@ fun SignUpContent(
                     SignUpTextField(
                         value = state.name,
                         label = R.string.input_login,
-                        onValueChange = setLogin,
+                        onValueChange = onLoginChange,
                         imeAction = ImeAction.Done
                     )
 
@@ -100,7 +105,7 @@ fun SignUpContent(
                         onClick = onSignUpClick,
                         modifier = Modifier.width(LocalDimen.current.buttonSignUpWidth),
                         colors = ButtonDefaults.buttonColors(Color.White),
-                        enabled = !(state.name.isEmpty() && state.password.isEmpty() && state.email.isEmpty())
+                        enabled = isFieldsNotEmpty()
                     ) {
                         Text(
                             text = stringResource(id = R.string.sign_up), color = Color.Black,
@@ -109,7 +114,7 @@ fun SignUpContent(
                     }
                     Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
 
-                    Text(text = stringResource(id = state.valid.text))
+                    Text(text = stringResource(id = state.valid.textResId))
                 }
             }
         }
@@ -162,11 +167,12 @@ fun SignUpTextField(
 fun SignUpScreenPreview() {
     SignUpContent(
         state = SignUpState(),
-        setLogin = {},
-        setPassword = {},
-        setEmail = {},
+        onLoginChange = {},
+        onPasswordChange = {},
+        onEmailChange = {},
         onSignUpClick = {},
         onSignInClick = {},
-        modifier = Modifier
+        isFieldsNotEmpty = { false },
+        modifier = Modifier,
     )
 }

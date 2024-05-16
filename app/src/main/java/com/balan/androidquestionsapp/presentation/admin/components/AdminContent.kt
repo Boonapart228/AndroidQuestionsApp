@@ -106,7 +106,7 @@ fun AdminContent(
                 )
             }
             Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
-            Text(text = stringResource(id = state.inValidPassword.text))
+            Text(text = stringResource(id = state.validPassword.textResId))
         }
     }
 }

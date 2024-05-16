@@ -27,59 +27,59 @@ import com.balan.androidquestionsapp.presentation.test_screen.components.TestVie
 fun Navigation(navHostController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navHostController,
-        startDestination = Screens.SIGN_IN.screen
+        startDestination = Screens.SIGN_IN.route
     ) {
-        composable(route = Screens.SIGN_IN.screen) {
+        composable(route = Screens.SIGN_IN.route) {
             val viewModel: SignInViewModel = hiltViewModel()
             SignInScreen(
                 viewModel = viewModel,
-                navigateToSignUp = { navHostController.navigate(Screens.SIGN_UP.screen) },
-                navigateToSignIn = { navHostController.navigate(Screens.MAIN.screen) })
+                navigateToSignUp = { navHostController.navigate(Screens.SIGN_UP.route) },
+                navigateToSignIn = { navHostController.navigate(Screens.MAIN.route) })
         }
-        composable(route = Screens.SIGN_UP.screen) {
+        composable(route = Screens.SIGN_UP.route) {
             val viewModel: SignUpViewModel = hiltViewModel()
             SignUpScreen(
                 viewModel = viewModel,
-                navigateToSignIn = { navHostController.navigate(Screens.SIGN_IN.screen) }
+                navigateToSignIn = { navHostController.navigate(Screens.SIGN_IN.route) }
             )
         }
-        composable(route = Screens.MAIN.screen) {
+        composable(route = Screens.MAIN.route) {
             val viewModel: MainViewModel = hiltViewModel()
             MainScreen(
                 viewModel = viewModel,
-                navigateToTest = { navHostController.navigate(Screens.TEST.screen) },
-                navigateToSignIn = { navHostController.navigate(Screens.SIGN_IN.screen) },
-                navigateToAdmin = { navHostController.navigate(Screens.ADMIN.screen) }
+                navigateToTest = { navHostController.navigate(Screens.TEST.route) },
+                navigateToSignIn = { navHostController.navigate(Screens.SIGN_IN.route) },
+                navigateToAdmin = { navHostController.navigate(Screens.ADMIN.route) }
             )
         }
-        composable(route = Screens.TEST.screen) {
+        composable(route = Screens.TEST.route) {
             val viewModel: TestViewModel = hiltViewModel()
             TestScreen(
                 viewModel = viewModel,
-                navigateToMain = { navHostController.navigate(Screens.MAIN.screen) },
-                navigateToResult = { navHostController.navigate(Screens.RESULT.screen) }
+                navigateToMain = { navHostController.navigate(Screens.MAIN.route) },
+                navigateToResult = { navHostController.navigate(Screens.RESULT.route) }
             )
         }
-        composable(route = Screens.RESULT.screen) {
+        composable(route = Screens.RESULT.route) {
             val viewModel: ResultViewModel = hiltViewModel()
             ResultScreen(
                 viewModel = viewModel,
-                navigateToMain = { navHostController.navigate(Screens.MAIN.screen) },
+                navigateToMain = { navHostController.navigate(Screens.MAIN.route) },
             )
         }
-        composable(route = Screens.ADMIN.screen) {
+        composable(route = Screens.ADMIN.route) {
             val viewModel: AdminViewModel = hiltViewModel()
             AdminScreen(
                 viewModel = viewModel,
-                navigateToMain = { navHostController.navigate(Screens.MAIN.screen) },
-                navigateToScore = { navHostController.navigate(Screens.SCORE.screen) },
+                navigateToMain = { navHostController.navigate(Screens.MAIN.route) },
+                navigateToScore = { navHostController.navigate(Screens.SCORE.route) },
             )
         }
-        composable(route = Screens.SCORE.screen) {
+        composable(route = Screens.SCORE.route) {
             val viewModel: ScoreViewModel = hiltViewModel()
             ScoreScreen(
                 viewModel = viewModel,
-                navigateToMain = { navHostController.navigate(Screens.MAIN.screen) },
+                navigateToMain = { navHostController.navigate(Screens.MAIN.route) },
             )
         }
     }

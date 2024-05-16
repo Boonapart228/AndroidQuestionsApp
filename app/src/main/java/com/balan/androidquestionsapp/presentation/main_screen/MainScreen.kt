@@ -23,12 +23,8 @@ fun MainScreen(
         }
     }
     MainContent(
-        onTestJuniorClick = viewModel::onTestJuniorClick,
-        onTestMiddleClick = viewModel::onTestMiddleClick,
-        onTestSeniorClick = viewModel::onTestSeniorClick,
         onSignInClick = viewModel::onSignInClick,
-        onAdminJuniorDoubleClick = viewModel::onAdminJuniorDoubleClick,
-        onAdminMiddleDoubleClick = viewModel::onAdminMiddleDoubleClick,
-        onAdminSeniorDoubleClick = viewModel::onAdminDoubleSeniorClick,
-        )
+        onTestClick = viewModel::onTestClick,
+        onTestDoubleClick = viewModel::onTestDoubleClick
+    )
 }

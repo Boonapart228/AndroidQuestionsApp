@@ -24,10 +24,11 @@ fun SignUpScreen(
     }
     SignUpContent(
         state = state,
-        setLogin = viewModel::setName,
-        setPassword = viewModel::setPassword,
-        setEmail = viewModel::setEmail,
+        onLoginChange = viewModel::setName,
+        onPasswordChange = viewModel::setPassword,
+        onEmailChange = viewModel::setEmail,
         onSignUpClick = viewModel::onSignUpClick,
-        onSignInClick = viewModel::onSignInClick
+        onSignInClick = viewModel::onSignInClick,
+        isFieldsNotEmpty = viewModel::isFieldsNotEmpty
     )
 }

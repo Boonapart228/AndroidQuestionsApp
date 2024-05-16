@@ -29,10 +29,10 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 @Composable
 fun TestCheckContent(
     title: String,
-    modifier: Modifier = Modifier,
     selectedAnswers: List<Answer>,
     answers: List<Answer>,
-    onSelectedAnswerClick: (Answer) -> Unit
+    onAnswerClick: (Answer) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
     Column(
@@ -69,20 +69,20 @@ fun TestCheckContent(
                     fontSize = LocalDimen.current.questionTitleTextSize,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16)) // Add space between text and answers
+                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
                 answers.forEach { answer ->
                     val selected = answer in selectedAnswers
                     Row(
                         modifier = Modifier
                             .padding(vertical = LocalDimen.current.questionVerticalPadding)
-                            .clickable { onSelectedAnswerClick(answer) },
+                            .clickable { onAnswerClick(answer) },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Checkbox(
                             checked = selected,
                             onCheckedChange = {
-                                onSelectedAnswerClick(answer)
+                                onAnswerClick(answer)
                             },
                             colors = CheckboxDefaults.colors(
                                 checkedColor = Color.Black,
@@ -117,5 +117,5 @@ fun PreviewCheck() {
             Answer(isTrue = false, title = ""),
             Answer(isTrue = false, title = "")
         ),
-        onSelectedAnswerClick = { })
+        onAnswerClick = { })
 }

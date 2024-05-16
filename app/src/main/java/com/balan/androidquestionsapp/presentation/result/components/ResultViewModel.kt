@@ -1,6 +1,5 @@
 package com.balan.androidquestionsapp.presentation.result.components
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.repository.ResultRepository
@@ -36,16 +35,19 @@ class ResultViewModel @Inject constructor(
         val question = userSession.getLevel()
         _state.update {
             it.copy(
-                questionSize = resultRepository.getQuestionSize(question)
+                questionSize = resultRepository.setQuestionSize(question)
             )
         }
     }
 
     private fun setQuestionScore() {
         val question = userSession.getLevel()
+        val user = userSession.getCurrentUser()
         _state.update {
             it.copy(
-                score = resultRepository.getQuestionScore(question)
+                score = if (user != null) {
+                    resultRepository.getQuestionScore(user = user, question = question)
+                } else 0
             )
         }
     }

@@ -28,6 +28,13 @@ class TestViewModel @Inject constructor(
 
     val event = _event.asSharedFlow()
 
+    init {
+        val question = userSession.getLevel()
+        _state.update {
+            it.copy(questions = testRepository.getQuestions(question))
+        }
+    }
+
     fun nextQuestion() {
         val question = userSession.getLevel()
         checkAnswer()
@@ -38,11 +45,18 @@ class TestViewModel @Inject constructor(
                 )
             }
         } else if (_state.value.questionNumber == _state.value.questions.lastIndex) {
-            testRepository.updateScore(_state.value.score, question)
-            navigateResultScreen()
+            val currentUser = userSession.getCurrentUser()
+            currentUser?.let {
+                val user = testRepository.updateScore(
+                    score = _state.value.score,
+                    user = currentUser,
+                    question = question
+                )
+                userSession.updateInfo(user)
+                navigateResultScreen()
+            }
         }
     }
-
 
     private fun navigateResultScreen() {
         viewModelScope.launch {
@@ -54,8 +68,8 @@ class TestViewModel @Inject constructor(
         if (_state.value.questionNumber != 0) {
             _state.update {
                 it.copy(
-                    questionNumber = it.questionNumber - 1,
-                    score = if (it.score != 0) it.score - 1 else it.score
+                    questionNumber = 0,
+                    score = if (it.score != 0) it.score - 1 else 0
                 )
             }
         }
@@ -131,7 +145,6 @@ class TestViewModel @Inject constructor(
         when (_state.value.questions[index].type) {
             QuestionType.RADIO_BUTTON.type -> {
                 checkRadioButtonAnswer()
-
             }
 
             QuestionType.CHECK_BOX.type -> {
@@ -151,10 +164,4 @@ class TestViewModel @Inject constructor(
         }
     }
 
-    init {
-        val question = userSession.getLevel()
-        _state.update {
-            it.copy(questions = testRepository.getQuestions(question))
-        }
-    }
 }

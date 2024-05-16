@@ -31,16 +31,15 @@ fun TestRadioContent(
     title: String,
     selectedAnswer: Answer?,
     answers: List<Answer>,
-    modifier: Modifier = Modifier,
-    onSelectedAnswerClick: (Answer) -> Unit
+    onAnswerClick: (Answer) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.run {
-            fillMaxSize()
-                .background(color = Background)
-        }
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = Background)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -62,12 +61,12 @@ fun TestRadioContent(
                 fontSize = LocalDimen.current.questionTitleTextSize,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16)) // Add space between text and answers
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             answers.forEach { answer ->
                 Row(
                     modifier = Modifier
                         .padding(vertical = LocalDimen.current.questionVerticalPadding)
-                        .clickable { onSelectedAnswerClick(answer) },
+                        .clickable { onAnswerClick(answer) },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -77,12 +76,13 @@ fun TestRadioContent(
                             unselectedColor = Color.Black,
                         ),
                         selected = selectedAnswer == answer,
-                        onClick = { onSelectedAnswerClick(answer) }
+                        onClick = { onAnswerClick(answer) }
                     )
                     Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
                     Text(
                         text = answer.title,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
                             .background(color = Color.White),
                         textAlign = TextAlign.Center,
@@ -105,7 +105,7 @@ fun PreviewRadio() {
             Answer(isTrue = false, title = "3"),
             Answer(isTrue = false, title = "4")
         ),
-        onSelectedAnswerClick = {},
+        onAnswerClick = {},
         title = "Cкільки буде 2 + 2"
 
     )

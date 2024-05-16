@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignUpState> =
@@ -54,7 +55,7 @@ class SignUpViewModel @Inject constructor(
 
 
     fun onSignUpClick() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val name = _state.value.name
             val password = _state.value.password
             val email = _state.value.email
@@ -73,5 +74,9 @@ class SignUpViewModel @Inject constructor(
             if (signUpResult == Validation.VALID) _event.emit(SignUpNavigationEvent.NavigationToSignIn)
         }
     }
+
+    fun isFieldsNotEmpty() = _state.value.name.isNotEmpty() &&
+            _state.value.password.isNotEmpty() &&
+            _state.value.email.isNotEmpty()
 
 }

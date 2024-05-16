@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.presentation.score.components.contents.BottomBarScore
@@ -43,10 +42,10 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 fun ScoreContent(
     onMainClick: () -> Unit,
     viewModel: ScoreViewModel,
-    modifier: Modifier = Modifier,
     onSortByDecreasingScoreClick: () -> Unit,
     onSortByIncreasingScoreClick: () -> Unit,
-    onSortByNameClick: () -> Unit
+    onSortByNameClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsState()
     val users = state.users
@@ -68,8 +67,9 @@ fun ScoreContent(
             items(users) { user ->
                 ScoreItem(
                     user = user,
-                    state = state,
-                    onDeleteUserScoreClick = { viewModel.onDeleteScoreClick(user) }
+                    onDeleteUserScoreClick = { viewModel.onDeleteScoreClick(user) },
+                    getScore = { viewModel.getScore(user) },
+                    isTestPassed = viewModel::isTestPassed
                 )
             }
         }
@@ -79,19 +79,15 @@ fun ScoreContent(
 @Composable
 fun ScoreItem(
     user: User,
-    state: ScoreState,
     onDeleteUserScoreClick: () -> Unit,
+    getScore: () -> Int?,
+    isTestPassed: (Int?) -> Boolean,
     modifier: Modifier = Modifier
 ) {
-    val score = when (state.level) {
-        QuestionLevel.JUNIOR -> user.question.junior
-        QuestionLevel.MIDDLE -> user.question.middle
-        QuestionLevel.SENIOR -> user.question.senior
-        QuestionLevel.DEFAULT -> 0
-    }
+    val score = getScore()
 
-    val testPassed = score != null && score >= 7
-
+    val testPassed = isTestPassed(score)
+    if(score != null){
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -141,6 +137,7 @@ fun ScoreItem(
             }
         }
     }
+    }
 }
 
 @Preview(
@@ -160,10 +157,6 @@ fun ScoreContentPreview() {
                 senior = 7
             )
         ),
-        state = ScoreState(
-            level = QuestionLevel.JUNIOR,
-            users = listOf()
-        ),
-        onDeleteUserScoreClick = {},
+        onDeleteUserScoreClick = {}, getScore = { 5 }, isTestPassed = { false },
     )
 }

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">AndroidQuestionsApp</string>
-    <string name="in_valid">Невірний логін або пароль</string>
+    <string name="in_valid">Невірний пароль або пошта</string>
     <string name="in_valid_email">Невірний формат пошти</string>
     <string name="in_valid_admin_password">Невірний пароль</string>
     <string name="valid" />

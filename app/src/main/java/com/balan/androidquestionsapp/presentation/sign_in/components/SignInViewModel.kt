@@ -2,9 +2,11 @@ package com.balan.androidquestionsapp.presentation.sign_in.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.balan.androidquestionsapp.domain.repository.AuthRepository
 import com.balan.androidquestionsapp.domain.models.Validation
+import com.balan.androidquestionsapp.domain.repository.AuthRepository
+import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userSession: UserSession
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignInState> =
@@ -27,10 +30,9 @@ class SignInViewModel @Inject constructor(
 
     val event = _event.asSharedFlow()
 
-
-    fun setName(name: String) {
+    fun setEmail(email: String) {
         _state.update {
-            it.copy(name = name)
+            it.copy(email = email)
         }
     }
 
@@ -41,17 +43,19 @@ class SignInViewModel @Inject constructor(
     }
 
     fun onSignInClick() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val password = _state.value.password
-            val name = _state.value.name
-            val signInResult = authRepository.signIn(login = name, password = password)
-
+            val email = _state.value.email
+            val signInResult = authRepository.signIn(email = email, password = password)
             _state.update {
                 it.copy(
-                    validation = if (!signInResult) Validation.INVALID else Validation.VALID
+                    validation = if (signInResult == null) Validation.INVALID else Validation.VALID
                 )
             }
-            if (signInResult) _event.emit(SignInNavigationEvent.NavigationToSignIn)
+            if (signInResult != null) {
+                userSession.setUser(signInResult)
+                _event.emit(SignInNavigationEvent.NavigationToSignIn)
+            }
         }
     }
 
@@ -60,4 +64,13 @@ class SignInViewModel @Inject constructor(
             _event.emit(SignInNavigationEvent.NavigationToSignUp)
         }
     }
+
+    fun isFieldsNotEmpty() = !(_state.value.email.isEmpty() || _state.value.password.isEmpty())
+
+    fun onShowPasswordClick() {
+        _state.update {
+            it.copy(showPassword = !_state.value.showPassword)
+        }
+    }
+
 }

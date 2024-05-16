@@ -1,22 +1,22 @@
 package com.balan.androidquestionsapp.data
 
-import com.balan.androidquestionsapp.data.local.currentUser
 import com.balan.androidquestionsapp.data.local.localUsers
+import com.balan.androidquestionsapp.domain.database.UserLocalSource
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.repository.AuthRepository
 
-class AuthRepositoryImpl : AuthRepository {
-    override fun signIn(login: String, password: String): Boolean {
-        val user = localUsers.find { it.name == login && it.password == password }
+class AuthRepositoryImpl(
+    private val userLocalSource: UserLocalSource // Room
+) : AuthRepository {
+    override fun signIn(email: String, password: String): User? {
+        val user = localUsers.find { it.email == email && it.password == password }
         user?.let {
-            currentUser = it
-            return true
+            return user
         }
-        return false
+        return null
     }
-
 
     override fun signUp(login: String, password: String, email: String): Validation {
         val newUser = User(

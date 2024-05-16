@@ -6,9 +6,6 @@ import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 
 class ScoreRepositoryImpl : ScoreRepository {
-    override fun getUsers(): List<User> {
-        return localUsers
-    }
 
     override fun deleteResult(user: User, level: QuestionLevel) {
         val index = localUsers.indexOf(user)
@@ -50,7 +47,7 @@ class ScoreRepositoryImpl : ScoreRepository {
         }
     }
 
-    override fun sortByName(level: QuestionLevel) {
+    override fun sortByName() {
         localUsers.sortBy { it.name }
     }
 }

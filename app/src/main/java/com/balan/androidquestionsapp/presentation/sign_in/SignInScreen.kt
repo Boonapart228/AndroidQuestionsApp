@@ -23,11 +23,15 @@ fun SignInScreen(
             }
         }
     }
+
     SignInContent(
         state = state,
-        setName = viewModel::setName,
-        setPassword = viewModel::setPassword,
+        onEmailChange = viewModel::setEmail,
+        onPasswordChange = viewModel::setPassword,
         onSignInClick = viewModel::onSignInClick,
         onSignUpClick = viewModel::onSignUpClick,
+        isFieldsNotEmpty = viewModel::isFieldsNotEmpty,
+        onShowPasswordClick = viewModel::onShowPasswordClick
+
     )
 }

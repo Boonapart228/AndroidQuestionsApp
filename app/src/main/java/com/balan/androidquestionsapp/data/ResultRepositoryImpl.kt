@@ -1,16 +1,16 @@
 package com.balan.androidquestionsapp.data
 
-import com.balan.androidquestionsapp.data.local.currentUser
 import com.balan.androidquestionsapp.data.local.juniorQuestion
 import com.balan.androidquestionsapp.data.local.middleQuestion
 import com.balan.androidquestionsapp.data.local.seniorQuestion
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.QuestionsItem
+import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.ResultRepository
 import com.google.gson.Gson
 
 class ResultRepositoryImpl() : ResultRepository {
-    override fun getQuestionSize(question: QuestionLevel): Int {
+    override fun setQuestionSize(question: QuestionLevel): Int {
         val gson = Gson()
         val json = when (question) {
             QuestionLevel.JUNIOR -> juniorQuestion
@@ -21,12 +21,11 @@ class ResultRepositoryImpl() : ResultRepository {
         return gson.fromJson(json, Array<QuestionsItem>::class.java).size
     }
 
-
-    override fun getQuestionScore(question: QuestionLevel): Int? {
+    override fun getQuestionScore(user: User, question: QuestionLevel): Int {
         return when (question) {
-            QuestionLevel.JUNIOR -> currentUser.question.junior
-            QuestionLevel.MIDDLE -> currentUser.question.middle
-            QuestionLevel.SENIOR -> currentUser.question.senior
+            QuestionLevel.JUNIOR -> user.question.junior ?: 0
+            QuestionLevel.MIDDLE -> user.question.middle ?: 0
+            QuestionLevel.SENIOR -> user.question.senior ?: 0
             else -> 0
         }
     }

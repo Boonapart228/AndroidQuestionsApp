@@ -3,6 +3,7 @@ package com.balan.androidquestionsapp.presentation.main_screen.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
+import com.balan.androidquestionsapp.domain.models.TestType
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,44 +18,44 @@ class MainViewModel @Inject constructor(
     private val _event = MutableSharedFlow<MainNavigationEvent>()
 
     val event = _event.asSharedFlow()
-    fun onTestJuniorClick() {
+    private fun testJunior() {
         viewModelScope.launch {
-            userSession.setLevel(QuestionLevel.JUNIOR)
+            userSession.questionLevel(QuestionLevel.JUNIOR)
             _event.emit(MainNavigationEvent.NavigationToTest)
         }
     }
 
-    fun onTestMiddleClick() {
+    private fun testMiddle() {
         viewModelScope.launch {
-            userSession.setLevel(QuestionLevel.MIDDLE)
+            userSession.questionLevel(QuestionLevel.MIDDLE)
             _event.emit(MainNavigationEvent.NavigationToTest)
         }
     }
 
-    fun onTestSeniorClick() {
+    private fun testSenior() {
         viewModelScope.launch {
-            userSession.setLevel(QuestionLevel.SENIOR)
+            userSession.questionLevel(QuestionLevel.SENIOR)
             _event.emit(MainNavigationEvent.NavigationToTest)
         }
     }
 
-    fun onAdminJuniorDoubleClick() {
+    private fun adminJunior() {
         viewModelScope.launch {
-            userSession.setLevel(QuestionLevel.JUNIOR)
+            userSession.questionLevel(QuestionLevel.JUNIOR)
             _event.emit(MainNavigationEvent.NavigationToAdmin)
         }
     }
 
-    fun onAdminMiddleDoubleClick() {
+    private fun adminMiddle() {
         viewModelScope.launch {
-            userSession.setLevel(QuestionLevel.MIDDLE)
+            userSession.questionLevel(QuestionLevel.MIDDLE)
             _event.emit(MainNavigationEvent.NavigationToAdmin)
         }
     }
 
-    fun onAdminDoubleSeniorClick() {
+    private fun adminSenior() {
         viewModelScope.launch {
-            userSession.setLevel(QuestionLevel.SENIOR)
+            userSession.questionLevel(QuestionLevel.SENIOR)
             _event.emit(MainNavigationEvent.NavigationToAdmin)
         }
     }
@@ -62,6 +63,39 @@ class MainViewModel @Inject constructor(
     fun onSignInClick() {
         viewModelScope.launch {
             _event.emit(MainNavigationEvent.NavigationToSignIn)
+        }
+    }
+
+
+    fun onTestClick(type: TestType) {
+        when (type) {
+            TestType.JUNIOR -> {
+                testJunior()
+            }
+
+            TestType.MIDDLE -> {
+                testMiddle()
+            }
+
+            TestType.SENIOR -> {
+                testSenior()
+            }
+        }
+    }
+
+    fun onTestDoubleClick(type: TestType) {
+        when (type) {
+            TestType.JUNIOR -> {
+                adminJunior()
+            }
+
+            TestType.MIDDLE -> {
+                adminMiddle()
+            }
+
+            TestType.SENIOR -> {
+                adminSenior()
+            }
         }
     }
 

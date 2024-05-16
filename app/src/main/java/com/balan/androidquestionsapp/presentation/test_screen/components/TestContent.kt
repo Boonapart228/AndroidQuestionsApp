@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.balan.androidquestionsapp.domain.models.Answer
+import com.balan.androidquestionsapp.domain.models.QuestionType
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.BottomBar
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TestCheckContent
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TestFieldContent
@@ -34,7 +35,11 @@ fun TestContent(
     ) {
         Scaffold(
             topBar = {
-                TopBarTestScreen(count = state.questionNumber, size = state.questions.size, onMainClick = onMainClick)
+                TopBarTestScreen(
+                    count = state.questionNumber,
+                    size = state.questions.size,
+                    onMainClick = onMainClick
+                )
             },
             bottomBar = {
                 BottomBar(
@@ -44,30 +49,28 @@ fun TestContent(
             }) {
             Box(modifier = Modifier.padding(it))
             when (state.questions[state.questionNumber].type) {
-                "radioButtons" -> {
+                QuestionType.RADIO_BUTTON.type -> {
                     TestRadioContent(
-                        modifier = Modifier,
                         answers = state.questions[state.questionNumber].answers,
                         selectedAnswer = state.selectedRadioAnswer,
-                        onSelectedAnswerClick = onSelectedRadioAnswerClick,
+                        onAnswerClick = onSelectedRadioAnswerClick,
                         title = state.questions[state.questionNumber].title
                     )
                 }
 
-                "checkBox" -> {
+                QuestionType.CHECK_BOX.type -> {
                     TestCheckContent(
                         title = state.questions[state.questionNumber].title,
-                        modifier = Modifier,
                         selectedAnswers = state.selectedCheckAnswer,
                         answers = state.questions[state.questionNumber].answers,
-                        onSelectedAnswerClick = onSelectedCheckAnswerClick,
+                        onAnswerClick = onSelectedCheckAnswerClick,
                     )
                 }
 
-                "textField" -> {
+                QuestionType.TEXT_FIELD.type -> {
                     TestFieldContent(
                         title = state.questions[state.questionNumber].title,
-                        modifier = Modifier, answer = state.writtenAnswer, setAnswer = setAnswer
+                        answer = state.writtenAnswer, setAnswer = setAnswer
                     )
                 }
             }
