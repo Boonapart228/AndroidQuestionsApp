@@ -10,6 +10,10 @@ import com.balan.androidquestionsapp.domain.repository.AuthRepository
 class AuthRepositoryImpl(
     private val userLocalSource: UserLocalSource // Room
 ) : AuthRepository {
+    companion object {
+        const val PASSWORD = "qwe"
+    }
+
     override fun signIn(email: String, password: String): User? {
         val user = localUsers.find { it.email == email && it.password == password }
         user?.let {
@@ -41,5 +45,5 @@ class AuthRepositoryImpl(
         return Validation.VALID
     }
 
-    override fun adminAccess(password: String): Boolean = password == "qwe"
+    override fun adminAccess(password: String): Boolean = password == PASSWORD
 }

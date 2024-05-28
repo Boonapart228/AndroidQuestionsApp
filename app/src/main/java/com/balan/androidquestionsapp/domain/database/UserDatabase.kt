@@ -35,9 +35,7 @@ data class UserTDbEntity(
         middle = middle,
         senior = senior
     )
-
 }
-
 
 data class UserTuple(
     val id: Long,
@@ -102,7 +100,7 @@ class UserLocalSourceImpl(
 ) : UserLocalSource {
 
     override fun getUserById(accountId: Long): UserTDbEntity? {
-       return userDao.getUserById(accountId = accountId)
+        return userDao.getUserById(accountId = accountId)
     }
 
     override fun updateScore(userTuple: UserTuple) {

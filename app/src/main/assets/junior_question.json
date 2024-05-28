@@ -1,0 +1,194 @@
+[
+  {
+    "title": "Що таке Jetpack Compose?",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Сучасний інструментарій для розробки Android UI",
+        "isTrue": true
+      },
+      {
+        "title": "Інструментарій для створення бібліотек",
+        "isTrue": false
+      },
+      {
+        "title": "Інтерфейс бази даних",
+        "isTrue": false
+      },
+      {
+        "title": "Плагін для збірки APK",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Composable-функції - це основний будівельний блок Compose.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Так",
+        "isTrue": true
+      },
+      {
+        "title": "Ні",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Якою анотацією позначається Composable-функція?",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "@Composable",
+        "isTrue": true
+      },
+      {
+        "title": "@Annotation",
+        "isTrue": false
+      },
+      {
+        "title": "@ComposableFunction",
+        "isTrue": false
+      },
+      {
+        "title": "@Preview",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Основні стандартні елементи макету в Compose:",
+    "type": "checkBox",
+    "answers": [
+      {
+        "title": "Column",
+        "isTrue": true
+      },
+      {
+        "title": "Row",
+        "isTrue": true
+      },
+      {
+        "title": "Text",
+        "isTrue": true
+      },
+      {
+        "title": "Box",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "Яка віконна панель використовується для імпорту, створення, керування та використання ресурсів у вашому додатку?",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Менеджер ресурсів",
+        "isTrue": false
+      },
+      {
+        "title": "Інструмент ресурсів",
+        "isTrue": false
+      },
+      {
+        "title": "Менеджер макетів",
+        "isTrue": false
+      },
+      {
+        "title": "Менеджер програм",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "Який клас є автоматично генерованим класом Android, що містить ідентифікатори всіх ресурсів у проекті.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Клас ресурсів",
+        "isTrue": false
+      },
+      {
+        "title": "Клас ResourceID",
+        "isTrue": false
+      },
+      {
+        "title": "Клас Android",
+        "isTrue": false
+      },
+      {
+        "title": "Клас R",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "Яка функція використовується для завантаження ресурсу зображення?",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Функція stringResource()",
+        "isTrue": false
+      },
+      {
+        "title": "Функція painterResource()",
+        "isTrue": false
+      },
+      {
+        "title": "Функція ImageResource()",
+        "isTrue": false
+      },
+      {
+        "title": "Функція loadResource()",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "Який параметр функції використовується для додавання тексту доступності, що використовується TalkBack?",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "accessibilityText",
+        "isTrue": false
+      },
+      {
+        "title": "contentText",
+        "isTrue": false
+      },
+      {
+        "title": "accessibilityDescription",
+        "isTrue": true
+      },
+      {
+        "title": "contentDescription",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Макет Box розміщує елементи інтерфейсу користувача один на одному.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Так",
+        "isTrue": true
+      },
+      {
+        "title": "Ні",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Який параметр використовується для вирівнювання дочірнього елемента до початку батьківського?",
+    "type": "textField",
+    "answers": [
+      {
+        "title": "Alignment.Start",
+        "isTrue": true
+      }
+    ]
+  }
+]

@@ -34,14 +34,18 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideTestRepository(): TestRepository {
-        return TestRepositoryImpl()
+    fun provideTestRepository(
+        @ApplicationContext context: Context
+    ): TestRepository {
+        return TestRepositoryImpl(context)
     }
 
     @Provides
     @Singleton
-    fun provideResultRepository(): ResultRepository {
-        return ResultRepositoryImpl()
+    fun provideResultRepository(
+        @ApplicationContext context: Context
+    ): ResultRepository {
+        return ResultRepositoryImpl(context)
     }
 
     @Provides

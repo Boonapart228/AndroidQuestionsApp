@@ -1,0 +1,184 @@
+[
+  {
+    "title": "З конкурентним програмуванням, код може виконуватися у порядку, відмінному від того, в якому він був написаний.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Так",
+        "isTrue": true
+      },
+      {
+        "title": "Ні",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Які з наступних висловлювань є правдивими щодо контекстів корутин?",
+    "type": "checkBox",
+    "answers": [
+      {
+        "title": "Dispatchers.Default є найкраще для довгих завдань з читання та запису великих обсягів даних.",
+        "isTrue": true
+      },
+      {
+        "title": "Dispatchers.Main - для оновлення інтерфейсу, не для довгих завдань.",
+        "isTrue": true
+      },
+      {
+        "title": "Job керує життєвим циклом корутини.",
+        "isTrue": true
+      },
+      {
+        "title": "Dispatchers.IO оптимізований для мережевого вводу-виводу, серед інших фонових завдань.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "launch() та async() є функціями розширення для ___, який відстежує всі корутини, які він створює.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "CoroutineScope",
+        "isTrue": true
+      },
+      {
+        "title": "Job",
+        "isTrue": false
+      },
+      {
+        "title": "Dispatcher",
+        "isTrue": false
+      },
+      {
+        "title": "CoroutineContext",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Які з наступних висловлювань є правдивими щодо структурованої конкурентності та її найкращих практик?",
+    "type": "checkBox",
+    "answers": [
+      {
+        "title": "Якщо скасовано головну корутину, дочірні також скасуються.",
+        "isTrue": true
+      },
+      {
+        "title": "Батьківська область може завершитися раніше, ніж її дочірні.",
+        "isTrue": true
+      },
+      {
+        "title": "Помилка повинна передаватися вниз без скасування батьківської корутини.",
+        "isTrue": false
+      },
+      {
+        "title": "Корутини повинні бути запущені з області видимості корутини.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "Які з наступних висловлювань є правдивими щодо веб-служб?",
+    "type": "checkBox",
+    "answers": [
+      {
+        "title": "GET, POST та DELETE - це всі приклади операцій HTTP.",
+        "isTrue": true
+      },
+      {
+        "title": "URL - це тип URI, але не всі URI є URL.",
+        "isTrue": true
+      },
+      {
+        "title": "RESTful служби завжди надають відформатовану XML відповідь.",
+        "isTrue": false
+      },
+      {
+        "title": "Retrofit - це стороння бібліотека для обробки JSON з веб-служби.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "Retrofit - це стороння бібліотека, яка дозволяє вашому додатку надсилати запити до ___ веб-служби.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "XML",
+        "isTrue": false
+      },
+      {
+        "title": "Socket",
+        "isTrue": false
+      },
+      {
+        "title": "RESTful",
+        "isTrue": true
+      },
+      {
+        "title": "JSON",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Рекомендований спосіб виконання мережевого запиту Retrofit - це за допомогою корутини, запущеної в viewModelScope.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Так",
+        "isTrue": true
+      },
+      {
+        "title": "Ні",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Щоб дозволити вашому додатку встановлювати з'єднання з Інтернетом, додайте дозвіл 'android.permission.INTERNET' у файл ___ .",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "MainActivity",
+        "isTrue": false
+      },
+      {
+        "title": "build.gradle",
+        "isTrue": false
+      },
+      {
+        "title": "Android manifest",
+        "isTrue": true
+      },
+      {
+        "title": "ViewModel",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Процес перетворення результату JSON у використовувані дані, як це робиться за допомогою Gson, називається ___ JSON.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Серіалізація",
+        "isTrue": false
+      },
+      {
+        "title": "Кодування",
+        "isTrue": false
+      },
+      {
+        "title": "Перетворення",
+        "isTrue": false
+      },
+      {
+        "title": "Розбірка",
+        "isTrue": true
+      }
+    ]
+  }
+]
