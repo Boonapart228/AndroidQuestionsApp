@@ -2,11 +2,13 @@ package com.balan.androidquestionsapp.presentation.score.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.balan.androidquestionsapp.domain.database.UserLocalSource
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -18,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ScoreViewModel @Inject constructor(
     private val scoreRepository: ScoreRepository,
-    private val userSession: UserSession
+    private val userSession: UserSession,
+    private val userLocalSource: UserLocalSource
 ) : ViewModel() {
     private val _state = MutableStateFlow(ScoreState())
     val state = _state.asStateFlow()
@@ -29,8 +32,10 @@ class ScoreViewModel @Inject constructor(
 
 
     init {
-        checkLevel()
-        update()
+        viewModelScope.launch(Dispatchers.IO) {
+            checkLevel()
+            update(userSession.getUsers())
+        }
     }
 
     private fun checkLevel() {
@@ -41,33 +46,37 @@ class ScoreViewModel @Inject constructor(
         }
     }
 
-    private fun update() {
-        _state.update {
-            it.copy(users = userSession.getUsers().toMutableList())
+    private fun update(userList: List<User>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.update {
+                it.copy(users = userList)
+            }
         }
     }
 
 
     fun onDeleteScoreClick(user: User) {
-        viewModelScope.launch {
-            scoreRepository.deleteResult(user = user, level = userSession.getLevel())
-            update()
+        viewModelScope.launch(Dispatchers.IO) {
+            update(scoreRepository.deleteResult(user = user, level = userSession.getLevel()))
         }
     }
 
     fun sortByIncreasingScore() {
-        scoreRepository.sortByIncreasingScore(_state.value.level)
-        update()
+        viewModelScope.launch(Dispatchers.IO) {
+            update(scoreRepository.sortByIncreasingScore(_state.value.level))
+        }
     }
 
     fun sortByDecreasingScore() {
-        scoreRepository.sortByDecreasingScore(_state.value.level)
-        update()
+        viewModelScope.launch(Dispatchers.IO) {
+            update(scoreRepository.sortByDecreasingScore(_state.value.level))
+        }
     }
 
     fun sortByName() {
-        scoreRepository.sortByName()
-        update()
+        viewModelScope.launch(Dispatchers.IO) {
+            update(scoreRepository.sortByName())
+        }
     }
 
     fun onMainClick() {

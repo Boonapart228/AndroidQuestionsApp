@@ -7,6 +7,7 @@ import com.balan.androidquestionsapp.domain.models.QuestionType
 import com.balan.androidquestionsapp.domain.repository.TestRepository
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -36,25 +37,27 @@ class TestViewModel @Inject constructor(
     }
 
     fun nextQuestion() {
-        if (_state.value.answered) {
-            val question = userSession.getLevel()
-            checkAnswer()
-            if (_state.value.questionNumber < _state.value.questions.lastIndex) {
-                _state.update {
-                    it.copy(
-                        questionNumber = it.questionNumber + 1
-                    )
-                }
-            } else if (_state.value.questionNumber == _state.value.questions.lastIndex) {
-                val currentUser = userSession.getCurrentUser()
-                currentUser?.let {
-                    val user = testRepository.updateScore(
-                        score = _state.value.score,
-                        user = currentUser,
-                        question = question
-                    )
-                    userSession.updateInfo(user)
-                    navigateResultScreen()
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_state.value.answered) {
+                val question = userSession.getLevel()
+                checkAnswer()
+                if (_state.value.questionNumber < _state.value.questions.lastIndex) {
+                    _state.update {
+                        it.copy(
+                            questionNumber = it.questionNumber + 1
+                        )
+                    }
+                } else if (_state.value.questionNumber == _state.value.questions.lastIndex) {
+                    val currentUser = userSession.getCurrentUser()
+                    currentUser?.let {
+                        val user = testRepository.updateScore(
+                            score = _state.value.score,
+                            user = currentUser,
+                            question = question
+                        )
+                        userSession.updateInfo(user)
+                        navigateResultScreen()
+                    }
                 }
             }
         }

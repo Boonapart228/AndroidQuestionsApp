@@ -50,14 +50,14 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideUserSession(): UserSession {
-        return UserSessionImpl()
+    fun provideUserSession(userLocalSource : UserLocalSource): UserSession {
+        return UserSessionImpl(userLocalSource)
     }
 
     @Provides
     @Singleton
-    fun provideScoreRepository(): ScoreRepository {
-        return ScoreRepositoryImpl()
+    fun provideScoreRepository(userLocalSource: UserLocalSource): ScoreRepository {
+        return ScoreRepositoryImpl(userLocalSource)
     }
 
     @Provides

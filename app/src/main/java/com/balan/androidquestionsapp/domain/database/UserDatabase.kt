@@ -10,6 +10,8 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.Update
+import com.balan.androidquestionsapp.domain.models.QuestionsScore
+import com.balan.androidquestionsapp.domain.models.User
 
 @Entity(
     tableName = "users",
@@ -22,40 +24,28 @@ data class UserTDbEntity(
     val name: String,
     @ColumnInfo(collate = ColumnInfo.NOCASE) val email: String,
     val password: String,
-    val junior: Int,
-    val middle: Int,
-    val senior: Int,
-) {
-    fun toUser(): UserTuple = UserTuple(
-        id = id,
-        name = name,
-        email = email,
-        password = password,
-        junior = junior,
-        middle = middle,
-        senior = senior
-    )
-}
+    val junior: Int?,
+    val middle: Int?,
+    val senior: Int?,
+)
 
-data class UserTuple(
-    val id: Long,
-    val name: String,
-    val email: String,
-    val password: String,
-    val junior: Int,
-    val middle: Int,
-    val senior: Int,
-) {
-    fun toEntity(): UserTDbEntity = UserTDbEntity(
-        id = id,
-        name = name,
-        email = email,
-        password = password,
-        junior = junior,
-        middle = middle,
-        senior = senior
-    )
-}
+fun UserTDbEntity.toUser() = User(
+    id = id,
+    name = name,
+    email = email,
+    password = password,
+    question = QuestionsScore(junior = junior, middle = middle, senior = senior)
+)
+
+fun User.toEntity() = UserTDbEntity(
+    id = id,
+    name = name,
+    email = email,
+    password = password,
+    junior = question.junior,
+    middle = question.middle,
+    senior = question.senior,
+)
 
 @Database(
     version = 1,
@@ -71,10 +61,10 @@ abstract class AppDataBase : RoomDatabase() {
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users WHERE email = :email Limit 1")
-    fun findUser(email: String): UserTuple?
+    fun findUser(email: String): UserTDbEntity?
 
     @Update(entity = UserTDbEntity::class)
-    fun updateScore(userTuple: UserTuple)
+    fun updateScore(userTDbEntity: UserTDbEntity)
 
     @Insert
     fun createUser(userTDbEntity: UserTDbEntity)
@@ -87,31 +77,31 @@ interface UserDao {
 }
 
 interface UserLocalSource {
-    fun getUserById(accountId: Long): UserTDbEntity?
-    fun createUser(userTuple: UserTuple)
+    fun getUserById(accountId: Long): User?
+    fun createUser(user: User)
 
-    fun getAllUsers(): List<UserTuple>
+    fun getAllUsers(): List<User>
 
-    fun updateScore(userTuple: UserTuple)
+    fun updateScore(user: User)
 }
 
 class UserLocalSourceImpl(
     private val userDao: UserDao
 ) : UserLocalSource {
 
-    override fun getUserById(accountId: Long): UserTDbEntity? {
-        return userDao.getUserById(accountId = accountId)
+    override fun getUserById(accountId: Long): User? {
+        return userDao.getUserById(accountId = accountId)?.toUser()
     }
 
-    override fun updateScore(userTuple: UserTuple) {
-        userDao.updateScore(userTuple = userTuple)
+    override fun updateScore(user: User) {
+        userDao.updateScore(userTDbEntity = user.toEntity())
     }
 
-    override fun createUser(userTuple: UserTuple) {
-        userDao.createUser(userTDbEntity = userTuple.toEntity())
+    override fun createUser(user: User) {
+        userDao.createUser(userTDbEntity = user.toEntity())
     }
 
-    override fun getAllUsers(): List<UserTuple> {
-        return userDao.getAllUsers().map { user -> user.toUser() }
+    override fun getAllUsers(): List<User> {
+        return userDao.getAllUsers().map { userDbEntity -> userDbEntity.toUser() }
     }
 }

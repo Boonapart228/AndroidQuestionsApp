@@ -1,5 +1,6 @@
 package com.balan.androidquestionsapp.data
 
+import android.util.Log
 import com.balan.androidquestionsapp.data.local.localUsers
 import com.balan.androidquestionsapp.domain.database.UserLocalSource
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
@@ -15,7 +16,8 @@ class AuthRepositoryImpl(
     }
 
     override fun signIn(email: String, password: String): User? {
-        val user = localUsers.find { it.email == email && it.password == password }
+        val user =
+            userLocalSource.getAllUsers().find { it.email == email && it.password == password }
         user?.let {
             return user
         }
@@ -24,6 +26,7 @@ class AuthRepositoryImpl(
 
     override fun signUp(login: String, password: String, email: String): Validation {
         val newUser = User(
+            id = 0,
             name = login,
             password = password,
             email = email,
@@ -31,6 +34,8 @@ class AuthRepositoryImpl(
         )
         val signUpResult = isEmailAvailableForRegistration(newUser = newUser)
         if (signUpResult == Validation.VALID) localUsers.add(newUser)
+        if (signUpResult == Validation.VALID) userLocalSource.createUser(newUser) // room
+        Log.d("BD", "$newUser") // room
         return signUpResult
     }
 

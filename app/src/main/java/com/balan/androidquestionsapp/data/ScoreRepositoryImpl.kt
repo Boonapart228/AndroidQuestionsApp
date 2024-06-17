@@ -1,53 +1,65 @@
 package com.balan.androidquestionsapp.data
 
-import com.balan.androidquestionsapp.data.local.localUsers
+import com.balan.androidquestionsapp.domain.database.UserLocalSource
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 
-class ScoreRepositoryImpl : ScoreRepository {
+class ScoreRepositoryImpl(
+    private val userLocalSource: UserLocalSource
+) : ScoreRepository {
 
-    override fun deleteResult(user: User, level: QuestionLevel) {
-        val index = localUsers.indexOf(user)
+    override fun deleteResult(user: User, level: QuestionLevel): List<User> {
+        val listUserDb = userLocalSource.getAllUsers().toMutableList()
+        val indexDb = listUserDb.indexOf(user)
         when (level) {
-            QuestionLevel.JUNIOR -> localUsers[index] =
-                localUsers[index].copy(question = localUsers[index].question.copy(junior = null))
+            QuestionLevel.JUNIOR ->
+                listUserDb[indexDb] =
+                    listUserDb[indexDb].copy(question = listUserDb[indexDb].question.copy(junior = null))
 
-            QuestionLevel.MIDDLE -> localUsers[index] =
-                localUsers[index].copy(question = localUsers[index].question.copy(middle = null))
+            QuestionLevel.MIDDLE -> listUserDb[indexDb] =
+                listUserDb[indexDb].copy(question = listUserDb[indexDb].question.copy(middle = null))
 
-            QuestionLevel.SENIOR -> localUsers[index] =
-                localUsers[index].copy(question = localUsers[index].question.copy(senior = null))
+            QuestionLevel.SENIOR -> listUserDb[indexDb] =
+                listUserDb[indexDb].copy(question = listUserDb[indexDb].question.copy(senior = null))
 
             QuestionLevel.DEFAULT -> 0
         }
+        val userDb = listUserDb[indexDb]
+        userLocalSource.updateScore(userDb)
+        return listUserDb
     }
 
-    override fun sortByIncreasingScore(level: QuestionLevel) {
-        when (level) {
-            QuestionLevel.JUNIOR -> localUsers.sortBy { it.question.junior }
+    override fun sortByIncreasingScore(level: QuestionLevel): List<User> {
+        val userList = when (level) {
+            QuestionLevel.JUNIOR -> userLocalSource.getAllUsers().sortedBy { it.question.junior }
 
-            QuestionLevel.MIDDLE -> localUsers.sortBy { it.question.middle }
+            QuestionLevel.MIDDLE -> userLocalSource.getAllUsers().sortedBy { it.question.middle }
 
-            QuestionLevel.SENIOR -> localUsers.sortBy { it.question.senior }
+            QuestionLevel.SENIOR -> userLocalSource.getAllUsers().sortedBy { it.question.senior }
 
-            QuestionLevel.DEFAULT -> 0
+            QuestionLevel.DEFAULT -> userLocalSource.getAllUsers()
         }
+        return userList
     }
 
-    override fun sortByDecreasingScore(level: QuestionLevel) {
-        when (level) {
-            QuestionLevel.JUNIOR -> localUsers.sortByDescending { it.question.junior }
+    override fun sortByDecreasingScore(level: QuestionLevel): List<User> {
+        val userList = when (level) {
+            QuestionLevel.JUNIOR -> userLocalSource.getAllUsers()
+                .sortedByDescending { it.question.junior }
 
-            QuestionLevel.MIDDLE -> localUsers.sortByDescending { it.question.junior }
+            QuestionLevel.MIDDLE -> userLocalSource.getAllUsers()
+                .sortedByDescending { it.question.middle }
 
-            QuestionLevel.SENIOR -> localUsers.sortByDescending { it.question.junior }
+            QuestionLevel.SENIOR -> userLocalSource.getAllUsers()
+                .sortedByDescending { it.question.senior }
 
-            QuestionLevel.DEFAULT -> 0
+            QuestionLevel.DEFAULT -> userLocalSource.getAllUsers()
         }
+        return userList
     }
 
-    override fun sortByName() {
-        localUsers.sortBy { it.name }
+    override fun sortByName(): List<User> {
+        return userLocalSource.getAllUsers().sortedBy { it.name }
     }
 }
