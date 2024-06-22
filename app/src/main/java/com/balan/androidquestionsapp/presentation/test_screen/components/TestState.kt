@@ -12,4 +12,3 @@ data class TestState(
     val writtenAnswer: String = "",
     val score: Int = 0
 )
-

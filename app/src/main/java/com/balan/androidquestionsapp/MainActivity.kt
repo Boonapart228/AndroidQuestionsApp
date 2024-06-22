@@ -11,8 +11,6 @@ import com.balan.androidquestionsapp.presentation.navigation.Navigation
 import com.balan.androidquestionsapp.ui.theme.AndroidQuestionsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-//sdjdjajs
-//asdddwe
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

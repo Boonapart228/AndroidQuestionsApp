@@ -1,9 +1,9 @@
 package com.balan.androidquestionsapp.data
 
-import com.balan.androidquestionsapp.domain.database.UserLocalSource
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
+import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 
 class ScoreRepositoryImpl(
     private val userLocalSource: UserLocalSource
@@ -31,35 +31,14 @@ class ScoreRepositoryImpl(
     }
 
     override fun sortByIncreasingScore(level: QuestionLevel): List<User> {
-        val userList = when (level) {
-            QuestionLevel.JUNIOR -> userLocalSource.getAllUsers().sortedBy { it.question.junior }
-
-            QuestionLevel.MIDDLE -> userLocalSource.getAllUsers().sortedBy { it.question.middle }
-
-            QuestionLevel.SENIOR -> userLocalSource.getAllUsers().sortedBy { it.question.senior }
-
-            QuestionLevel.DEFAULT -> userLocalSource.getAllUsers()
-        }
-        return userList
+        return userLocalSource.sortByIncreasingScore()
     }
 
     override fun sortByDecreasingScore(level: QuestionLevel): List<User> {
-        val userList = when (level) {
-            QuestionLevel.JUNIOR -> userLocalSource.getAllUsers()
-                .sortedByDescending { it.question.junior }
-
-            QuestionLevel.MIDDLE -> userLocalSource.getAllUsers()
-                .sortedByDescending { it.question.middle }
-
-            QuestionLevel.SENIOR -> userLocalSource.getAllUsers()
-                .sortedByDescending { it.question.senior }
-
-            QuestionLevel.DEFAULT -> userLocalSource.getAllUsers()
-        }
-        return userList
+        return userLocalSource.sortByDecreasingScore()
     }
 
     override fun sortByName(): List<User> {
-        return userLocalSource.getAllUsers().sortedBy { it.name }
+        return userLocalSource.sortUserByName()
     }
 }

@@ -1,15 +1,13 @@
 package com.balan.androidquestionsapp.data
 
-import android.util.Log
-import com.balan.androidquestionsapp.data.local.localUsers
-import com.balan.androidquestionsapp.domain.database.UserLocalSource
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.repository.AuthRepository
+import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 
 class AuthRepositoryImpl(
-    private val userLocalSource: UserLocalSource // Room
+    private val userLocalSource: UserLocalSource
 ) : AuthRepository {
     companion object {
         const val PASSWORD = "qwe"
@@ -17,7 +15,7 @@ class AuthRepositoryImpl(
 
     override fun signIn(email: String, password: String): User? {
         val user =
-            userLocalSource.getAllUsers().find { it.email == email && it.password == password }
+            userLocalSource.findUser(email = email, password = password)
         user?.let {
             return user
         }
@@ -30,12 +28,10 @@ class AuthRepositoryImpl(
             name = login,
             password = password,
             email = email,
-            QuestionsScore(junior = 0, middle = 0, senior = 0)
+            QuestionsScore(junior = 10, middle = 10, senior = 10)
         )
         val signUpResult = isEmailAvailableForRegistration(newUser = newUser)
-        if (signUpResult == Validation.VALID) localUsers.add(newUser)
-        if (signUpResult == Validation.VALID) userLocalSource.createUser(newUser) // room
-        Log.d("BD", "$newUser") // room
+        if (signUpResult == Validation.VALID) userLocalSource.createUser(newUser)
         return signUpResult
     }
 
@@ -43,10 +39,10 @@ class AuthRepositoryImpl(
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newUser.email).matches()) {
             return Validation.INVALID_EMAIL
         }
-
-        if (localUsers.any { it.email == newUser.email }) {
+        if (userLocalSource.getAllUsers().any { it.email == newUser.email }) {
             return Validation.EMAIL_ALREADY_EXIST
         }
+
         return Validation.VALID
     }
 

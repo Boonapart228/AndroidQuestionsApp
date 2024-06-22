@@ -30,12 +30,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.presentation.score.components.contents.BottomBarScore
 import com.balan.androidquestionsapp.presentation.topbar.TopBar
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -113,7 +115,7 @@ fun ScoreItem(
                     )
                 }
                 Text(
-                    text = "Результат: $score",
+                    text = "${stringResource(id = R.string.result_score)} $score",
                     modifier = Modifier.padding(horizontal = LocalDimen.current.scoreTextHorizontalPadding)
                 )
                 Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
@@ -122,7 +124,7 @@ fun ScoreItem(
                     shape = CircleShape,
                     modifier = Modifier.size(LocalDimen.current.buttonSize),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (testPassed) Color.Green else Color.Red
+                        containerColor = if (testPassed) LocalColors.current.green else LocalColors.current.red
                     )
                 ) {}
                 Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
@@ -132,7 +134,6 @@ fun ScoreItem(
                     Icon(
                         imageVector = Icons.Filled.Delete,
                         contentDescription = null,
-                        tint = Color.Gray
                     )
                 }
             }

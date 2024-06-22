@@ -2,7 +2,6 @@ package com.balan.androidquestionsapp.presentation.score.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.balan.androidquestionsapp.domain.database.UserLocalSource
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
@@ -20,8 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ScoreViewModel @Inject constructor(
     private val scoreRepository: ScoreRepository,
-    private val userSession: UserSession,
-    private val userLocalSource: UserLocalSource
+    private val userSession: UserSession
 ) : ViewModel() {
     private val _state = MutableStateFlow(ScoreState())
     val state = _state.asStateFlow()
@@ -47,10 +45,8 @@ class ScoreViewModel @Inject constructor(
     }
 
     private fun update(userList: List<User>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _state.update {
-                it.copy(users = userList)
-            }
+        _state.update {
+            it.copy(users = userList)
         }
     }
 
@@ -94,7 +90,6 @@ class ScoreViewModel @Inject constructor(
         }
     }
 
-    fun isTestPassed(score: Int?) = if (score == null) false else score >= 7
-
+    fun isTestPassed(score: Int?) = score != null && score >= 7
 
 }

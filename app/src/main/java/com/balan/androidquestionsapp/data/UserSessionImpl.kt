@@ -1,8 +1,9 @@
 package com.balan.androidquestionsapp.data
 
-import com.balan.androidquestionsapp.domain.database.UserLocalSource
+
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.User
+import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.user.UserSession
 
 class UserSessionImpl(
