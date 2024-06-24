@@ -14,7 +14,7 @@ class ResultRepositoryImpl(private val assetManager: AssetManager) : ResultRepos
 
         val gson = Gson()
 
-        val json = assetManager.getJsonByFileName(question)
+        val json = assetManager.getJsonByFileName(question.path)
 
         return gson.fromJson(json, Array<QuestionsItem>::class.java).size
     }

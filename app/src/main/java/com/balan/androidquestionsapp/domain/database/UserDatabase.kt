@@ -16,7 +16,7 @@ import com.balan.androidquestionsapp.domain.models.User
         Index("email", unique = true)
     ]
 )
-data class UserDbEntity(
+data class UserEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String,
     @ColumnInfo(collate = ColumnInfo.NOCASE) val email: String,
@@ -26,7 +26,7 @@ data class UserDbEntity(
     val senior: Int?,
 )
 
-fun UserDbEntity.toUser() = User(
+fun UserEntity.toUser() = User(
     id = id,
     name = name,
     email = email,
@@ -34,7 +34,7 @@ fun UserDbEntity.toUser() = User(
     question = QuestionsScore(junior = junior, middle = middle, senior = senior)
 )
 
-fun User.toEntity() = UserDbEntity(
+fun User.toEntity() = UserEntity(
     id = id,
     name = name,
     email = email,
@@ -47,7 +47,7 @@ fun User.toEntity() = UserDbEntity(
 @Database(
     version = 1,
     entities = [
-        UserDbEntity::class
+        UserEntity::class
     ]
 )
 

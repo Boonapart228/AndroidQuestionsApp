@@ -2,6 +2,7 @@
     <string name="app_name">AndroidQuestionsApp</string>
     <string name="in_valid">Невірний пароль або пошта</string>
     <string name="in_valid_email">Невірний формат пошти</string>
+    <string name="email_already_exists">Пошта вже існує</string>
     <string name="in_valid_admin_password">Невірний пароль</string>
     <string name="valid" />
     <string name="input_login">Введіть логін</string>

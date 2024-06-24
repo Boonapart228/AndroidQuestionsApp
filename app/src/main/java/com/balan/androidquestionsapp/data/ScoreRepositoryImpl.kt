@@ -10,7 +10,7 @@ class ScoreRepositoryImpl(
 ) : ScoreRepository {
 
     override fun deleteResult(user: User, level: QuestionLevel): List<User> {
-        val listUserDb = userLocalSource.getAllUsers().toMutableList()
+        val listUserDb = userLocalSource.getAll().toMutableList()
         val indexDb = listUserDb.indexOf(user)
         when (level) {
             QuestionLevel.JUNIOR ->
@@ -23,22 +23,10 @@ class ScoreRepositoryImpl(
             QuestionLevel.SENIOR -> listUserDb[indexDb] =
                 listUserDb[indexDb].copy(question = listUserDb[indexDb].question.copy(senior = null))
 
-            QuestionLevel.DEFAULT -> 0
+            QuestionLevel.DEFAULT -> listUserDb[indexDb]
         }
         val userDb = listUserDb[indexDb]
         userLocalSource.updateScore(userDb)
         return listUserDb
-    }
-
-    override fun sortByIncreasingScore(level: QuestionLevel): List<User> {
-        return userLocalSource.sortByIncreasingScore()
-    }
-
-    override fun sortByDecreasingScore(level: QuestionLevel): List<User> {
-        return userLocalSource.sortByDecreasingScore()
-    }
-
-    override fun sortByName(): List<User> {
-        return userLocalSource.sortUserByName()
     }
 }

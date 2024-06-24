@@ -12,7 +12,7 @@ class TestRepositoryImpl(
 ) : TestRepository {
     override fun getQuestions(session: QuestionLevel): List<QuestionsItem> {
         val gson = Gson()
-        val json = assetManager.getJsonByFileName(session)
+        val json = assetManager.getJsonByFileName(session.path)
         return gson.fromJson(json, Array<QuestionsItem>::class.java).toList()
     }
 

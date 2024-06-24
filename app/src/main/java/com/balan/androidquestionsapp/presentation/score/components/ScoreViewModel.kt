@@ -3,8 +3,10 @@ package com.balan.androidquestionsapp.presentation.score.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
+import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
+import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +21,14 @@ import javax.inject.Inject
 @HiltViewModel
 class ScoreViewModel @Inject constructor(
     private val scoreRepository: ScoreRepository,
-    private val userSession: UserSession
+    private val userSession: UserSession,
+    private val userLocalSource: UserLocalSource
+
 ) : ViewModel() {
+    companion object {
+        const val PASSING_SCORE = 7
+    }
+
     private val _state = MutableStateFlow(ScoreState())
     val state = _state.asStateFlow()
 
@@ -32,7 +40,7 @@ class ScoreViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             checkLevel()
-            update(userSession.getUsers())
+            update(userLocalSource.getAll())
         }
     }
 
@@ -57,21 +65,9 @@ class ScoreViewModel @Inject constructor(
         }
     }
 
-    fun sortByIncreasingScore() {
+    fun sort(sortDirection: SortDirection) {
         viewModelScope.launch(Dispatchers.IO) {
-            update(scoreRepository.sortByIncreasingScore(_state.value.level))
-        }
-    }
-
-    fun sortByDecreasingScore() {
-        viewModelScope.launch(Dispatchers.IO) {
-            update(scoreRepository.sortByDecreasingScore(_state.value.level))
-        }
-    }
-
-    fun sortByName() {
-        viewModelScope.launch(Dispatchers.IO) {
-            update(scoreRepository.sortByName())
+          update(userLocalSource.sortByDirection(sortDirection))
         }
     }
 
@@ -90,6 +86,6 @@ class ScoreViewModel @Inject constructor(
         }
     }
 
-    fun isTestPassed(score: Int?) = score != null && score >= 7
+    fun isTestPassed(score: Int?) = score != null && score >= PASSING_SCORE
 
 }
