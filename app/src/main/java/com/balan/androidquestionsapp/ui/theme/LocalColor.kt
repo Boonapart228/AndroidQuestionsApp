@@ -4,11 +4,11 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 
-val LocalColorResult = compositionLocalOf {
-    ColorResult()
+val LocalColors = compositionLocalOf {
+    Colors()
 }
 
-data class ColorResult(
+data class Colors(
     val green: Color = Color(0xFF00FF00),
     val red: Color = Color(0xFFFF0000)
 )

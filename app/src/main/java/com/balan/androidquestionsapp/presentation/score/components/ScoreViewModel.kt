@@ -66,8 +66,16 @@ class ScoreViewModel @Inject constructor(
     }
 
     fun sort(sortDirection: SortDirection) {
+
         viewModelScope.launch(Dispatchers.IO) {
-          update(userLocalSource.sortByDirection(sortDirection))
+            update(userLocalSource.sortByDirection(sortDirection))
+        }
+
+    }
+
+    fun onToggleMenuClick() {
+        _state.update {
+            it.copy(menuExpanded = !it.menuExpanded)
         }
     }
 

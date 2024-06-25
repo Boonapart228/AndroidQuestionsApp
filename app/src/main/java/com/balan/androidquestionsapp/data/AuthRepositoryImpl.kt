@@ -15,7 +15,7 @@ class AuthRepositoryImpl(
 
     override fun signIn(email: String, password: String): User? {
         val user =
-            userLocalSource.find(email = email, password = password)
+            userLocalSource.getByEmailAndPassword(email = email, password = password)
         user?.let {
             return user
         }
@@ -39,7 +39,7 @@ class AuthRepositoryImpl(
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newUser.email).matches()) {
             return Validation.INVALID_EMAIL
         }
-        if (userLocalSource.findByEmail(newUser.email)) {
+        if (userLocalSource.getByEmail(newUser.email)) {
             return Validation.EMAIL_ALREADY_EXIST
         }
 

@@ -36,10 +36,8 @@ import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
 import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
-import com.balan.androidquestionsapp.presentation.score.components.contents.BottomBarScore
-import com.balan.androidquestionsapp.presentation.score.model.sortButtons
-import com.balan.androidquestionsapp.presentation.topbar.TopBar
-import com.balan.androidquestionsapp.ui.theme.LocalColorResult
+import com.balan.androidquestionsapp.presentation.score.components.contents.TopBarScore
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -47,6 +45,7 @@ fun ScoreContent(
     onMainClick: () -> Unit,
     viewModel: ScoreViewModel,
     onSortClick: (SortDirection) -> Unit,
+    onActiveClick : () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsState()
@@ -55,21 +54,14 @@ fun ScoreContent(
         modifier = modifier
             .fillMaxSize(),
         topBar = {
-            TopBar(onClick = onMainClick, imageVector = Icons.Filled.Home)
+            TopBarScore(
+                onClick = onMainClick,
+                imageVector = Icons.Filled.Home,
+                onSelectOptionClick = onSortClick,
+                state = state,
+                onToggleMenuClick = onActiveClick
+            )
         },
-        bottomBar = {
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(vertical = LocalDimen.current.spacerPaddingVertical),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.Absolute.SpaceAround
-            ) {
-                sortButtons.forEach { (imageVector, sortType) ->
-                    BottomBarScore(imageVector = imageVector) { onSortClick(sortType) }
-                }
-            }
-        }
     ) { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
             items(users) { user ->
@@ -130,7 +122,7 @@ fun ScoreItem(
                     shape = CircleShape,
                     modifier = Modifier.size(LocalDimen.current.buttonSize),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (testPassed) LocalColorResult.current.green else LocalColorResult.current.red
+                        containerColor = if (testPassed) LocalColors.current.green else LocalColors.current.red
                     )
                 ) {}
                 Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))

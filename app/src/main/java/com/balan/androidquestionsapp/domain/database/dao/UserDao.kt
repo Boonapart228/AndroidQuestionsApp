@@ -29,9 +29,8 @@ interface UserDao {
     @Query("SELECT * FROM users ORDER BY name")
     fun sortUserByName(): List<UserEntity>
 
-    @Query("SELECT * FROM users ORDER BY junior AND middle AND senior")
-    fun sortByIncreasingScore(): List<UserEntity>
+    @Query("SELECT * FROM users ORDER BY CASE WHEN :ascending THEN junior ELSE NULL END ASC, CASE WHEN :ascending THEN middle ELSE NULL END ASC, CASE WHEN :ascending THEN senior ELSE NULL END ASC, CASE WHEN :ascending THEN NULL ELSE junior END DESC, CASE WHEN :ascending THEN NULL ELSE middle END DESC, CASE WHEN :ascending THEN NULL ELSE senior END DESC")
+    fun sortByScore(ascending: Boolean): List<UserEntity>
 
-    @Query("SELECT * FROM users ORDER BY junior DESC, middle DESC, senior DESC")
-    fun sortByDecreasingScore(): List<UserEntity>
+
 }

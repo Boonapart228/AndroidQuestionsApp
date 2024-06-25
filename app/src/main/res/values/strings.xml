@@ -18,5 +18,8 @@
     <string name="result">Результат</string>
     <string name="result_score">Результат:</string>
     <string name="results_panel">панель результатів</string>
+    <string name="increasing">Зростанням</string>
+    <string name="decreasing">Спаданням</string>
+    <string name="name">Ім\'ям</string>
 
 </resources>

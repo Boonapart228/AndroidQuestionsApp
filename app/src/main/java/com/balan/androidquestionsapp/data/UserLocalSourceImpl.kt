@@ -13,21 +13,27 @@ class UserLocalSourceImpl(
 
     override fun sortByDirection(sortDirection: SortDirection): List<User> {
         return when (sortDirection) {
-            SortDirection.INCREASING -> userDao.sortByDecreasingScore()
-                .map { userDbEntity -> userDbEntity.toUser() }
+            SortDirection.INCREASING ->{
+                userDao.sortByScore(true)
+                    .map { userDbEntity -> userDbEntity.toUser() }
+            }
 
-            SortDirection.DECREASING -> userDao.sortByIncreasingScore()
-                .map { userDbEntity -> userDbEntity.toUser() }
+            SortDirection.DECREASING ->{
+                userDao.sortByScore(false)
+                    .map { userDbEntity -> userDbEntity.toUser() }
+            }
+
             SortDirection.NAME -> userDao.sortUserByName()
                 .map { userDbEntity -> userDbEntity.toUser() }
         }
     }
 
-    override fun find(email: String, password: String): User? {
+    override fun getByEmailAndPassword(email: String, password: String): User? {
         return userDao.findUser(email, password)?.toUser()
     }
-   override fun findByEmail(email: String): Boolean {
-       return userDao.findUser(email)
+
+    override fun getByEmail(email: String): Boolean {
+        return userDao.findUser(email)
     }
 
     override fun getById(accountId: Long): User? {

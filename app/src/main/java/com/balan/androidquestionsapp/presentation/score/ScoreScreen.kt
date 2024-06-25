@@ -21,6 +21,7 @@ fun ScoreScreen(
     ScoreContent(
         onMainClick = viewModel::onMainClick,
         viewModel = viewModel,
-        onSortClick = viewModel::sort
+        onSortClick = viewModel::sort,
+        onActiveClick = viewModel::onToggleMenuClick
     )
 }
