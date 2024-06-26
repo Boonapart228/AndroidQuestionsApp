@@ -3,7 +3,7 @@ package com.balan.androidquestionsapp.presentation.sign_in.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Validation
-import com.balan.androidquestionsapp.domain.repository.AuthRepository
+import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,10 +14,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val signInUseCase: Provider<SignInUseCase>,
     private val userSession: UserSession
 ) : ViewModel() {
 
@@ -46,7 +47,7 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val password = _state.value.password
             val email = _state.value.email
-            val signInResult = authRepository.signIn(email = email, password = password)
+            val signInResult = signInUseCase.get().execute(email = email, password = password)
             _state.update {
                 it.copy(
                     validation = if (signInResult == null) Validation.INVALID else Validation.VALID

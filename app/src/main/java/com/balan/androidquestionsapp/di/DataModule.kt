@@ -17,6 +17,15 @@ import com.balan.androidquestionsapp.domain.repository.ResultRepository
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 import com.balan.androidquestionsapp.domain.repository.TestRepository
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
+import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
+import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
+import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
+import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionsUseCase
+import com.balan.androidquestionsapp.domain.usecase.test.UpdateScoreUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.QuestionLevelUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateInfoUseCase
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.Module
 import dagger.Provides
@@ -85,5 +94,59 @@ class DataModule {
     @Singleton
     fun provideAssetManager(@ApplicationContext context: Context): AssetManager {
         return AssetManagerImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignInUseCase(authRepository: AuthRepository): SignInUseCase {
+        return SignInUseCase(authRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignUpUseCase(authRepository: AuthRepository): SignUpUseCase {
+        return SignUpUseCase(authRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuestionLevelUseCase(userSession: UserSession): QuestionLevelUseCase {
+        return QuestionLevelUseCase(userSession)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetLevelUseCase(userSession: UserSession): GetLevelUseCase {
+        return GetLevelUseCase(userSession)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetCurrentUserUseCase(userSession: UserSession): GetCurrentUserUseCase {
+        return GetCurrentUserUseCase(userSession)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateInfoUseCase(userSession: UserSession): UpdateInfoUseCase {
+        return UpdateInfoUseCase(userSession)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetQuestionsUseCase(testRepository: TestRepository): GetQuestionsUseCase {
+        return GetQuestionsUseCase(testRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateScoreUseCase(testRepository: TestRepository): UpdateScoreUseCase {
+        return UpdateScoreUseCase(testRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteResultUseCase(scoreRepository: ScoreRepository) : DeleteResultUseCase{
+        return DeleteResultUseCase(scoreRepository)
     }
 }

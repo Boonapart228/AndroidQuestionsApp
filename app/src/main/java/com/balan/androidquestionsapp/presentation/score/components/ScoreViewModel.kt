@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
-import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
+import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,12 +17,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class ScoreViewModel @Inject constructor(
-    private val scoreRepository: ScoreRepository,
     private val userSession: UserSession,
-    private val userLocalSource: UserLocalSource
+    private val userLocalSource: UserLocalSource,
+    private val deleteResultUseCase: Provider<DeleteResultUseCase>
 
 ) : ViewModel() {
     companion object {
@@ -61,7 +62,7 @@ class ScoreViewModel @Inject constructor(
 
     fun onDeleteScoreClick(user: User) {
         viewModelScope.launch(Dispatchers.IO) {
-            update(scoreRepository.deleteResult(user = user, level = userSession.getLevel()))
+            update(deleteResultUseCase.get().execute(user = user, level = userSession.getLevel()))
         }
     }
 

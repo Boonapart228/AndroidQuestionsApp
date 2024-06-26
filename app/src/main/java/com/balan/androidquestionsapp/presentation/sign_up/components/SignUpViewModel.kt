@@ -3,7 +3,7 @@ package com.balan.androidquestionsapp.presentation.sign_up.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Validation
-import com.balan.androidquestionsapp.domain.repository.AuthRepository
+import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,10 +13,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val signUpUseCase: Provider<SignUpUseCase>
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignUpState> =
@@ -59,8 +60,7 @@ class SignUpViewModel @Inject constructor(
             val name = _state.value.name
             val password = _state.value.password
             val email = _state.value.email
-            val signUpResult =
-                authRepository.signUp(login = name, password = password, email = email)
+            val signUpResult = signUpUseCase.get().execute(login = name, password = password, email = email)
             _state.update {
                 it.copy(
                     valid = when (signUpResult) {

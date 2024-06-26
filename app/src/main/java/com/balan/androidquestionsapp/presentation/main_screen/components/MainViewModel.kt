@@ -4,58 +4,59 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.TestType
-import com.balan.androidquestionsapp.domain.user.UserSession
+import com.balan.androidquestionsapp.domain.usecase.user_session.QuestionLevelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userSession: UserSession
+    private val userQuestionLevelUseCase: Provider<QuestionLevelUseCase>
 ) : ViewModel() {
     private val _event = MutableSharedFlow<MainNavigationEvent>()
 
     val event = _event.asSharedFlow()
     private fun testJunior() {
         viewModelScope.launch {
-            userSession.questionLevel(QuestionLevel.JUNIOR)
+            userQuestionLevelUseCase.get().execute(QuestionLevel.JUNIOR)
             _event.emit(MainNavigationEvent.NavigationToTest)
         }
     }
 
     private fun testMiddle() {
         viewModelScope.launch {
-            userSession.questionLevel(QuestionLevel.MIDDLE)
+            userQuestionLevelUseCase.get().execute(QuestionLevel.MIDDLE)
             _event.emit(MainNavigationEvent.NavigationToTest)
         }
     }
 
     private fun testSenior() {
         viewModelScope.launch {
-            userSession.questionLevel(QuestionLevel.SENIOR)
+            userQuestionLevelUseCase.get().execute(QuestionLevel.SENIOR)
             _event.emit(MainNavigationEvent.NavigationToTest)
         }
     }
 
     private fun adminJunior() {
         viewModelScope.launch {
-            userSession.questionLevel(QuestionLevel.JUNIOR)
+            userQuestionLevelUseCase.get().execute(QuestionLevel.JUNIOR)
             _event.emit(MainNavigationEvent.NavigationToAdmin)
         }
     }
 
     private fun adminMiddle() {
         viewModelScope.launch {
-            userSession.questionLevel(QuestionLevel.MIDDLE)
+            userQuestionLevelUseCase.get().execute(QuestionLevel.MIDDLE)
             _event.emit(MainNavigationEvent.NavigationToAdmin)
         }
     }
 
     private fun adminSenior() {
         viewModelScope.launch {
-            userSession.questionLevel(QuestionLevel.SENIOR)
+            userQuestionLevelUseCase.get().execute(QuestionLevel.SENIOR)
             _event.emit(MainNavigationEvent.NavigationToAdmin)
         }
     }
