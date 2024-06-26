@@ -2,19 +2,21 @@ package com.balan.androidquestionsapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.balan.androidquestionsapp.data.AssetManagerImpl
 import com.balan.androidquestionsapp.data.AuthRepositoryImpl
 import com.balan.androidquestionsapp.data.ResultRepositoryImpl
 import com.balan.androidquestionsapp.data.ScoreRepositoryImpl
 import com.balan.androidquestionsapp.data.TestRepositoryImpl
+import com.balan.androidquestionsapp.data.UserLocalSourceImpl
 import com.balan.androidquestionsapp.data.UserSessionImpl
 import com.balan.androidquestionsapp.domain.database.AppDataBase
-import com.balan.androidquestionsapp.domain.database.UserDao
-import com.balan.androidquestionsapp.domain.database.UserLocalSource
-import com.balan.androidquestionsapp.domain.database.UserLocalSourceImpl
+import com.balan.androidquestionsapp.domain.database.dao.UserDao
+import com.balan.androidquestionsapp.domain.repository.AssetManager
 import com.balan.androidquestionsapp.domain.repository.AuthRepository
 import com.balan.androidquestionsapp.domain.repository.ResultRepository
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 import com.balan.androidquestionsapp.domain.repository.TestRepository
+import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.Module
 import dagger.Provides
@@ -34,37 +36,37 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideTestRepository(): TestRepository {
-        return TestRepositoryImpl()
+    fun provideTestRepository(assetManager: AssetManager): TestRepository {
+        return TestRepositoryImpl(assetManager)
     }
 
     @Provides
     @Singleton
-    fun provideResultRepository(): ResultRepository {
-        return ResultRepositoryImpl()
+    fun provideResultRepository(assetManager: AssetManager): ResultRepository {
+        return ResultRepositoryImpl(assetManager)
     }
 
     @Provides
     @Singleton
-    fun provideUserSession(): UserSession {
-        return UserSessionImpl()
+    fun provideUserSession(userLocalSource: UserLocalSource): UserSession {
+        return UserSessionImpl(userLocalSource)
     }
 
     @Provides
     @Singleton
-    fun provideScoreRepository(): ScoreRepository {
-        return ScoreRepositoryImpl()
+    fun provideScoreRepository(userLocalSource: UserLocalSource): ScoreRepository {
+        return ScoreRepositoryImpl(userLocalSource)
     }
 
     @Provides
     @Singleton
-    fun provideUserLocalSource(userDao: UserDao): UserLocalSource { //Room
+    fun provideUserLocalSource(userDao: UserDao): UserLocalSource {
         return UserLocalSourceImpl(userDao)
     }
 
     @Provides
     @Singleton
-    fun provideAppDataBase(@ApplicationContext applicationContext: Context): AppDataBase { //Room
+    fun provideAppDataBase(@ApplicationContext applicationContext: Context): AppDataBase {
         return Room.databaseBuilder(
             applicationContext,
             AppDataBase::class.java,
@@ -75,7 +77,13 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideUserDao(appDataBase: AppDataBase): UserDao { //Room
+    fun provideUserDao(appDataBase: AppDataBase): UserDao {
         return appDataBase.getUserDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAssetManager(@ApplicationContext context: Context): AssetManager {
+        return AssetManagerImpl(context)
     }
 }

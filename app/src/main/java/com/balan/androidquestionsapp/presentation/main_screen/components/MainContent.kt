@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.TestType
 import com.balan.androidquestionsapp.presentation.main_screen.model.mainButtons
 import com.balan.androidquestionsapp.presentation.topbar.TopBar

@@ -7,8 +7,8 @@ data class TestState(
     val questions: List<QuestionsItem> = listOf(),
     val questionNumber: Int = 0,
     val selectedRadioAnswer: Answer? = null,
+    val answered: Boolean = false,
     val selectedCheckAnswer: List<Answer> = emptyList(),
     val writtenAnswer: String = "",
     val score: Int = 0
 )
-

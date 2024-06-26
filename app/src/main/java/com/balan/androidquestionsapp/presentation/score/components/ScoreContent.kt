@@ -30,21 +30,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
+import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
-import com.balan.androidquestionsapp.presentation.score.components.contents.BottomBarScore
-import com.balan.androidquestionsapp.presentation.topbar.TopBar
+import com.balan.androidquestionsapp.presentation.score.components.contents.TopBarScore
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
 fun ScoreContent(
     onMainClick: () -> Unit,
     viewModel: ScoreViewModel,
-    onSortByDecreasingScoreClick: () -> Unit,
-    onSortByIncreasingScoreClick: () -> Unit,
-    onSortByNameClick: () -> Unit,
+    onSortClick: (SortDirection) -> Unit,
+    onActiveClick : () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsState()
@@ -53,15 +54,14 @@ fun ScoreContent(
         modifier = modifier
             .fillMaxSize(),
         topBar = {
-            TopBar(onClick = onMainClick, imageVector = Icons.Filled.Home)
-        },
-        bottomBar = {
-            BottomBarScore(
-                onSortByNameClick = onSortByNameClick,
-                onSortByIncreasingScoreClick = onSortByDecreasingScoreClick,
-                onSortByDecreasingScoreClick = onSortByIncreasingScoreClick
+            TopBarScore(
+                onClick = onMainClick,
+                imageVector = Icons.Filled.Home,
+                onSelectOptionClick = onSortClick,
+                state = state,
+                onToggleMenuClick = onActiveClick
             )
-        }
+        },
     ) { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
             items(users) { user ->
@@ -87,56 +87,55 @@ fun ScoreItem(
     val score = getScore()
 
     val testPassed = isTestPassed(score)
-    if(score != null){
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(LocalDimen.current.spacerPaddingAll8)
-            .clip(RoundedCornerShape(LocalDimen.current.scoreCardClip))
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+    if (score != null) {
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(LocalDimen.current.spacerPaddingAll8)
+                .clip(RoundedCornerShape(LocalDimen.current.scoreCardClip))
         ) {
-            Column(
-                modifier = Modifier.weight(3f)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                Column(
+                    modifier = Modifier.weight(3f)
+                ) {
+                    Text(
+                        text = user.name,
+                        modifier = Modifier.padding(horizontal = LocalDimen.current.scoreTextHorizontalPadding)
+                    )
+                    Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight4))
+                    Text(
+                        text = user.email,
+                        modifier = Modifier.padding(horizontal = LocalDimen.current.scoreTextHorizontalPadding)
+                    )
+                }
                 Text(
-                    text = user.name,
+                    text = "${stringResource(id = R.string.result_score)} $score",
                     modifier = Modifier.padding(horizontal = LocalDimen.current.scoreTextHorizontalPadding)
                 )
-                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight4))
-                Text(
-                    text = user.email,
-                    modifier = Modifier.padding(horizontal = LocalDimen.current.scoreTextHorizontalPadding)
-                )
-            }
-            Text(
-                text = "Результат: $score",
-                modifier = Modifier.padding(horizontal = LocalDimen.current.scoreTextHorizontalPadding)
-            )
-            Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
-            Button(
-                onClick = {},
-                shape = CircleShape,
-                modifier = Modifier.size(LocalDimen.current.buttonSize),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (testPassed) Color.Green else Color.Red
-                )
-            ) {}
-            Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
-            IconButton(
-                onClick = onDeleteUserScoreClick
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
+                Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
+                Button(
+                    onClick = {},
+                    shape = CircleShape,
+                    modifier = Modifier.size(LocalDimen.current.buttonSize),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (testPassed) LocalColors.current.green else LocalColors.current.red
+                    )
+                ) {}
+                Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
+                IconButton(
+                    onClick = onDeleteUserScoreClick
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = null,
+                    )
+                }
             }
         }
-    }
     }
 }
 
@@ -148,6 +147,7 @@ fun ScoreItem(
 fun ScoreContentPreview() {
     ScoreItem(
         user = User(
+            id = 0,
             name = "Calli",
             password = "Keri",
             email = "Nefertiti",

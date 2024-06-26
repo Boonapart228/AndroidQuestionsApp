@@ -7,6 +7,7 @@ import com.balan.androidquestionsapp.domain.models.QuestionType
 import com.balan.androidquestionsapp.domain.repository.TestRepository
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -36,24 +37,28 @@ class TestViewModel @Inject constructor(
     }
 
     fun nextQuestion() {
-        val question = userSession.getLevel()
-        checkAnswer()
-        if (_state.value.questionNumber < _state.value.questions.lastIndex) {
-            _state.update {
-                it.copy(
-                    questionNumber = it.questionNumber + 1
-                )
-            }
-        } else if (_state.value.questionNumber == _state.value.questions.lastIndex) {
-            val currentUser = userSession.getCurrentUser()
-            currentUser?.let {
-                val user = testRepository.updateScore(
-                    score = _state.value.score,
-                    user = currentUser,
-                    question = question
-                )
-                userSession.updateInfo(user)
-                navigateResultScreen()
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_state.value.answered) {
+                val question = userSession.getLevel()
+                checkAnswer()
+                if (_state.value.questionNumber < _state.value.questions.lastIndex) {
+                    _state.update {
+                        it.copy(
+                            questionNumber = it.questionNumber + 1
+                        )
+                    }
+                } else if (_state.value.questionNumber == _state.value.questions.lastIndex) {
+                    val currentUser = userSession.getCurrentUser()
+                    currentUser?.let {
+                        val user = testRepository.updateScore(
+                            score = _state.value.score,
+                            user = currentUser,
+                            question = question
+                        )
+                        userSession.updateInfo(user)
+                        navigateResultScreen()
+                    }
+                }
             }
         }
     }
@@ -69,7 +74,8 @@ class TestViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     questionNumber = 0,
-                    score = if (it.score != 0) it.score - 1 else 0
+                    score = if (it.score != 0) it.score - 1 else 0,
+                    answered = false
                 )
             }
         }
@@ -79,8 +85,16 @@ class TestViewModel @Inject constructor(
         _state.update {
             it.copy(writtenAnswer = text)
         }
+        setAnswered()
     }
 
+    private fun setAnswered() {
+        _state.update {
+            it.copy(
+                answered = true
+            )
+        }
+    }
 
     fun onAnswerRadioButtonClick(answer: Answer) {
         _state.update {
@@ -88,6 +102,7 @@ class TestViewModel @Inject constructor(
                 selectedRadioAnswer = answer
             )
         }
+        setAnswered()
     }
 
     private fun checkRadioButtonAnswer() {
@@ -96,7 +111,7 @@ class TestViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     score = it.score + 1,
-                    selectedRadioAnswer = copySelectedRadioAnswer
+                    selectedRadioAnswer = copySelectedRadioAnswer,
                 )
             }
         }
@@ -108,7 +123,7 @@ class TestViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     score = it.score + 1,
-                    selectedCheckAnswer = copySelectedCheckAnswer
+                    selectedCheckAnswer = copySelectedCheckAnswer,
                 )
             }
         }
@@ -120,7 +135,7 @@ class TestViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     score = it.score + 1,
-                    writtenAnswer = ""
+                    writtenAnswer = "",
                 )
             }
         }
@@ -138,10 +153,16 @@ class TestViewModel @Inject constructor(
                 selectedCheckAnswer = answers,
             )
         }
+        setAnswered()
     }
 
     private fun checkAnswer() {
         val index = _state.value.questionNumber
+        _state.update {
+            it.copy(
+                answered = false
+            )
+        }
         when (_state.value.questions[index].type) {
             QuestionType.RADIO_BUTTON.type -> {
                 checkRadioButtonAnswer()
