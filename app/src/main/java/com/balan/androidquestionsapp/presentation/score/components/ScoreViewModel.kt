@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
-import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
-import com.balan.androidquestionsapp.domain.user.UserSession
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,9 +22,10 @@ import javax.inject.Provider
 
 @HiltViewModel
 class ScoreViewModel @Inject constructor(
-    private val userSession: UserSession,
-    private val userLocalSource: UserLocalSource,
-    private val deleteResultUseCase: Provider<DeleteResultUseCase>
+    private val deleteResultUseCase: Provider<DeleteResultUseCase>,
+    private val getAllUseCase: Provider<GetAllUseCase>,
+    private val getLevelUseCase: Provider<GetLevelUseCase>,
+    private val sortByDirectionUseCase: Provider<SortByDirectionUseCase>
 
 ) : ViewModel() {
     companion object {
@@ -41,14 +43,14 @@ class ScoreViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             checkLevel()
-            update(userLocalSource.getAll())
+            update(getAllUseCase.get().execute())
         }
     }
 
     private fun checkLevel() {
         _state.update {
             it.copy(
-                level = userSession.getLevel()
+                level = getLevelUseCase.get().execute()
             )
         }
     }
@@ -62,14 +64,17 @@ class ScoreViewModel @Inject constructor(
 
     fun onDeleteScoreClick(user: User) {
         viewModelScope.launch(Dispatchers.IO) {
-            update(deleteResultUseCase.get().execute(user = user, level = userSession.getLevel()))
+            update(
+                deleteResultUseCase.get()
+                    .execute(user = user, level = getLevelUseCase.get().execute())
+            )
         }
     }
 
     fun sort(sortDirection: SortDirection) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            update(userLocalSource.sortByDirection(sortDirection))
+            update(sortByDirectionUseCase.get().execute(sortDirection))
         }
 
     }
@@ -87,7 +92,7 @@ class ScoreViewModel @Inject constructor(
     }
 
     fun getScore(user: User): Int? {
-        return when (userSession.getLevel()) {
+        return when (getLevelUseCase.get().execute()) {
             QuestionLevel.JUNIOR -> user.question.junior
             QuestionLevel.MIDDLE -> user.question.middle
             QuestionLevel.SENIOR -> user.question.senior
