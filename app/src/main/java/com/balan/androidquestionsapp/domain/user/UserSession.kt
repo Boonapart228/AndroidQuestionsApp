@@ -4,7 +4,7 @@ import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.User
 
 interface UserSession {
-    fun questionLevel(session: QuestionLevel)
+    fun setQuestionLevel(session: QuestionLevel)
     fun getLevel(): QuestionLevel
 
     fun setUser(user: User)

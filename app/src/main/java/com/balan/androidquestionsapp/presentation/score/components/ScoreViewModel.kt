@@ -7,7 +7,7 @@ import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
-import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ import javax.inject.Provider
 @HiltViewModel
 class ScoreViewModel @Inject constructor(
     private val deleteResultUseCase: Provider<DeleteResultUseCase>,
-    private val getAllUseCase: Provider<GetAllUseCase>,
+    private val getAllUserUseCase: Provider<GetAllUserUseCase>,
     private val getLevelUseCase: Provider<GetLevelUseCase>,
     private val sortByDirectionUseCase: Provider<SortByDirectionUseCase>
 
@@ -43,7 +43,7 @@ class ScoreViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             checkLevel()
-            update(getAllUseCase.get().execute())
+            update(getAllUserUseCase.get().execute())
         }
     }
 

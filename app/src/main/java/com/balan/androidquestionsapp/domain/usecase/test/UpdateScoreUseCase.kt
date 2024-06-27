@@ -7,7 +7,7 @@ import com.balan.androidquestionsapp.domain.repository.TestRepository
 class UpdateScoreUseCase(
     private val testRepository: TestRepository
 ) {
-    fun execute(score: Int, user: User, question: QuestionLevel) : User {
-       return testRepository.updateScore(score = score, user = user, question = question)
+    fun execute(score: Int, user: User, questionLevel: QuestionLevel) : User {
+       return testRepository.updateScore(score = score, user = user, question = questionLevel)
     }
 }

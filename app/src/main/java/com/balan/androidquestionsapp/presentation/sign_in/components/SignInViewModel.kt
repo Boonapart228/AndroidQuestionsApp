@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
-import com.balan.androidquestionsapp.domain.usecase.user_session.SetUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +18,6 @@ import javax.inject.Provider
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val signInUseCase: Provider<SignInUseCase>,
-    private val setUserUseCase: Provider<SetUserUseCase>,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignInState> =
@@ -50,11 +48,10 @@ class SignInViewModel @Inject constructor(
             val signInResult = signInUseCase.get().execute(email = email, password = password)
             _state.update {
                 it.copy(
-                    validation = if (signInResult == null) Validation.INVALID else Validation.VALID
+                    validation = if (!signInResult) Validation.INVALID else Validation.VALID
                 )
             }
-            if (signInResult != null) {
-                setUserUseCase.get().execute(signInResult)
+            if (signInResult) {
                 _event.emit(SignInNavigationEvent.NavigationToSignIn)
             }
         }

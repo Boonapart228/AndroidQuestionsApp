@@ -8,7 +8,7 @@ import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionsUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.UpdateScoreUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
-import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateInfoUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,7 +24,7 @@ import javax.inject.Provider
 class TestViewModel @Inject constructor(
     private val getLevelUseCase: Provider<GetLevelUseCase>,
     private val getCurrentUserUseCase: Provider<GetCurrentUserUseCase>,
-    private val updateInfoUseCase: Provider<UpdateInfoUseCase>,
+    private val updateUserInfoUseCase: Provider<UpdateUserInfoUseCase>,
     private val getQuestionsUseCase: Provider<GetQuestionsUseCase>,
     private val updateScoreUseCase: Provider<UpdateScoreUseCase>
 ) : ViewModel() {
@@ -37,9 +37,8 @@ class TestViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     init {
-        val question = getLevelUseCase.get().execute()
         _state.update {
-            it.copy(questions = getQuestionsUseCase.get().execute(question))
+            it.copy(questions = getQuestionsUseCase.get().execute())
         }
     }
 
@@ -60,9 +59,9 @@ class TestViewModel @Inject constructor(
                         val user = updateScoreUseCase.get().execute(
                             score = _state.value.score,
                             user = currentUser,
-                            question = question
+                            questionLevel = question
                         )
-                        updateInfoUseCase.get().execute(user)
+                        updateUserInfoUseCase.get().execute(user)
                         navigateResultScreen()
                     }
                 }
