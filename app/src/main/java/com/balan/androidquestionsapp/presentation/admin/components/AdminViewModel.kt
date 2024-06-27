@@ -3,7 +3,7 @@ package com.balan.androidquestionsapp.presentation.admin.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Validation
-import com.balan.androidquestionsapp.domain.repository.AuthRepository
+import com.balan.androidquestionsapp.domain.usecase.auth.AuthenticateAdminUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,10 +12,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authenticateAdminUseCase: Provider<AuthenticateAdminUseCase>
 ) : ViewModel() {
     private val _state = MutableStateFlow(AdminState())
     val state = _state.asStateFlow()
@@ -31,7 +32,7 @@ class AdminViewModel @Inject constructor(
 
     fun onScoreClick() {
         viewModelScope.launch {
-            val adminAccess = authRepository.adminAccess(_state.value.password)
+            val adminAccess = authenticateAdminUseCase.get().execute(_state.value.password)
             if (adminAccess) {
                 _event.emit(AdminNavigationEvent.NavigationToScore)
             } else {

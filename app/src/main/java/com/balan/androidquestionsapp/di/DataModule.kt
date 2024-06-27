@@ -17,6 +17,21 @@ import com.balan.androidquestionsapp.domain.repository.ResultRepository
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 import com.balan.androidquestionsapp.domain.repository.TestRepository
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
+import com.balan.androidquestionsapp.domain.usecase.auth.AuthenticateAdminUseCase
+import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
+import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
+import com.balan.androidquestionsapp.domain.usecase.result.GetQuestionScoreUseCase
+import com.balan.androidquestionsapp.domain.usecase.result.SetQuestionSizeUseCase
+import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
+import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionsUseCase
+import com.balan.androidquestionsapp.domain.usecase.test.UpdateScoreUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.SetQuestionLevelUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.SetUserUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateUserInfoUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.Module
 import dagger.Provides
@@ -85,5 +100,87 @@ class DataModule {
     @Singleton
     fun provideAssetManager(@ApplicationContext context: Context): AssetManager {
         return AssetManagerImpl(context)
+    }
+
+    @Provides
+    fun provideSignInUseCase(
+        authRepository: AuthRepository,
+        userSession: UserSession
+    ): SignInUseCase {
+        return SignInUseCase(authRepository, userSession)
+    }
+
+    @Provides
+    fun provideSignUpUseCase(authRepository: AuthRepository): SignUpUseCase {
+        return SignUpUseCase(authRepository)
+    }
+
+    @Provides
+    fun provideQuestionLevelUseCase(userSession: UserSession): SetQuestionLevelUseCase {
+        return SetQuestionLevelUseCase(userSession)
+    }
+
+    @Provides
+    fun provideGetLevelUseCase(userSession: UserSession): GetLevelUseCase {
+        return GetLevelUseCase(userSession)
+    }
+
+    @Provides
+    fun provideGetCurrentUserUseCase(userSession: UserSession): GetCurrentUserUseCase {
+        return GetCurrentUserUseCase(userSession)
+    }
+
+    @Provides
+    fun provideUpdateInfoUseCase(userSession: UserSession): UpdateUserInfoUseCase {
+        return UpdateUserInfoUseCase(userSession)
+    }
+
+    @Provides
+    fun provideGetQuestionsUseCase(
+        testRepository: TestRepository,
+        userSession: UserSession
+    ): GetQuestionsUseCase {
+        return GetQuestionsUseCase(testRepository, userSession)
+    }
+
+    @Provides
+    fun provideUpdateScoreUseCase(testRepository: TestRepository): UpdateScoreUseCase {
+        return UpdateScoreUseCase(testRepository)
+    }
+
+    @Provides
+    fun provideDeleteResultUseCase(scoreRepository: ScoreRepository): DeleteResultUseCase {
+        return DeleteResultUseCase(scoreRepository)
+    }
+
+    @Provides
+    fun provideGetAllUseCase(userLocalSource: UserLocalSource): GetAllUserUseCase {
+        return GetAllUserUseCase(userLocalSource)
+    }
+
+    @Provides
+    fun provideSortByDirectionUseCase(userLocalSource: UserLocalSource): SortByDirectionUseCase {
+        return SortByDirectionUseCase(userLocalSource)
+    }
+
+    @Provides
+    fun provideSetQuestionSizeUseCase(resultRepository: ResultRepository): SetQuestionSizeUseCase {
+        return SetQuestionSizeUseCase(resultRepository)
+    }
+
+
+    @Provides
+    fun provideGetQuestionScoreUseCase(resultRepository: ResultRepository): GetQuestionScoreUseCase {
+        return GetQuestionScoreUseCase(resultRepository)
+    }
+
+    @Provides
+    fun provideSetUserUseCase(userSession: UserSession): SetUserUseCase {
+        return SetUserUseCase(userSession)
+    }
+
+    @Provides
+    fun provideAdminAccessUseCase(authRepository: AuthRepository): AuthenticateAdminUseCase {
+        return AuthenticateAdminUseCase(authRepository)
     }
 }

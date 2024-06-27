@@ -14,7 +14,7 @@ class UserSessionImpl(
 
 
 
-    override fun questionLevel(session: QuestionLevel) {
+    override fun setQuestionLevel(session: QuestionLevel) {
         currentLevel = session
     }
 
