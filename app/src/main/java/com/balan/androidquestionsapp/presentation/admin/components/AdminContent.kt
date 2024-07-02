@@ -9,31 +9,47 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.Background
-import com.balan.androidquestionsapp.ui.theme.LocalDimen
+
+@Preview(
+    showSystemUi = true,
+    showBackground = true
+)
+@Composable
+fun AdminContentPreview() {
+    AdminContent(
+        state = AdminState(),
+        onPanelScoreClick = {},
+        setPassword = {},
+        modifier = Modifier,
+        onMainClick = {}
+    )
+}
 
 @Composable
 fun AdminContent(
@@ -48,80 +64,68 @@ fun AdminContent(
     ) {
         Box(modifier = Modifier.padding(it))
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = modifier
                 .fillMaxSize()
-                .background(Background),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(Background)
+                .padding(16.dp)
         ) {
+            Icon(
+                imageVector = Icons.Filled.Person,
+                contentDescription = null,
+                modifier = Modifier.size(130.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(id = R.string.results_panel),
-                modifier = Modifier
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(LocalDimen.current.questionTitleShape)
-                    )
-                    .clip(RoundedCornerShape(LocalDimen.current.questionTitleClip))
-                    .padding(LocalDimen.current.spacerPaddingAll8),
-                fontSize = LocalDimen.current.textSize32,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
-            Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
-            OutlinedTextField(
+            Spacer(modifier = Modifier.height(32.dp))
+            TextFieldBox(
                 value = state.password,
-                onValueChange = setPassword,
-                textStyle = TextStyle(
-                    textAlign = TextAlign.Center,
-                    fontSize = LocalDimen.current.outlinedTextSize,
-                ),
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.input_password),
-                        modifier = Modifier.fillMaxWidth(),
-                        fontSize = LocalDimen.current.textSize24,
-                        textAlign = TextAlign.Center
-                    )
-                },
-                shape = RoundedCornerShape(LocalDimen.current.outlinedShape),
-                modifier = Modifier
-                    .clip(RoundedCornerShape(LocalDimen.current.outlinedClip))
-                    .width(LocalDimen.current.outlinedTextWidth)
-                    .height(LocalDimen.current.outlinedTextHeight)
-                    .background(Color.White),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                )
+                text = stringResource(R.string.input_password),
+                imageVector = ImageVector.vectorResource(R.drawable.baseline_password_24),
+                onValueChange = setPassword
             )
-            Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
+            Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = onPanelScoreClick,
-                modifier = Modifier.width(LocalDimen.current.buttonWidth),
-                colors = ButtonDefaults.buttonColors(Color.White),
+                colors = ButtonDefaults.buttonColors(Color.Black),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.sign_in),
-                    color = Color.Black,
-                    fontSize = LocalDimen.current.buttonTextSize24
+                    fontSize = 16.sp
                 )
             }
-            Spacer(modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop32))
-            Text(text = stringResource(id = state.validPassword.textResId))
         }
     }
 }
 
-@Preview(
-    showSystemUi = true,
-    showBackground = true
-)
 @Composable
-fun AdminContentPreview() {
-    AdminContent(
-        state = AdminState(),
-        onPanelScoreClick = {},
-        setPassword = {},
-        modifier = Modifier,
-        onMainClick = {}
+fun TextFieldBox(
+    value: String,
+    onValueChange: (String) -> Unit,
+    text: String,
+    imageVector: ImageVector
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = text) },
+        singleLine = true,
+        leadingIcon = {
+            Icon(
+                imageVector = imageVector,
+                contentDescription = null,
+                modifier = Modifier.size(30.dp)
+            )
+        },
+        modifier = Modifier.fillMaxWidth()
     )
 }
