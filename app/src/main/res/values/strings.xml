@@ -21,5 +21,6 @@
     <string name="increasing">Зростанням</string>
     <string name="decreasing">Спаданням</string>
     <string name="name">Ім\'ям</string>
+    <string name="authorization">Авторизація</string>
 
 </resources>
