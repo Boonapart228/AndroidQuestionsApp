@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
@@ -47,38 +49,47 @@ fun TestRadioContent(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
                 .weight(1f)
         ) {
             TestTitleAnswer(title = title)
             Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
-            answers.forEach { answer ->
-                Row(
-                    modifier = Modifier
-                        .padding(vertical = LocalDimen.current.questionVerticalPadding)
-                        .clickable { onAnswerClick(answer) },
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    RadioButton(
-                        colors = RadioButtonDefaults.colors(
-                            selectedColor = Color.Black,
-                            unselectedColor = Color.Black,
-                        ),
-                        selected = selectedAnswer == answer,
-                        onClick = { onAnswerClick(answer) }
-                    )
-                    Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
-                    Text(
-                        text = answer.title,
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                answers.forEach { answer ->
+                    Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
-                            .background(color = Color.White)
-                            .padding(horizontal = 24.dp),
-                        textAlign = TextAlign.Start,
-                        fontSize = LocalDimen.current.answerTextSize
-                    )
+
+                            .padding(vertical = LocalDimen.current.questionVerticalPadding)
+                            .clickable { onAnswerClick(answer) },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        RadioButton(
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = Color.Black,
+                                unselectedColor = Color.Black,
+                            ),
+                            selected = selectedAnswer == answer,
+                            onClick = { onAnswerClick(answer) }
+                        )
+                        Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
+                        Text(
+                            text = answer.title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
+                                .background(color = Color.White)
+                                .padding(horizontal = 24.dp),
+                            textAlign = TextAlign.Start,
+                            fontSize = LocalDimen.current.answerTextSize
+                        )
+                    }
                 }
             }
         }

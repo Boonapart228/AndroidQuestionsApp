@@ -3,6 +3,7 @@ package com.balan.androidquestionsapp.presentation.test_screen.components.conten
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,21 +49,26 @@ fun TestCheckContent(
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .fillMaxSize()
-                .background(color = Background)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
+        ) {
+            TestTitleAnswer(title = title)
+        }
+
+        Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
+                .verticalScroll(rememberScrollState())
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxWidth()
-                    .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
-                    .weight(1f)
+                verticalArrangement = Arrangement.Top
             ) {
-                TestTitleAnswer(title = title)
-                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
                 answers.forEach { answer ->
                     val selected = answer in selectedAnswers
                     Row(
@@ -109,7 +115,6 @@ fun PreviewCheck() {
         selectedAnswers = emptyList(),
         answers = listOf(
             Answer(isTrue = false, title = "qwe"),
-            Answer(isTrue = false, title = "qwe")
         ),
         onAnswerClick = { })
 }
