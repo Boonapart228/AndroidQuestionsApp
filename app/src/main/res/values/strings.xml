@@ -22,5 +22,7 @@
     <string name="decreasing">Спаданням</string>
     <string name="name">Ім\'ям</string>
     <string name="authorization">Авторизація</string>
+    <string name="registration">Реєстрація</string>
+    <string name="register">Зареєструватися</string>
 
 </resources>
