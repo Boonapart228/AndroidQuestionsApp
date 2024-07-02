@@ -23,8 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
@@ -50,13 +48,13 @@ fun ResultContent(
         modifier = modifier
             .fillMaxSize()
             .background(Background)
-            .padding(16.dp),
+            .padding(LocalDimen.current.paddingAll16),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             imageVector = Icons.Filled.Star, contentDescription = null,
-            modifier = Modifier.size(64.dp)
+            modifier = Modifier.size(LocalDimen.current.imageSize64)
         )
         Text(
             text = stringResource(id = textResult),
@@ -73,11 +71,11 @@ fun ResultContent(
             onClick = onMainClick,
             colors = ButtonDefaults.buttonColors(Color.Black),
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(10.dp)
+            shape = RoundedCornerShape(LocalDimen.current.buttonShape)
         ) {
             androidx.compose.material3.Text(
                 text = stringResource(id = R.string.menu),
-                fontSize = 16.sp
+                fontSize = LocalDimen.current.textSize16
             )
         }
     }

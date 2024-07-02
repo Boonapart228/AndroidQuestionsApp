@@ -11,19 +11,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
-fun TestTitleAnswer(title : String){
+fun TestTitleAnswer(title: String) {
     Text(
         text = title,
         modifier = Modifier
             .background(
                 color = Color.White,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(LocalDimen.current.titleBackgroundShape)
             )
-            .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
+            .border(
+                width = LocalDimen.current.titleBorderWidth,
+                color = Color.Black,
+                shape = RoundedCornerShape(LocalDimen.current.titleBorderShape)
+            )
             .fillMaxWidth()
             .clip(RoundedCornerShape(LocalDimen.current.questionTitleClip))
             .padding(LocalDimen.current.questionTitlePaddingAll),

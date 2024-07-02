@@ -30,11 +30,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.Background
+import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Preview(
     showSystemUi = true,
@@ -69,38 +68,38 @@ fun AdminContent(
             modifier = modifier
                 .fillMaxSize()
                 .background(Background)
-                .padding(16.dp)
+                .padding(LocalDimen.current.paddingAll16)
         ) {
             Icon(
                 imageVector = Icons.Filled.Person,
                 contentDescription = null,
-                modifier = Modifier.size(130.dp)
+                modifier = Modifier.size(LocalDimen.current.iconSize130)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             Text(
                 text = stringResource(id = R.string.results_panel),
                 textAlign = TextAlign.Center,
-                fontSize = 24.sp,
+                fontSize = LocalDimen.current.textSize24,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
             TextFieldBox(
                 value = state.password,
                 text = stringResource(R.string.input_password),
                 imageVector = ImageVector.vectorResource(R.drawable.baseline_password_24),
                 onValueChange = setPassword
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
             Button(
                 onClick = onPanelScoreClick,
                 colors = ButtonDefaults.buttonColors(Color.Black),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(LocalDimen.current.buttonShape)
             ) {
                 Text(
                     text = stringResource(id = R.string.sign_in),
-                    fontSize = 16.sp
+                    fontSize = LocalDimen.current.textSize16
                 )
             }
         }
@@ -123,7 +122,7 @@ fun TextFieldBox(
             Icon(
                 imageVector = imageVector,
                 contentDescription = null,
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(LocalDimen.current.iconSize30)
             )
         },
         modifier = Modifier.fillMaxWidth()

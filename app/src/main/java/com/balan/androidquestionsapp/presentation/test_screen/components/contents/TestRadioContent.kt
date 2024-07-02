@@ -24,7 +24,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.balan.androidquestionsapp.domain.models.Answer
 import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
@@ -58,7 +57,7 @@ fun TestRadioContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .height(LocalDimen.current.scrollContainerHeight)
                     .verticalScroll(rememberScrollState())
             ) {
                 answers.forEach { answer ->
@@ -85,7 +84,7 @@ fun TestRadioContent(
                                 .fillMaxWidth()
                                 .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
                                 .background(color = Color.White)
-                                .padding(horizontal = 24.dp),
+                                .padding(horizontal = LocalDimen.current.horizontalPadding24),
                             textAlign = TextAlign.Start,
                             fontSize = LocalDimen.current.answerTextSize
                         )

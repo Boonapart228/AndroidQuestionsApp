@@ -35,11 +35,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.Background
+import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Preview(
     showBackground = true,
@@ -85,22 +84,22 @@ fun SignUpContent(
             modifier = modifier
                 .fillMaxSize()
                 .background(Background)
-                .padding(16.dp)
+                .padding(LocalDimen.current.paddingAll16)
         ) {
             Icon(
                 imageVector = Icons.Filled.Face,
                 contentDescription = null,
-                modifier = Modifier.size(130.dp)
+                modifier = Modifier.size(LocalDimen.current.iconSize130)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             Text(
                 text = stringResource(id = R.string.registration),
                 textAlign = TextAlign.Center,
-                fontSize = 24.sp,
+                fontSize = LocalDimen.current.textSize24,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
             TextFieldBox(
                 value = state.email,
                 text = stringResource(id = R.string.input_email),
@@ -108,7 +107,7 @@ fun SignUpContent(
                 onValueChange = onEmailChange,
                 imeAction = ImeAction.Next
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             TextFieldBox(
                 value = state.name,
                 text = stringResource(id = R.string.input_login),
@@ -116,7 +115,7 @@ fun SignUpContent(
                 onValueChange = onLoginChange,
                 imeAction = ImeAction.Next
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             TextFieldBox(
                 value = state.password,
                 text = stringResource(id = R.string.input_password),
@@ -124,23 +123,23 @@ fun SignUpContent(
                 onValueChange = onPasswordChange,
                 imeAction = ImeAction.Done
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
             Button(
                 onClick = onSignUpClick,
                 colors = ButtonDefaults.buttonColors(Color.Black),
                 modifier = Modifier.fillMaxWidth(),
                 enabled = isFieldsNotEmpty(),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(LocalDimen.current.buttonShape)
             ) {
                 Text(
                     text = stringResource(id = R.string.register),
-                    fontSize = 16.sp
+                    fontSize = LocalDimen.current.textSize16
                 )
             }
             Text(
                 text = stringResource(id = state.valid.textResId),
                 color = Color.Black,
-                fontSize = 16.sp,
+                fontSize = LocalDimen.current.textSize16,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -158,12 +157,17 @@ fun TextFieldBox(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(text = text) },
+        label = {
+            Text(
+                text = text,
+                fontSize = LocalDimen.current.textSize16
+            )
+        },
         leadingIcon = {
             Icon(
                 imageVector = imageVector,
                 contentDescription = null,
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(LocalDimen.current.iconSize30)
             )
         },
         singleLine = true,

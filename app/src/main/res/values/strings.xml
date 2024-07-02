@@ -26,5 +26,6 @@
     <string name="register">Зареєструватися</string>
     <string name="menu">меню</string>
     <string name="input_answer">Введіть відповідь</string>
+    <string name="either">Або</string>
 
 </resources>

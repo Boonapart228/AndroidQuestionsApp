@@ -25,7 +25,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.balan.androidquestionsapp.domain.models.Answer
 import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
@@ -61,7 +60,7 @@ fun TestCheckContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
+                .height(LocalDimen.current.scrollContainerHeight)
                 .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -95,7 +94,7 @@ fun TestCheckContent(
                                 .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
                                 .background(color = Color.White)
                                 .fillMaxWidth()
-                                .padding(horizontal = 24.dp),
+                                .padding(horizontal = LocalDimen.current.horizontalPadding24),
                             textAlign = TextAlign.Start,
                             fontSize = LocalDimen.current.answerTextSize
                         )
