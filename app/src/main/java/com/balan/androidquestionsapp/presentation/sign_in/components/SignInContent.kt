@@ -55,6 +55,7 @@ fun SignInContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier
+
             .fillMaxSize()
             .background(Background)
             .padding(16.dp)

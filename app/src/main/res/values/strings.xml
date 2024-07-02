@@ -24,5 +24,7 @@
     <string name="authorization">Авторизація</string>
     <string name="registration">Реєстрація</string>
     <string name="register">Зареєструватися</string>
+    <string name="menu">меню</string>
+    <string name="input_answer">Введіть відповідь</string>
 
 </resources>

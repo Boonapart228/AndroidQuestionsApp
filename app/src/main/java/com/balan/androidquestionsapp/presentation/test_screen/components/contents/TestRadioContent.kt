@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.balan.androidquestionsapp.domain.models.Answer
 import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
@@ -49,18 +50,7 @@ fun TestRadioContent(
                 .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
                 .weight(1f)
         ) {
-            Text(
-                text = title,
-                modifier = Modifier
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(LocalDimen.current.questionTitleShape)
-                    )
-                    .clip(RoundedCornerShape(LocalDimen.current.questionTitleClip))
-                    .padding(LocalDimen.current.questionTitlePaddingAll),
-                fontSize = LocalDimen.current.questionTitleTextSize,
-                textAlign = TextAlign.Center
-            )
+            TestTitleAnswer(title = title)
             Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             answers.forEach { answer ->
                 Row(
@@ -84,8 +74,9 @@ fun TestRadioContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
-                            .background(color = Color.White),
-                        textAlign = TextAlign.Center,
+                            .background(color = Color.White)
+                            .padding(horizontal = 24.dp),
+                        textAlign = TextAlign.Start,
                         fontSize = LocalDimen.current.answerTextSize
                     )
                 }
