@@ -2,8 +2,10 @@ package com.balan.androidquestionsapp.presentation.result.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.balan.androidquestionsapp.domain.repository.ResultRepository
-import com.balan.androidquestionsapp.domain.user.UserSession
+import com.balan.androidquestionsapp.domain.usecase.result.GetQuestionScoreUseCase
+import com.balan.androidquestionsapp.domain.usecase.result.SetQuestionSizeUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,11 +14,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class ResultViewModel @Inject constructor(
-    private val resultRepository: ResultRepository,
-    private val userSession: UserSession
+    private val getLevelUseCase: Provider<GetLevelUseCase>,
+    private val getCurrentUserUseCase: Provider<GetCurrentUserUseCase>,
+    private val setQuestionSizeUseCase: Provider<SetQuestionSizeUseCase>,
+    private val getQuestionScoreUseCase: Provider<GetQuestionScoreUseCase>
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<ResultState> = MutableStateFlow(ResultState())
@@ -32,21 +37,21 @@ class ResultViewModel @Inject constructor(
     }
 
     private fun setQuestionSize() {
-        val question = userSession.getLevel()
+        val question = getLevelUseCase.get().execute()
         _state.update {
             it.copy(
-                questionSize = resultRepository.setQuestionSize(question)
+                questionSize = setQuestionSizeUseCase.get().execute(question)
             )
         }
     }
 
     private fun setQuestionScore() {
-        val question = userSession.getLevel()
-        val user = userSession.getCurrentUser()
+        val question = getLevelUseCase.get().execute()
+        val user = getCurrentUserUseCase.get().execute()
         _state.update {
             it.copy(
                 score = if (user != null) {
-                    resultRepository.getQuestionScore(user = user, question = question)
+                    getQuestionScoreUseCase.get().execute(user = user, question = question)
                 } else 0
             )
         }

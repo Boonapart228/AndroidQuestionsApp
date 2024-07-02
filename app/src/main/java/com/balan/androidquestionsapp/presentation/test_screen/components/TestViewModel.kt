@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Answer
 import com.balan.androidquestionsapp.domain.models.QuestionType
-import com.balan.androidquestionsapp.domain.repository.TestRepository
-import com.balan.androidquestionsapp.domain.user.UserSession
+import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionsUseCase
+import com.balan.androidquestionsapp.domain.usecase.test.UpdateScoreUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,11 +18,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltViewModel
 class TestViewModel @Inject constructor(
-    private val testRepository: TestRepository,
-    private val userSession: UserSession
+    private val getLevelUseCase: Provider<GetLevelUseCase>,
+    private val getCurrentUserUseCase: Provider<GetCurrentUserUseCase>,
+    private val updateUserInfoUseCase: Provider<UpdateUserInfoUseCase>,
+    private val getQuestionsUseCase: Provider<GetQuestionsUseCase>,
+    private val updateScoreUseCase: Provider<UpdateScoreUseCase>
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<TestState> = MutableStateFlow(TestState())
@@ -30,16 +37,15 @@ class TestViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     init {
-        val question = userSession.getLevel()
         _state.update {
-            it.copy(questions = testRepository.getQuestions(question))
+            it.copy(questions = getQuestionsUseCase.get().execute())
         }
     }
 
     fun nextQuestion() {
         viewModelScope.launch(Dispatchers.IO) {
             if (_state.value.answered) {
-                val question = userSession.getLevel()
+                val question = getLevelUseCase.get().execute()
                 checkAnswer()
                 if (_state.value.questionNumber < _state.value.questions.lastIndex) {
                     _state.update {
@@ -48,14 +54,14 @@ class TestViewModel @Inject constructor(
                         )
                     }
                 } else if (_state.value.questionNumber == _state.value.questions.lastIndex) {
-                    val currentUser = userSession.getCurrentUser()
+                    val currentUser = getCurrentUserUseCase.get().execute()
                     currentUser?.let {
-                        val user = testRepository.updateScore(
+                        val user = updateScoreUseCase.get().execute(
                             score = _state.value.score,
                             user = currentUser,
-                            question = question
+                            questionLevel = question
                         )
-                        userSession.updateInfo(user)
+                        updateUserInfoUseCase.get().execute(user)
                         navigateResultScreen()
                     }
                 }
