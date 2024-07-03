@@ -24,8 +24,15 @@
     <string name="authorization">Авторизація</string>
     <string name="registration">Реєстрація</string>
     <string name="register">Зареєструватися</string>
-    <string name="menu">меню</string>
-    <string name="input_answer">Введіть відповідь</string>
+    <string name="menu">Меню</string>
     <string name="either">Або</string>
-
+    <string name="input_answer">Введіть відповідь</string>
+    <string name="too_short">Пароль занадто короткий</string>
+    <string name="no_uppercase_letter">Пароль не містить великої літери</string>
+    <string name="no_lowercase_letter">Пароль не містить малої літери</string>
+    <string name="no_digit">Пароль не містить чисел</string>
+    <string name="no_special_character">Пароль не містить спеціальних символів</string>
+    <string name="empty_login">Логін не може бути порожнім</string>
+    <string name="too_short_login">Логін занадто короткий</string>
+    <string name="invalid_characters_in_login">Логін містить недопустимі символи</string>
 </resources>

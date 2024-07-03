@@ -6,5 +6,7 @@ data class SignUpState(
     val email: String = "",
     val name: String = "",
     val password: String = "",
-    val valid: Validation = Validation.VALID,
+    val passwordValidation: Validation = Validation.VALID,
+    val emailValidation: Validation = Validation.VALID,
+    val loginValidation: Validation = Validation.VALID
 )

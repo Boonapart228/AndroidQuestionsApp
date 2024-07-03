@@ -31,7 +31,8 @@ fun SignInScreen(
         onSignInClick = viewModel::onSignInClick,
         onSignUpClick = viewModel::onSignUpClick,
         isFieldsNotEmpty = viewModel::isFieldsNotEmpty,
-        onShowPasswordClick = viewModel::onShowPasswordClick
+        onShowPasswordClick = viewModel::onShowPasswordClick,
+        onClearClick = viewModel::onClearClick
 
     )
 }

@@ -1,6 +1,7 @@
 package com.balan.androidquestionsapp.presentation.sign_in.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -36,6 +38,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
+import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
@@ -46,6 +49,7 @@ fun SignInContent(
     onPasswordChange: (String) -> Unit,
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
+    onClearClick: (InputFieldType) -> Unit,
     onShowPasswordClick: () -> Unit,
     isFieldsNotEmpty: () -> Boolean,
     modifier: Modifier = Modifier
@@ -81,6 +85,15 @@ fun SignInContent(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(LocalDimen.current.iconSize30)
+                        .clickable { onClearClick(InputFieldType.EMAIL) }
+                )
+            },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Email,
@@ -179,7 +192,8 @@ fun SignInScreenPreview() {
         onSignInClick = {},
         onSignUpClick = {},
         isFieldsNotEmpty = { false },
-        onShowPasswordClick = {}
+        onShowPasswordClick = {},
+        onClearClick = {}
 
     )
 }

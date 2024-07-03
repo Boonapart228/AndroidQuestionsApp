@@ -2,6 +2,7 @@ package com.balan.androidquestionsapp.presentation.sign_in.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,6 +69,13 @@ class SignInViewModel @Inject constructor(
     fun onShowPasswordClick() {
         _state.update {
             it.copy(showPassword = !_state.value.showPassword)
+        }
+    }
+
+    fun onClearClick(inputFieldType: InputFieldType) {
+        when (inputFieldType) {
+            InputFieldType.EMAIL -> _state.update { it.copy(email = "") }
+            else -> {}
         }
     }
 

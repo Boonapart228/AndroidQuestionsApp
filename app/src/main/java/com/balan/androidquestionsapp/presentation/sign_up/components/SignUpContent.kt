@@ -1,6 +1,7 @@
 package com.balan.androidquestionsapp.presentation.sign_up.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -36,6 +38,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
+import com.balan.androidquestionsapp.domain.models.InputFieldType
+import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.Background
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
@@ -54,6 +58,8 @@ fun SignUpScreenPreview() {
         onSignUpClick = {},
         onSignInClick = {},
         isFieldsNotEmpty = { false },
+        isErrorValidation = { false },
+        onClearClick = {},
         modifier = Modifier,
     )
 }
@@ -67,6 +73,8 @@ fun SignUpContent(
     onSignUpClick: () -> Unit,
     onSignInClick: () -> Unit,
     isFieldsNotEmpty: () -> Boolean,
+    onClearClick: (InputFieldType) -> Unit,
+    isErrorValidation: (Validation) -> Boolean,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -105,7 +113,10 @@ fun SignUpContent(
                 text = stringResource(id = R.string.input_email),
                 imageVector = Icons.Filled.Email,
                 onValueChange = onEmailChange,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
+                textError = state.emailValidation,
+                isErrorValidation = isErrorValidation,
+                onClearClick = { onClearClick(InputFieldType.EMAIL) }
             )
             Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             TextFieldBox(
@@ -113,7 +124,10 @@ fun SignUpContent(
                 text = stringResource(id = R.string.input_login),
                 imageVector = Icons.Filled.AccountBox,
                 onValueChange = onLoginChange,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
+                textError = state.loginValidation,
+                isErrorValidation = isErrorValidation,
+                onClearClick = { onClearClick(InputFieldType.LOGIN) }
             )
             Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             TextFieldBox(
@@ -121,7 +135,10 @@ fun SignUpContent(
                 text = stringResource(id = R.string.input_password),
                 imageVector = ImageVector.vectorResource(R.drawable.baseline_password_24),
                 onValueChange = onPasswordChange,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
+                textError = state.passwordValidation,
+                isErrorValidation = isErrorValidation,
+                onClearClick = { onClearClick(InputFieldType.PASSWORD) }
             )
             Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
             Button(
@@ -136,12 +153,6 @@ fun SignUpContent(
                     fontSize = LocalDimen.current.textSize16
                 )
             }
-            Text(
-                text = stringResource(id = state.valid.textResId),
-                color = Color.Black,
-                fontSize = LocalDimen.current.textSize16,
-                fontWeight = FontWeight.Bold
-            )
         }
     }
 }
@@ -151,30 +162,52 @@ fun TextFieldBox(
     value: String,
     imeAction: ImeAction,
     text: String,
+    textError: Validation,
     onValueChange: (String) -> Unit,
-    imageVector: ImageVector
+    isErrorValidation: (Validation) -> Boolean,
+    onClearClick: () -> Unit,
+    imageVector: ImageVector,
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = {
+    val isError = isErrorValidation(textError)
+    Column {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = {
+                Text(
+                    text = text,
+                    fontSize = LocalDimen.current.textSize16
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = imageVector,
+                    contentDescription = null,
+                    modifier = Modifier.size(LocalDimen.current.iconSize30)
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(LocalDimen.current.iconSize30)
+                        .clickable { onClearClick() }
+                )
+            },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = imeAction
+            ),
+            modifier = Modifier.fillMaxWidth(),
+            isError = isError
+        )
+        if (isError) {
             Text(
-                text = text,
-                fontSize = LocalDimen.current.textSize16
+                text = stringResource(id = textError.textResId),
+                color = Color.Red
             )
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = imageVector,
-                contentDescription = null,
-                modifier = Modifier.size(LocalDimen.current.iconSize30)
-            )
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Text,
-            imeAction = imeAction
-        ),
-        modifier = Modifier.fillMaxWidth()
-    )
+        }
+    }
 }

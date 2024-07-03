@@ -2,6 +2,7 @@ package com.balan.androidquestionsapp.presentation.sign_up.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,23 +61,66 @@ class SignUpViewModel @Inject constructor(
             val name = _state.value.name
             val password = _state.value.password
             val email = _state.value.email
-            val signUpResult = signUpUseCase.get().execute(login = name, password = password, email = email)
+            val signUpResult =
+                signUpUseCase.get().execute(login = name, password = password, email = email)
+
+            val (emailValidation, passwordValidation, loginValidation) = mapValidationResult(
+                signUpResult
+            )
+
             _state.update {
                 it.copy(
-                    valid = when (signUpResult) {
-                        Validation.VALID -> Validation.VALID
-                        Validation.INVALID_EMAIL -> Validation.INVALID_EMAIL
-                        Validation.EMAIL_ALREADY_EXIST -> Validation.EMAIL_ALREADY_EXIST
-                        else -> Validation.VALID
-                    }
+                    emailValidation = emailValidation,
+                    passwordValidation = passwordValidation,
+                    loginValidation = loginValidation
                 )
             }
-            if (signUpResult == Validation.VALID) _event.emit(SignUpNavigationEvent.NavigationToSignIn)
+
+            if (signUpResult == Validation.VALID) {
+                _event.emit(SignUpNavigationEvent.NavigationToSignIn)
+            }
         }
+    }
+
+    private fun mapValidationResult(result: Validation): Triple<Validation, Validation, Validation> {
+        val emailValidation = when (result) {
+            Validation.INVALID_EMAIL -> Validation.INVALID_EMAIL
+            Validation.EMAIL_ALREADY_EXIST -> Validation.EMAIL_ALREADY_EXIST
+            else -> Validation.VALID
+        }
+
+        val passwordValidation = when (result) {
+            Validation.INVALID_ADMIN_PASSWORD -> Validation.INVALID_ADMIN_PASSWORD
+            Validation.TOO_SHORT -> Validation.TOO_SHORT
+            Validation.NO_UPPERCASE_LETTER -> Validation.NO_UPPERCASE_LETTER
+            Validation.NO_LOWERCASE_LETTER -> Validation.NO_LOWERCASE_LETTER
+            Validation.NO_DIGIT -> Validation.NO_DIGIT
+            Validation.NO_SPECIAL_CHARACTER -> Validation.NO_SPECIAL_CHARACTER
+            else -> Validation.VALID
+        }
+
+        val loginValidation = when (result) {
+            Validation.EMPTY_LOGIN -> Validation.EMPTY_LOGIN
+            Validation.TOO_SHORT_LOGIN -> Validation.TOO_SHORT_LOGIN
+            Validation.INVALID_CHARACTERS_IN_LOGIN -> Validation.INVALID_CHARACTERS_IN_LOGIN
+            else -> Validation.VALID
+        }
+
+        return Triple(emailValidation, passwordValidation, loginValidation)
     }
 
     fun isFieldsNotEmpty() = _state.value.name.isNotEmpty() &&
             _state.value.password.isNotEmpty() &&
             _state.value.email.isNotEmpty()
 
+    fun onClearClick(inputFieldType: InputFieldType) {
+        when (inputFieldType) {
+            InputFieldType.LOGIN -> _state.update { it.copy(name = "") }
+            InputFieldType.PASSWORD -> _state.update { it.copy(password = "") }
+            InputFieldType.EMAIL -> _state.update { it.copy(email = "") }
+        }
+    }
+
+
+    fun isErrorValidation(validation: Validation) = validation != Validation.VALID
 }
