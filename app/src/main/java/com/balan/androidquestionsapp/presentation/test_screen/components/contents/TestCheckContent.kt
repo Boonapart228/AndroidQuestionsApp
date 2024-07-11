@@ -22,11 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.Answer
-import com.balan.androidquestionsapp.ui.theme.Background
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -41,7 +40,7 @@ fun TestCheckContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = Background),
+            .background(color = LocalColors.current.backGround),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -83,8 +82,8 @@ fun TestCheckContent(
                                 onAnswerClick(answer)
                             },
                             colors = CheckboxDefaults.colors(
-                                checkedColor = Color.Black,
-                                uncheckedColor = Color.Black
+                                checkedColor = LocalColors.current.black,
+                                uncheckedColor = LocalColors.current.black
                             )
                         )
                         Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
@@ -92,7 +91,7 @@ fun TestCheckContent(
                             text = answer.title,
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
-                                .background(color = Color.White)
+                                .background(color = LocalColors.current.white)
                                 .fillMaxWidth()
                                 .padding(horizontal = LocalDimen.current.horizontalPadding24),
                             textAlign = TextAlign.Start,

@@ -71,5 +71,9 @@ data class Dimensions(
     val paddingAll16: Dp = 16.dp,
     val buttonShape: Dp = 10.dp,
     val textSize16: TextUnit = 16.sp,
-    val imageSize64: Dp = 64.dp,
+    val arrangementSpaceBy12: Dp = 12.dp,
+    val borderWidth2: Dp = 2.dp,
+    val roundedCornerShape16: Dp = 16.dp,
+    val driverThickness: Dp = 1.dp,
+    val horizontalPadding8: Dp = 8.dp,
 )

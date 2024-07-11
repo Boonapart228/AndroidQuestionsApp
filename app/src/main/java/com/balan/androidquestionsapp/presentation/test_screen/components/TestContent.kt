@@ -38,6 +38,7 @@ fun TestContent(
                 TopBarTestScreen(
                     count = state.questionNumber,
                     size = state.questions.size,
+                    title = state.title,
                     onMainClick = onMainClick
                 )
             },

@@ -9,8 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -19,12 +19,12 @@ fun TestTitleAnswer(title: String) {
         text = title,
         modifier = Modifier
             .background(
-                color = Color.White,
+                color = LocalColors.current.white,
                 shape = RoundedCornerShape(LocalDimen.current.titleBackgroundShape)
             )
             .border(
                 width = LocalDimen.current.titleBorderWidth,
-                color = Color.Black,
+                color = LocalColors.current.black,
                 shape = RoundedCornerShape(LocalDimen.current.titleBorderShape)
             )
             .fillMaxWidth()

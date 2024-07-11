@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Answer
 import com.balan.androidquestionsapp.domain.models.QuestionType
+import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionTitleUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionsUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.UpdateScoreUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
@@ -26,7 +27,8 @@ class TestViewModel @Inject constructor(
     private val getCurrentUserUseCase: Provider<GetCurrentUserUseCase>,
     private val updateUserInfoUseCase: Provider<UpdateUserInfoUseCase>,
     private val getQuestionsUseCase: Provider<GetQuestionsUseCase>,
-    private val updateScoreUseCase: Provider<UpdateScoreUseCase>
+    private val updateScoreUseCase: Provider<UpdateScoreUseCase>,
+    private val getQuestionTitleUseCase: Provider<GetQuestionTitleUseCase>
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<TestState> = MutableStateFlow(TestState())
@@ -38,7 +40,10 @@ class TestViewModel @Inject constructor(
 
     init {
         _state.update {
-            it.copy(questions = getQuestionsUseCase.get().execute())
+            it.copy(
+                questions = getQuestionsUseCase.get().execute(),
+                title = getQuestionTitleUseCase.get().execute()
+            )
         }
     }
 

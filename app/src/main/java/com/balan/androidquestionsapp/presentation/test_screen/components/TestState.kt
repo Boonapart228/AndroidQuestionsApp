@@ -10,5 +10,6 @@ data class TestState(
     val answered: Boolean = false,
     val selectedCheckAnswer: List<Answer> = emptyList(),
     val writtenAnswer: String = "",
-    val score: Int = 0
+    val score: Int = 0,
+    val title : String = ""
 )

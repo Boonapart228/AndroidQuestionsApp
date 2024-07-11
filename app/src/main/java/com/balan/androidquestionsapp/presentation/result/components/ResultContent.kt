@@ -1,5 +1,6 @@
 package com.balan.androidquestionsapp.presentation.result.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,12 +20,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
-import com.balan.androidquestionsapp.ui.theme.Background
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Preview(
@@ -44,17 +44,20 @@ fun ResultContent(
     modifier: Modifier = Modifier,
     onMainClick: () -> Unit
 ) {
+    BackHandler {
+        onMainClick()
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Background)
+            .background(LocalColors.current.backGround)
             .padding(LocalDimen.current.paddingAll16),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             imageVector = Icons.Filled.Star, contentDescription = null,
-            modifier = Modifier.size(LocalDimen.current.imageSize64)
+            modifier = Modifier.size(LocalDimen.current.iconSize64)
         )
         Text(
             text = stringResource(id = textResult),
@@ -69,13 +72,14 @@ fun ResultContent(
         Spacer(modifier = Modifier.height(LocalDimen.current.spacerPaddingAll32))
         Button(
             onClick = onMainClick,
-            colors = ButtonDefaults.buttonColors(Color.Black),
+            colors = ButtonDefaults.buttonColors(LocalColors.current.black),
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(LocalDimen.current.buttonShape)
         ) {
-            androidx.compose.material3.Text(
+            Text(
                 text = stringResource(id = R.string.menu),
-                fontSize = LocalDimen.current.textSize16
+                fontSize = LocalDimen.current.textSize16,
+                color = LocalColors.current.white
             )
         }
     }

@@ -5,6 +5,7 @@
     <string name="email_already_exists">Пошта вже існує</string>
     <string name="in_valid_admin_password">Невірний пароль</string>
     <string name="valid" />
+    <string name="default_valid" />
     <string name="input_login">Введіть логін</string>
     <string name="input_password">Введіть пароль</string>
     <string name="input_email">Введіть пошту</string>
@@ -35,4 +36,11 @@
     <string name="empty_login">Логін не може бути порожнім</string>
     <string name="too_short_login">Логін занадто короткий</string>
     <string name="invalid_characters_in_login">Логін містить недопустимі символи</string>
+    <string name="successful_registration">Успішна реєстрація</string>
+    <string name="successful_authorization">Успішна авторизація</string>
+    <string name="test_selection">Вибір тестів</string>
+    <string name="alert_delete_score">Підтвердження видалення результату</string>
+    <string name="alert_delete_score_message">Ви впевнені, що хочете видалити цей результат?</string>
+    <string name="action_confirm">Підтвердити</string>
+    <string name="action_dismiss">Ні</string>
 </resources>

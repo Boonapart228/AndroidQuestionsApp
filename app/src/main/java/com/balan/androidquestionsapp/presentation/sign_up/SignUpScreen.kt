@@ -29,8 +29,7 @@ fun SignUpScreen(
         onEmailChange = viewModel::setEmail,
         onSignUpClick = viewModel::onSignUpClick,
         onSignInClick = viewModel::onSignInClick,
-        isFieldsNotEmpty = viewModel::isFieldsNotEmpty,
         isErrorValidation = viewModel::isErrorValidation,
-        onClearClick = viewModel::onClearClick
+        onClearClick = viewModel::onClearClick,
     )
 }

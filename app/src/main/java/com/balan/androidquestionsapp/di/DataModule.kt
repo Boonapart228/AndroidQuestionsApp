@@ -23,6 +23,7 @@ import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
 import com.balan.androidquestionsapp.domain.usecase.result.GetQuestionScoreUseCase
 import com.balan.androidquestionsapp.domain.usecase.result.SetQuestionSizeUseCase
 import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
+import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionTitleUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionsUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.UpdateScoreUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
@@ -182,5 +183,13 @@ class DataModule {
     @Provides
     fun provideAdminAccessUseCase(authRepository: AuthRepository): AuthenticateAdminUseCase {
         return AuthenticateAdminUseCase(authRepository)
+    }
+
+    @Provides
+    fun provideGetQuestionTitleUseCase(
+        testRepository: TestRepository,
+        userSession: UserSession
+    ): GetQuestionTitleUseCase {
+        return GetQuestionTitleUseCase(testRepository, userSession)
     }
 }

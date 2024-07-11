@@ -25,4 +25,7 @@ class TestRepositoryImpl(
         }
         return newUserInfo
     }
+
+    override fun getQuestionTitle(question: QuestionLevel) = question.path.substringBefore("_")
+
 }

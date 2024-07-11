@@ -2,6 +2,7 @@ package com.balan.androidquestionsapp.presentation.score.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
@@ -63,20 +64,16 @@ class ScoreViewModel @Inject constructor(
 
 
     fun onDeleteScoreClick(user: User) {
-        viewModelScope.launch(Dispatchers.IO) {
-            update(
-                deleteResultUseCase.get()
-                    .execute(user = user, level = getLevelUseCase.get().execute())
-            )
+        _state.update {
+            it.copy(user = user)
         }
+        toggleDialogAlert()
     }
 
     fun sort(sortDirection: SortDirection) {
-
         viewModelScope.launch(Dispatchers.IO) {
             update(sortByDirectionUseCase.get().execute(sortDirection))
         }
-
     }
 
     fun onToggleMenuClick() {
@@ -102,4 +99,31 @@ class ScoreViewModel @Inject constructor(
 
     fun isTestPassed(score: Int?) = score != null && score >= PASSING_SCORE
 
+    private fun toggleDialogAlert() {
+        _state.update {
+            it.copy(dialogAlert = !_state.value.dialogAlert)
+        }
+    }
+
+    fun handleDialogAction(dialogAction: DialogAction) {
+        val currentUser = _state.value.user
+        when (dialogAction) {
+            DialogAction.DISMISS -> false
+            DialogAction.CONFIRM -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    if (currentUser != null) {
+                        update(
+                            deleteResultUseCase.get()
+                                .execute(
+                                    user = currentUser,
+                                    level = getLevelUseCase.get().execute()
+                                )
+                        )
+                    }
+                }
+            }
+        }
+        toggleDialogAlert()
+
+    }
 }

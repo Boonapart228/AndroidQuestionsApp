@@ -21,11 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.Answer
-import com.balan.androidquestionsapp.ui.theme.Background
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -41,7 +40,7 @@ fun TestRadioContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(color = Background)
+            .background(color = LocalColors.current.backGround)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,8 +70,8 @@ fun TestRadioContent(
                     ) {
                         RadioButton(
                             colors = RadioButtonDefaults.colors(
-                                selectedColor = Color.Black,
-                                unselectedColor = Color.Black,
+                                selectedColor = LocalColors.current.black,
+                                unselectedColor = LocalColors.current.black,
                             ),
                             selected = selectedAnswer == answer,
                             onClick = { onAnswerClick(answer) }
@@ -83,7 +82,7 @@ fun TestRadioContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
-                                .background(color = Color.White)
+                                .background(color = LocalColors.current.white)
                                 .padding(horizontal = LocalDimen.current.horizontalPadding24),
                             textAlign = TextAlign.Start,
                             fontSize = LocalDimen.current.answerTextSize

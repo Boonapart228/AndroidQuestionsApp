@@ -3,7 +3,6 @@ package com.balan.androidquestionsapp.presentation.test_screen.components.conten
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,10 +17,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.balan.androidquestionsapp.ui.theme.Background
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 
@@ -30,6 +28,7 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 fun TopBarTestScreen(
     count: Int,
     size: Int,
+    title: String,
     onMainClick: () -> Unit
 ) {
     Column(
@@ -38,8 +37,8 @@ fun TopBarTestScreen(
     ) {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Background,
-                titleContentColor = Color.Black,
+                containerColor = LocalColors.current.backGround,
+                titleContentColor = LocalColors.current.black,
             ),
             title = {
                 Column(
@@ -49,9 +48,9 @@ fun TopBarTestScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Text(text = title, fontSize = LocalDimen.current.textSize24)
                     Text(
                         text = "$count/$size",
-                        modifier = Modifier.padding(top = LocalDimen.current.spacerPaddingTop4),
                         textAlign = TextAlign.Center,
                         fontSize = LocalDimen.current.textSize32
                     )
@@ -75,5 +74,5 @@ fun TopBarTestScreen(
 )
 @Composable
 fun PreviewTopBar() {
-    TopBarTestScreen(count = 0, size = 4, onMainClick = {})
+    TopBarTestScreen(count = 0, size = 4, title = "JUNIOR", onMainClick = {})
 }

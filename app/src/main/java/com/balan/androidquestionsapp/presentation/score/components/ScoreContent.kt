@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -24,15 +26,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
+import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
 import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
@@ -45,7 +50,8 @@ fun ScoreContent(
     onMainClick: () -> Unit,
     viewModel: ScoreViewModel,
     onSortClick: (SortDirection) -> Unit,
-    onActiveClick : () -> Unit,
+    onActiveClick: () -> Unit,
+    onConfirmationClick: (DialogAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsState()
@@ -72,6 +78,15 @@ fun ScoreContent(
                     isTestPassed = viewModel::isTestPassed
                 )
             }
+        }
+        if (state.dialogAlert) {
+            CustomAlertDialog(
+                onDismissRequest = { onConfirmationClick(DialogAction.DISMISS) },
+                onConfirmation = { onConfirmationClick(DialogAction.CONFIRM) },
+                dialogTitle = stringResource(id = R.string.alert_delete_score),
+                dialogText = stringResource(id = R.string.alert_delete_score_message),
+                icon = Icons.Filled.Info
+            )
         }
     }
 }
@@ -134,10 +149,54 @@ fun ScoreItem(
                         contentDescription = null,
                     )
                 }
+
             }
         }
     }
 }
+
+@Composable
+fun CustomAlertDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+    icon: ImageVector,
+) {
+    AlertDialog(
+        icon = {
+            Icon(icon, contentDescription = "Example Icon")
+        },
+        title = {
+            Text(text = dialogTitle)
+        },
+        text = {
+            Text(text = dialogText)
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text(stringResource(id = R.string.action_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text(stringResource(id = R.string.action_dismiss))
+            }
+        }
+    )
+}
+
 
 @Preview(
     showBackground = true,
@@ -157,6 +216,8 @@ fun ScoreContentPreview() {
                 senior = 7
             )
         ),
-        onDeleteUserScoreClick = {}, getScore = { 5 }, isTestPassed = { false },
+        onDeleteUserScoreClick = {},
+        getScore = { 5 },
+        isTestPassed = { false },
     )
 }
