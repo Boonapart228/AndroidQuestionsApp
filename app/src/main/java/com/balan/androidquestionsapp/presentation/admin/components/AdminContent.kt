@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -57,7 +56,7 @@ fun AdminContentPreview() {
         onPanelScoreClick = {},
         setPassword = {},
         modifier = Modifier,
-        onMainClick = {}, isErrorValidation = { false }, onClearClick = { },
+        onMainClick = {}, isFieldInvalid = { false }, onClearClick = { },
 
         )
 }
@@ -69,7 +68,7 @@ fun AdminContent(
     setPassword: (String) -> Unit,
     onPanelScoreClick: () -> Unit,
     onMainClick: () -> Unit,
-    isErrorValidation: (Validation) -> Boolean,
+    isFieldInvalid: (Validation) -> Boolean,
     onClearClick: (InputFieldType) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -85,7 +84,7 @@ fun AdminContent(
             modifier = modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .background(LocalColors.current.backGround)
+                .background(LocalColors.current.background)
                 .padding(it)
         ) {
             Column(
@@ -104,17 +103,17 @@ fun AdminContent(
                     textAlign = TextAlign.Center,
                     fontSize = LocalDimen.current.textSize24,
                     fontWeight = FontWeight.Bold,
-                    color = LocalColors.current.black
+                    color = LocalColors.current.uiElementBlack
                 )
                 Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
-                CustomTextField(
+                TextFieldWithValidation(
                     value = state.password,
                     text = stringResource(R.string.input_password),
                     imageVector = ImageVector.vectorResource(R.drawable.baseline_password_24),
                     onValueChange = setPassword,
                     imeAction = ImeAction.Done,
                     textError = state.passwordValidation,
-                    isErrorValidation = isErrorValidation,
+                    isFieldInvalid = isFieldInvalid,
                     onClearClick = { onClearClick(InputFieldType.PASSWORD) },
                 )
                 Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
@@ -123,7 +122,7 @@ fun AdminContent(
                         keyboardController?.hide()
                         onPanelScoreClick()
                     },
-                    colors = ButtonDefaults.buttonColors(LocalColors.current.black),
+                    colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(LocalDimen.current.buttonShape),
                     enabled = state.isFieldsNotEmpty
@@ -140,17 +139,16 @@ fun AdminContent(
 }
 
 @Composable
-fun CustomTextField(
+fun TextFieldWithValidation(
     value: String,
     imeAction: ImeAction,
     text: String,
     textError: Validation,
     onValueChange: (String) -> Unit,
-    isErrorValidation: (Validation) -> Boolean,
+    isFieldInvalid: (Validation) -> Boolean,
     onClearClick: () -> Unit,
     imageVector: ImageVector,
 ) {
-    val isError = isErrorValidation(textError)
     Column {
         OutlinedTextField(
             value = value,
@@ -177,7 +175,7 @@ fun CustomTextField(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize30)
-                        .clickable { onClearClick() }
+                        .clickable(onClick = onClearClick)
                 )
             },
             singleLine = true,
@@ -186,12 +184,12 @@ fun CustomTextField(
                 imeAction = imeAction
             ),
             modifier = Modifier.fillMaxWidth(),
-            isError = isError
+            isError = isFieldInvalid(textError)
         )
-        if (isError) {
+        if (isFieldInvalid(textError)) {
             Text(
                 text = stringResource(id = textError.textResId),
-                color = Color.Red
+                color = LocalColors.current.warningRed
             )
         }
     }

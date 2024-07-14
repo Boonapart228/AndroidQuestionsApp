@@ -16,5 +16,5 @@ enum class Validation(val textResId: Int) {
     EMPTY_LOGIN(R.string.empty_login),
     TOO_SHORT_LOGIN(R.string.too_short_login),
     INVALID_CHARACTERS_IN_LOGIN(R.string.invalid_characters_in_login),
-    DEFAULT(R.string.default_valid)
+    DEFAULT(R.string.valid)
 }

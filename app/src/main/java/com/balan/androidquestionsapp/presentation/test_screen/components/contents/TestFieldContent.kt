@@ -36,7 +36,7 @@ fun TestFieldContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = LocalColors.current.backGround),
+            .background(color = LocalColors.current.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -48,7 +48,7 @@ fun TestFieldContent(
                 .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
                 .weight(1f)
         ) {
-            TestTitleAnswer(title = title)
+            AnswerTitle(title = title)
             Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll16))
             OutlinedTextField(
                 value = answer,

@@ -30,7 +30,7 @@ fun TopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(LocalColors.current.backGround)
+            .background(LocalColors.current.background)
             .padding(LocalDimen.current.paddingAll16),
         contentAlignment = Alignment.Center
     ) {

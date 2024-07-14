@@ -40,7 +40,7 @@ fun TestCheckContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = LocalColors.current.backGround),
+            .background(color = LocalColors.current.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -51,7 +51,7 @@ fun TestCheckContent(
                 .fillMaxWidth()
                 .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
         ) {
-            TestTitleAnswer(title = title)
+            AnswerTitle(title = title)
         }
 
         Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
@@ -72,7 +72,7 @@ fun TestCheckContent(
                     Row(
                         modifier = Modifier
                             .padding(vertical = LocalDimen.current.questionVerticalPadding)
-                            .clickable { onAnswerClick(answer) },
+                            .clickable(onClick = { onAnswerClick(answer) }),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -82,8 +82,8 @@ fun TestCheckContent(
                                 onAnswerClick(answer)
                             },
                             colors = CheckboxDefaults.colors(
-                                checkedColor = LocalColors.current.black,
-                                uncheckedColor = LocalColors.current.black
+                                checkedColor = LocalColors.current.uiElementBlack,
+                                uncheckedColor = LocalColors.current.uiElementBlack
                             )
                         )
                         Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
@@ -91,7 +91,7 @@ fun TestCheckContent(
                             text = answer.title,
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
-                                .background(color = LocalColors.current.white)
+                                .background(color = LocalColors.current.uiElementGreen)
                                 .fillMaxWidth()
                                 .padding(horizontal = LocalDimen.current.horizontalPadding24),
                             textAlign = TextAlign.Start,

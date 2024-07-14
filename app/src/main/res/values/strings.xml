@@ -5,7 +5,6 @@
     <string name="email_already_exists">Пошта вже існує</string>
     <string name="in_valid_admin_password">Невірний пароль</string>
     <string name="valid" />
-    <string name="default_valid" />
     <string name="input_login">Введіть логін</string>
     <string name="input_password">Введіть пароль</string>
     <string name="input_email">Введіть пошту</string>

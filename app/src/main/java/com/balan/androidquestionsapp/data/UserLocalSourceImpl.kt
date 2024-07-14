@@ -32,7 +32,7 @@ class UserLocalSourceImpl(
         return userDao.findUser(email, password)?.toUser()
     }
 
-    override fun getByEmail(email: String): Boolean {
+    override fun isUserInDatabase(email: String): Boolean {
         return userDao.findUser(email)
     }
 
@@ -51,4 +51,6 @@ class UserLocalSourceImpl(
     override fun getAll(): List<User> {
         return userDao.getAllUsers().map { userDbEntity -> userDbEntity.toUser() }
     }
+
+
 }

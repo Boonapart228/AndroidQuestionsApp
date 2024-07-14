@@ -1,6 +1,5 @@
 package com.balan.androidquestionsapp.presentation.sign_in.components
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -57,20 +55,19 @@ fun SignInContent(
     state: SignInState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onSignInClick: (Context) -> Unit,
+    onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
     onClearClick: (InputFieldType) -> Unit,
     onShowPasswordClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     val scrollState = rememberScrollState()
     val keyboardController = LocalSoftwareKeyboardController.current
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .background(LocalColors.current.backGround)
+            .background(LocalColors.current.background)
             .padding(LocalDimen.current.paddingAll16),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(space = LocalDimen.current.spacerHeight16),
@@ -85,9 +82,9 @@ fun SignInContent(
             text = stringResource(id = R.string.authorization),
             textAlign = TextAlign.Center,
             fontSize = LocalDimen.current.textSize24,
-            color = LocalColors.current.black
+            color = LocalColors.current.uiElementBlack
         )
-        CustomTextField(
+        TextFieldWithValidation(
             value = state.email,
             text = stringResource(id = R.string.input_email),
             onValueChange = onEmailChange,
@@ -96,7 +93,7 @@ fun SignInContent(
             imeAction = ImeAction.Next,
             onTrailingIconClick = { onClearClick(InputFieldType.EMAIL) }
         )
-        CustomTextField(
+        TextFieldWithValidation(
             value = state.password,
             text = stringResource(id = R.string.input_password),
             onValueChange = onPasswordChange,
@@ -111,9 +108,9 @@ fun SignInContent(
         Button(
             onClick = {
                 keyboardController?.hide()
-                onSignInClick(context)
+                onSignInClick()
             },
-            colors = ButtonDefaults.buttonColors(LocalColors.current.black),
+            colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
             enabled = state.isFieldsNotEmpty,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(LocalDimen.current.buttonShape)
@@ -131,7 +128,7 @@ fun SignInContent(
 
         ) {
             Divider(
-                color = LocalColors.current.black,
+                color = LocalColors.current.uiElementBlack,
                 thickness = LocalDimen.current.driverThickness,
                 modifier = Modifier.weight(1f)
             )
@@ -141,7 +138,7 @@ fun SignInContent(
                 modifier = Modifier.padding(horizontal = LocalDimen.current.horizontalPadding8)
             )
             Divider(
-                color = LocalColors.current.black,
+                color = LocalColors.current.uiElementBlack,
                 thickness = LocalDimen.current.driverThickness,
                 modifier = Modifier.weight(1f)
             )
@@ -152,7 +149,7 @@ fun SignInContent(
         }) {
             Text(
                 text = stringResource(id = R.string.sign_up),
-                color = LocalColors.current.black,
+                color = LocalColors.current.uiElementBlack,
                 fontSize = LocalDimen.current.textSize16,
                 fontWeight = FontWeight.Bold,
             )
@@ -160,7 +157,7 @@ fun SignInContent(
         }
         Text(
             text = stringResource(id = state.validation.textResId),
-            color = LocalColors.current.black,
+            color = LocalColors.current.uiElementBlack,
             fontSize = LocalDimen.current.textSize16,
             fontWeight = FontWeight.Bold
         )
@@ -188,7 +185,7 @@ fun SignInScreenPreview() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun CustomTextField(
+fun TextFieldWithValidation(
     value: String,
     text: String = "",
     onValueChange: (String) -> Unit,
@@ -246,7 +243,7 @@ fun CustomTextField(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize30)
-                        .clickable { onTrailingIconClick() }
+                        .clickable(onClick = onTrailingIconClick)
                 )
             }
         },

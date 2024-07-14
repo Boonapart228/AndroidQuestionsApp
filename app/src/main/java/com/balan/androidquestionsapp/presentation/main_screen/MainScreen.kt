@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.balan.androidquestionsapp.presentation.main_screen.components.MainContent
 import com.balan.androidquestionsapp.presentation.main_screen.components.MainNavigationEvent
+import com.balan.androidquestionsapp.presentation.main_screen.components.MainState
 import com.balan.androidquestionsapp.presentation.main_screen.components.MainViewModel
 
 @Composable
@@ -23,6 +24,7 @@ fun MainScreen(
         }
     }
     MainContent(
+        state = MainState(),
         onSignInClick = viewModel::onSignInClick,
         onTestClick = viewModel::onTestClick,
         onTestDoubleClick = viewModel::onTestDoubleClick

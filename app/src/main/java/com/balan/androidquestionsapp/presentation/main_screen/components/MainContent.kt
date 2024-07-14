@@ -36,13 +36,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.TestType
 import com.balan.androidquestionsapp.presentation.main_screen.components.contents.TopBarMainContent
-import com.balan.androidquestionsapp.presentation.main_screen.model.mainButtons
 import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 import com.balan.androidquestionsapp.ui.theme.LocalProperty
 
 @Composable
 fun MainContent(
+    state: MainState,
     onSignInClick: () -> Unit,
     onTestClick: (TestType) -> Unit,
     onTestDoubleClick: (TestType) -> Unit,
@@ -60,13 +60,13 @@ fun MainContent(
             modifier = modifier
                 .padding(it)
                 .fillMaxSize()
-                .background(LocalColors.current.backGround)
+                .background(LocalColors.current.background)
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(LocalDimen.current.arrangementSpaceBy12)
             ) {
-                items(mainButtons) { (testType, messageResId) ->
+                items(state.mainButtons) { (testType, messageResId) ->
                     MainButton(
                         messageResId = messageResId,
                         onClick = { onTestClick(testType) },
@@ -113,7 +113,7 @@ fun MainButton(messageResId: Int, onAdminDoubleClick: () -> Unit, onClick: () ->
                     .border(
                         width = LocalDimen.current.borderWidth2,
                         shape = RoundedCornerShape(LocalDimen.current.roundedCornerShape16),
-                        color = LocalColors.current.black
+                        color = LocalColors.current.uiElementBlack
                     )
                     .fillMaxWidth()
                     .graphicsLayer { rotationZ = sway }
@@ -133,5 +133,8 @@ fun MainContentPreview() {
     MainContent(
         onSignInClick = {},
         modifier = Modifier, onTestClick = { }, onTestDoubleClick = { },
+        state = MainState(
+            mainButtons = listOf()
+        ),
     )
 }

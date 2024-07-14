@@ -9,9 +9,9 @@ val LocalColors = compositionLocalOf {
 }
 
 data class Colors(
-    val green: Color = Color(0xFF00FF00),
-    val red: Color = Color(0xFFFF0000),
-    val black: Color = Color(0xFF000000),
-    val white: Color = Color(0xFFFFFFFF),
-    val backGround: Color = Color(0xFF9CECA9)
+    val testPassedGreen: Color = Color(0xFF00FF00),
+    val warningRed: Color = Color(0xFFFF0000),
+    val uiElementBlack: Color = Color(0xFF000000),
+    val uiElementGreen: Color = Color(0xFFFFFFFF),
+    val background: Color = Color(0xFF9CECA9)
 )

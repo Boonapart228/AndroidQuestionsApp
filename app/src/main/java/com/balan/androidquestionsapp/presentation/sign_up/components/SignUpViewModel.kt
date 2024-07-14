@@ -1,19 +1,19 @@
 package com.balan.androidquestionsapp.presentation.sign_up.components
 
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
+import com.balan.androidquestionsapp.presentation.sign_up.model.ValidationResults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,7 +22,7 @@ import javax.inject.Provider
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUpUseCase: Provider<SignUpUseCase>
+    private val signUpUseCase: Provider<SignUpUseCase>,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignUpState> =
@@ -34,26 +34,48 @@ class SignUpViewModel @Inject constructor(
 
     val event = _event.asSharedFlow()
 
+    private val _toastEvent = MutableSharedFlow<SignUpToastEvent>()
+
+    val toastEvent = _toastEvent.asSharedFlow()
+
+
+    init {
+        viewModelScope.launch {
+            state
+                .map { distinctUntilChangedByTextFieldValue(it.email, it.password, it.name) }
+                .distinctUntilChanged()
+                .collect { isFieldsNotEmpty ->
+                    _state.update {
+                        it.copy(isFieldsNotEmpty = isFieldsNotEmpty)
+                    }
+                }
+        }
+    }
+
+    private fun distinctUntilChangedByTextFieldValue(
+        email: String,
+        password: String,
+        name: String
+    ): Boolean {
+        return email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty()
+    }
 
     fun setName(name: String) {
         _state.update {
             it.copy(name = name)
         }
-        isFieldsNotEmpty()
     }
 
     fun setPassword(password: String) {
         _state.update {
             it.copy(password = password)
         }
-        isFieldsNotEmpty()
     }
 
     fun setEmail(email: String) {
         _state.update {
             it.copy(email = email)
         }
-        isFieldsNotEmpty()
     }
 
     fun onSignInClick() {
@@ -63,7 +85,7 @@ class SignUpViewModel @Inject constructor(
     }
 
 
-    fun onSignUpClick(context: Context) {
+    fun onSignUpClick() {
         viewModelScope.launch(Dispatchers.IO) {
             val name = _state.value.name
             val password = _state.value.password
@@ -83,25 +105,16 @@ class SignUpViewModel @Inject constructor(
                 )
             }
             if (signUpResult == Validation.VALID) {
+
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, R.string.successful_registration, Toast.LENGTH_SHORT)
-                        .show()
+                    _toastEvent.emit(SignUpToastEvent.SuccessRegistration)
                     _event.emit(SignUpNavigationEvent.NavigationToSignIn)
                 }
             }
         }
     }
 
-
-    private fun isFieldsNotEmpty() {
-        _state.update {
-            it.copy(
-                isFieldsNotEmpty = _state.value.password.isNotEmpty() && _state.value.email.isNotEmpty() && _state.value.name.isNotEmpty()
-            )
-        }
-    }
-
-    private fun mapValidationResult(result: Validation): Triple<Validation, Validation, Validation> {
+    private fun mapValidationResult(result: Validation): ValidationResults {
         val emailValidation = when (result) {
             Validation.INVALID_EMAIL -> Validation.INVALID_EMAIL
             Validation.EMAIL_ALREADY_EXIST -> Validation.EMAIL_ALREADY_EXIST
@@ -124,8 +137,14 @@ class SignUpViewModel @Inject constructor(
             Validation.INVALID_CHARACTERS_IN_LOGIN -> Validation.INVALID_CHARACTERS_IN_LOGIN
             else -> Validation.VALID
         }
-        return Triple(emailValidation, passwordValidation, loginValidation)
+
+        return ValidationResults(
+            emailValidation = emailValidation,
+            passwordValidation = passwordValidation,
+            loginValidation = loginValidation
+        )
     }
+
 
     fun onClearClick(inputFieldType: InputFieldType) {
         when (inputFieldType) {

@@ -14,17 +14,17 @@ import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
-fun TestTitleAnswer(title: String) {
+fun AnswerTitle(title: String) {
     Text(
         text = title,
         modifier = Modifier
             .background(
-                color = LocalColors.current.white,
+                color = LocalColors.current.uiElementGreen,
                 shape = RoundedCornerShape(LocalDimen.current.titleBackgroundShape)
             )
             .border(
                 width = LocalDimen.current.titleBorderWidth,
-                color = LocalColors.current.black,
+                color = LocalColors.current.uiElementBlack,
                 shape = RoundedCornerShape(LocalDimen.current.titleBorderShape)
             )
             .fillMaxWidth()

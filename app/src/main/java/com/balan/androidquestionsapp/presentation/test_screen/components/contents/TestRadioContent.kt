@@ -40,7 +40,7 @@ fun TestRadioContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(color = LocalColors.current.backGround)
+            .background(color = LocalColors.current.background)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,7 +51,7 @@ fun TestRadioContent(
                 .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
                 .weight(1f)
         ) {
-            TestTitleAnswer(title = title)
+            AnswerTitle(title = title)
             Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             Column(
                 modifier = Modifier
@@ -64,14 +64,14 @@ fun TestRadioContent(
                         modifier = Modifier
 
                             .padding(vertical = LocalDimen.current.questionVerticalPadding)
-                            .clickable { onAnswerClick(answer) },
+                            .clickable(onClick = { onAnswerClick(answer) }),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         RadioButton(
                             colors = RadioButtonDefaults.colors(
-                                selectedColor = LocalColors.current.black,
-                                unselectedColor = LocalColors.current.black,
+                                selectedColor = LocalColors.current.uiElementBlack,
+                                unselectedColor = LocalColors.current.uiElementBlack,
                             ),
                             selected = selectedAnswer == answer,
                             onClick = { onAnswerClick(answer) }
@@ -82,7 +82,7 @@ fun TestRadioContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
-                                .background(color = LocalColors.current.white)
+                                .background(color = LocalColors.current.uiElementGreen)
                                 .padding(horizontal = LocalDimen.current.horizontalPadding24),
                             textAlign = TextAlign.Start,
                             fontSize = LocalDimen.current.answerTextSize

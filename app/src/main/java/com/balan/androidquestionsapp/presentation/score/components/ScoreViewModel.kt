@@ -101,29 +101,23 @@ class ScoreViewModel @Inject constructor(
 
     private fun toggleDialogAlert() {
         _state.update {
-            it.copy(dialogAlert = !_state.value.dialogAlert)
+            it.copy(isDeleteDialogVisible = !_state.value.isDeleteDialogVisible)
         }
     }
 
     fun handleDialogAction(dialogAction: DialogAction) {
         val currentUser = _state.value.user
-        when (dialogAction) {
-            DialogAction.DISMISS -> false
-            DialogAction.CONFIRM -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    if (currentUser != null) {
-                        update(
-                            deleteResultUseCase.get()
-                                .execute(
-                                    user = currentUser,
-                                    level = getLevelUseCase.get().execute()
-                                )
-                        )
-                    }
+        if (dialogAction == DialogAction.CONFIRM)
+            if (currentUser != null) {
+                viewModelScope.launch {
+                    update(
+                        deleteResultUseCase.get()
+                            .execute(
+                                user = currentUser
+                            )
+                    )
                 }
             }
-        }
         toggleDialogAlert()
-
     }
 }

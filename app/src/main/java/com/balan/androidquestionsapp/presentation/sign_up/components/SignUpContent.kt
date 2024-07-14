@@ -1,6 +1,5 @@
 package com.balan.androidquestionsapp.presentation.sign_up.components
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,9 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -63,7 +60,7 @@ fun SignUpScreenPreview() {
         onEmailChange = {},
         onSignUpClick = {},
         onSignInClick = {},
-        isErrorValidation = { false },
+        isFieldInvalid = { false },
         onClearClick = {},
         modifier = Modifier,
     )
@@ -76,13 +73,12 @@ fun SignUpContent(
     onLoginChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
-    onSignUpClick: (Context) -> Unit,
+    onSignUpClick: () -> Unit,
     onSignInClick: () -> Unit,
     onClearClick: (InputFieldType) -> Unit,
-    isErrorValidation: (Validation) -> Boolean,
+    isFieldInvalid: (Validation) -> Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     val scrollState = rememberScrollState()
     val keyboardController = LocalSoftwareKeyboardController.current
     Scaffold(
@@ -97,8 +93,9 @@ fun SignUpContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(space = LocalDimen.current.spacerHeight16),
             modifier = modifier
-                .fillMaxSize().verticalScroll(scrollState)
-                .background(LocalColors.current.backGround)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .background(LocalColors.current.background)
                 .padding(it)
         ) {
             Column(
@@ -106,7 +103,7 @@ fun SignUpContent(
                 verticalArrangement = Arrangement.spacedBy(space = LocalDimen.current.spacerHeight16),
                 modifier = modifier
                     .fillMaxSize()
-                    .background(LocalColors.current.backGround)
+                    .background(LocalColors.current.background)
                     .padding(LocalDimen.current.paddingAll16)
             ) {
 
@@ -121,45 +118,45 @@ fun SignUpContent(
                     textAlign = TextAlign.Center,
                     fontSize = LocalDimen.current.textSize24,
                     fontWeight = FontWeight.Bold,
-                    color = LocalColors.current.black
+                    color = LocalColors.current.uiElementBlack
                 )
-                CustomTextField(
+                TextFieldWithValidation(
                     value = state.email,
                     text = stringResource(id = R.string.input_email),
                     imageVector = Icons.Filled.Email,
                     onValueChange = onEmailChange,
                     imeAction = ImeAction.Next,
                     textError = state.emailValidation,
-                    isErrorValidation = isErrorValidation,
+                    isFieldInvalid = isFieldInvalid,
                     onClearClick = { onClearClick(InputFieldType.EMAIL) }
                 )
-                CustomTextField(
+                TextFieldWithValidation(
                     value = state.name,
                     text = stringResource(id = R.string.input_login),
                     imageVector = Icons.Filled.AccountBox,
                     onValueChange = onLoginChange,
                     imeAction = ImeAction.Next,
                     textError = state.loginValidation,
-                    isErrorValidation = isErrorValidation,
+                    isFieldInvalid = isFieldInvalid,
                     onClearClick = { onClearClick(InputFieldType.LOGIN) }
                 )
-                CustomTextField(
+                TextFieldWithValidation(
                     value = state.password,
                     text = stringResource(id = R.string.input_password),
                     imageVector = ImageVector.vectorResource(R.drawable.baseline_password_24),
                     onValueChange = onPasswordChange,
                     imeAction = ImeAction.Done,
                     textError = state.passwordValidation,
-                    isErrorValidation = isErrorValidation,
+                    isFieldInvalid = isFieldInvalid,
                     onClearClick = { onClearClick(InputFieldType.PASSWORD) }
                 )
                 Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
                 Button(
                     onClick = {
                         keyboardController?.hide()
-                        onSignUpClick(context)
+                        onSignUpClick()
                     },
-                    colors = ButtonDefaults.buttonColors(LocalColors.current.black),
+                    colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
                     modifier = Modifier.fillMaxWidth(),
                     enabled = state.isFieldsNotEmpty,
                     shape = RoundedCornerShape(LocalDimen.current.buttonShape)
@@ -175,17 +172,16 @@ fun SignUpContent(
 }
 
 @Composable
-fun CustomTextField(
+fun TextFieldWithValidation(
     value: String,
     imeAction: ImeAction,
     text: String,
     textError: Validation,
     onValueChange: (String) -> Unit,
-    isErrorValidation: (Validation) -> Boolean,
+    isFieldInvalid: (Validation) -> Boolean,
     onClearClick: () -> Unit,
     imageVector: ImageVector,
 ) {
-    val isError = isErrorValidation(textError)
     Column {
         OutlinedTextField(
             value = value,
@@ -212,7 +208,7 @@ fun CustomTextField(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize30)
-                        .clickable { onClearClick() }
+                        .clickable(onClick = onClearClick)
                 )
             },
             singleLine = true,
@@ -221,12 +217,12 @@ fun CustomTextField(
                 imeAction = imeAction
             ),
             modifier = Modifier.fillMaxWidth(),
-            isError = isError
+            isError = isFieldInvalid(textError)
         )
-        if (isError) {
+        if (isFieldInvalid(textError)) {
             Text(
                 text = stringResource(id = textError.textResId),
-                color = Color.Red
+                color = LocalColors.current.warningRed
             )
         }
     }

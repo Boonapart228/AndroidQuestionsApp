@@ -25,7 +25,7 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarTestScreen(
+fun TopBarTest(
     count: Int,
     size: Int,
     title: String,
@@ -37,8 +37,8 @@ fun TopBarTestScreen(
     ) {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = LocalColors.current.backGround,
-                titleContentColor = LocalColors.current.black,
+                containerColor = LocalColors.current.background,
+                titleContentColor = LocalColors.current.uiElementBlack,
             ),
             title = {
                 Column(
@@ -74,5 +74,5 @@ fun TopBarTestScreen(
 )
 @Composable
 fun PreviewTopBar() {
-    TopBarTestScreen(count = 0, size = 4, title = "JUNIOR", onMainClick = {})
+    TopBarTest(count = 0, size = 4, title = "JUNIOR", onMainClick = {})
 }

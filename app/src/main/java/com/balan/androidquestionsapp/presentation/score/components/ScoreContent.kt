@@ -79,12 +79,12 @@ fun ScoreContent(
                 )
             }
         }
-        if (state.dialogAlert) {
-            CustomAlertDialog(
+        if (state.isDeleteDialogVisible) {
+            DeleteUserConfirmationDialog(
                 onDismissRequest = { onConfirmationClick(DialogAction.DISMISS) },
                 onConfirmation = { onConfirmationClick(DialogAction.CONFIRM) },
-                dialogTitle = stringResource(id = R.string.alert_delete_score),
-                dialogText = stringResource(id = R.string.alert_delete_score_message),
+                title = stringResource(id = R.string.alert_delete_score),
+                text = stringResource(id = R.string.alert_delete_score_message),
                 icon = Icons.Filled.Info
             )
         }
@@ -137,7 +137,7 @@ fun ScoreItem(
                     shape = CircleShape,
                     modifier = Modifier.size(LocalDimen.current.buttonSize),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (testPassed) LocalColors.current.green else LocalColors.current.red
+                        containerColor = if (testPassed) LocalColors.current.testPassedGreen else LocalColors.current.warningRed
                     )
                 ) {}
                 Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
@@ -156,22 +156,22 @@ fun ScoreItem(
 }
 
 @Composable
-fun CustomAlertDialog(
+fun DeleteUserConfirmationDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
+    title: String,
+    text: String,
     icon: ImageVector,
 ) {
     AlertDialog(
         icon = {
-            Icon(icon, contentDescription = "Example Icon")
+            Icon(icon, contentDescription = null)
         },
         title = {
-            Text(text = dialogTitle)
+            Text(text = title)
         },
         text = {
-            Text(text = dialogText)
+            Text(text = text)
         },
         onDismissRequest = {
             onDismissRequest()

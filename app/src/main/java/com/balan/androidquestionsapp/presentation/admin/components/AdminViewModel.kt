@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,11 +27,30 @@ class AdminViewModel @Inject constructor(
     private val _event = MutableSharedFlow<AdminNavigationEvent>()
 
     val event = _event.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            state
+                .map { distinctUntilChangedByTextFieldValue(it.password) }
+                .distinctUntilChanged()
+                .collect { isFieldsNotEmpty ->
+                    _state.update {
+                        it.copy(isFieldsNotEmpty = isFieldsNotEmpty)
+                    }
+                }
+        }
+    }
+
+    private fun distinctUntilChangedByTextFieldValue(password: String): Boolean {
+        return password.isNotEmpty()
+    }
+
     fun setPassword(password: String) {
         _state.update {
-            it.copy(password = password)
+            it.copy(
+                password = password,
+            )
         }
-        isFieldsNotEmpty()
     }
 
     fun onScoreClick() {
@@ -40,14 +61,6 @@ class AdminViewModel @Inject constructor(
             } else {
                 _state.update { it.copy(passwordValidation = Validation.INVALID_ADMIN_PASSWORD) }
             }
-        }
-    }
-
-    private fun isFieldsNotEmpty() {
-        _state.update {
-            it.copy(
-                isFieldsNotEmpty = _state.value.password.isNotEmpty()
-            )
         }
     }
 
@@ -63,7 +76,7 @@ class AdminViewModel @Inject constructor(
     fun onClearClick(inputFieldType: InputFieldType) {
         when (inputFieldType) {
             InputFieldType.PASSWORD -> _state.update { it.copy(password = "") }
-            else -> {}
+            else -> return
         }
     }
 }

@@ -50,7 +50,7 @@ fun ResultContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(LocalColors.current.backGround)
+            .background(LocalColors.current.background)
             .padding(LocalDimen.current.paddingAll16),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -72,14 +72,14 @@ fun ResultContent(
         Spacer(modifier = Modifier.height(LocalDimen.current.spacerPaddingAll32))
         Button(
             onClick = onMainClick,
-            colors = ButtonDefaults.buttonColors(LocalColors.current.black),
+            colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(LocalDimen.current.buttonShape)
         ) {
             Text(
                 text = stringResource(id = R.string.menu),
                 fontSize = LocalDimen.current.textSize16,
-                color = LocalColors.current.white
+                color = LocalColors.current.uiElementGreen
             )
         }
     }

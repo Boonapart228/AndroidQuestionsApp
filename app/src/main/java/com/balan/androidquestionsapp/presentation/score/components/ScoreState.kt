@@ -8,6 +8,5 @@ data class ScoreState(
     val users: List<User> = emptyList(),
     val user: User? = null,
     val menuExpanded: Boolean = false,
-    val dialogAlert: Boolean = false,
-    val dialogAction: Boolean = false
+    val isDeleteDialogVisible: Boolean = false,
 )

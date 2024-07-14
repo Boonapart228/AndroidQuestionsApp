@@ -27,14 +27,14 @@ fun TopBarMainContent(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(LocalColors.current.backGround)
+            .background(LocalColors.current.background)
             .padding(LocalDimen.current.paddingAll16),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = stringResource(id = R.string.test_selection),
             style = MaterialTheme.typography.titleLarge,
-            color = LocalColors.current.black
+            color = LocalColors.current.uiElementBlack
         )
 
         IconButton(

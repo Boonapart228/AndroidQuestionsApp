@@ -36,8 +36,8 @@ fun TopBarScore(
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = LocalColors.current.backGround,
-            titleContentColor = LocalColors.current.black,
+            containerColor = LocalColors.current.background,
+            titleContentColor = LocalColors.current.uiElementBlack,
         ),
         title = {},
         navigationIcon = {

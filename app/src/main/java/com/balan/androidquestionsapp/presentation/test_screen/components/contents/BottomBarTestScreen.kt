@@ -34,8 +34,8 @@ fun BottomBar(
             onClick = onIndexMinusClick,
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
             colors = ButtonDefaults.buttonColors(
-                contentColor = LocalColors.current.black,
-                containerColor = LocalColors.current.white
+                contentColor = LocalColors.current.uiElementBlack,
+                containerColor = LocalColors.current.uiElementGreen
             ),
         ) {
             Text(text = stringResource(id = R.string.button_back),
@@ -45,8 +45,8 @@ fun BottomBar(
             onClick = onIndexPlusClick,
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
             colors = ButtonDefaults.buttonColors(
-                contentColor = LocalColors.current.black,
-                containerColor = LocalColors.current.white
+                contentColor = LocalColors.current.uiElementBlack,
+                containerColor = LocalColors.current.uiElementGreen
             ),
         ) {
             Text(text = stringResource(id = R.string.button_next),

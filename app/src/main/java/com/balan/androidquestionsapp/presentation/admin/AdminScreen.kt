@@ -28,7 +28,7 @@ fun AdminScreen(
         onPanelScoreClick = viewModel::onScoreClick,
         setPassword = viewModel::setPassword,
         onMainClick = viewModel::onMainClick,
-        isErrorValidation = viewModel::isErrorValidation,
+        isFieldInvalid = viewModel::isErrorValidation,
         onClearClick = viewModel::onClearClick,
 
     )

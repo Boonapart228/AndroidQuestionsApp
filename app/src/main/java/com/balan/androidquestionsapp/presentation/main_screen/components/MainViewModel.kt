@@ -7,7 +7,9 @@ import com.balan.androidquestionsapp.domain.models.TestType
 import com.balan.androidquestionsapp.domain.usecase.user_session.SetQuestionLevelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
@@ -19,6 +21,11 @@ class MainViewModel @Inject constructor(
     private val _event = MutableSharedFlow<MainNavigationEvent>()
 
     val event = _event.asSharedFlow()
+
+
+    private val _state = MutableStateFlow(MainState())
+    val state = _state.asStateFlow()
+
     private fun testJunior() {
         viewModelScope.launch {
             userSetQuestionLevelUseCase.get().execute(QuestionLevel.JUNIOR)
