@@ -36,17 +36,19 @@ class SignInViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             state
-                .map { distinctUntilChangedByTextFieldValue(it.email, it.password) }
+                .map { distinctUntilChangedByValue(it.email, it.password) }
                 .distinctUntilChanged()
-                .collect { isFieldsNotEmpty ->
+                .collect { fieldsIsNotEmpty ->
                     _state.update {
-                        it.copy(isFieldsNotEmpty = isFieldsNotEmpty)
+                        it.copy(fieldsIsNotEmpty = fieldsIsNotEmpty)
                     }
                 }
         }
     }
 
-    private fun distinctUntilChangedByTextFieldValue(email: String, password: String): Boolean {
+
+
+    private fun distinctUntilChangedByValue(email: String, password: String): Boolean {
         return email.isNotEmpty() && password.isNotEmpty()
     }
 

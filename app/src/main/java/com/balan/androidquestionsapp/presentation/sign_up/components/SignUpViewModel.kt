@@ -40,9 +40,9 @@ class SignUpViewModel @Inject constructor(
             state
                 .map { distinctUntilChangedByTextFieldValue(it.email, it.password, it.name) }
                 .distinctUntilChanged()
-                .collect { isFieldsNotEmpty ->
+                .collect { fieldsIsNotEmpty ->
                     _state.update {
-                        it.copy(isFieldsNotEmpty = isFieldsNotEmpty)
+                        it.copy(fieldsIsNotEmpty = fieldsIsNotEmpty)
                     }
                 }
         }

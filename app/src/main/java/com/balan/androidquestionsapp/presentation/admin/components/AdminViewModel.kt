@@ -31,17 +31,17 @@ class AdminViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             state
-                .map { distinctUntilChangedByTextFieldValue(it.password) }
+                .map { distinctUntilChanged(it.password) }
                 .distinctUntilChanged()
-                .collect { isFieldsNotEmpty ->
+                .collect { fieldsIsNotEmpty ->
                     _state.update {
-                        it.copy(isFieldsNotEmpty = isFieldsNotEmpty)
+                        it.copy(fieldsIsNotEmpty = fieldsIsNotEmpty)
                     }
                 }
         }
     }
 
-    private fun distinctUntilChangedByTextFieldValue(password: String): Boolean {
+    private fun distinctUntilChanged(password: String): Boolean {
         return password.isNotEmpty()
     }
 

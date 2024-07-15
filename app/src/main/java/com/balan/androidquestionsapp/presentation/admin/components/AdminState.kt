@@ -4,6 +4,6 @@ import com.balan.androidquestionsapp.domain.models.Validation
 
 data class AdminState(
     val password: String = "",
-    val isFieldsNotEmpty : Boolean = false,
+    val fieldsIsNotEmpty : Boolean = false,
     val passwordValidation: Validation = Validation.VALID
 )

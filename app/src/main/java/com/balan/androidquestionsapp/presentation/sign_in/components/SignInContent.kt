@@ -111,7 +111,7 @@ fun SignInContent(
                 onSignInClick()
             },
             colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
-            enabled = state.isFieldsNotEmpty,
+            enabled = state.fieldsIsNotEmpty,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(LocalDimen.current.buttonShape)
         ) {

@@ -6,7 +6,7 @@ data class SignUpState(
     val email: String = "",
     val name: String = "",
     val password: String = "",
-    val isFieldsNotEmpty : Boolean = false,
+    val fieldsIsNotEmpty : Boolean = false,
     val passwordValidation: Validation = Validation.DEFAULT,
     val emailValidation: Validation = Validation.DEFAULT,
     val loginValidation: Validation = Validation.DEFAULT

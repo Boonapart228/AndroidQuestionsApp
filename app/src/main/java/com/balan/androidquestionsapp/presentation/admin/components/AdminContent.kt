@@ -125,7 +125,7 @@ fun AdminContent(
                     colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(LocalDimen.current.buttonShape),
-                    enabled = state.isFieldsNotEmpty
+                    enabled = state.fieldsIsNotEmpty
                 ) {
                     Text(
                         text = stringResource(id = R.string.sign_in),

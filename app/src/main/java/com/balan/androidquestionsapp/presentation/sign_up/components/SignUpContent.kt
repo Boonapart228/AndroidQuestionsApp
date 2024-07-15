@@ -158,7 +158,7 @@ fun SignUpContent(
                     },
                     colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = state.isFieldsNotEmpty,
+                    enabled = state.fieldsIsNotEmpty,
                     shape = RoundedCornerShape(LocalDimen.current.buttonShape)
                 ) {
                     Text(
