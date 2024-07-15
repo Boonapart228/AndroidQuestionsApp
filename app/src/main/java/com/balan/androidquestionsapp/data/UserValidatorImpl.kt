@@ -4,6 +4,7 @@ import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.repository.UserValidator
+import com.balan.androidquestionsapp.presentation.sign_up.model.ValidationResults
 
 class UserValidatorImpl(
     private val userLocalSource: UserLocalSource
@@ -51,11 +52,42 @@ class UserValidatorImpl(
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return Validation.INVALID_EMAIL
         }
-        if (userLocalSource.isUserInDatabase(email)) {
+        if (userLocalSource.isExists(email)) {
             return Validation.EMAIL_ALREADY_EXIST
         }
 
         return Validation.VALID
+    }
+
+     override fun mapValidationResult(result: Validation): ValidationResults {
+        val emailValidation = when (result) {
+            Validation.INVALID_EMAIL -> Validation.INVALID_EMAIL
+            Validation.EMAIL_ALREADY_EXIST -> Validation.EMAIL_ALREADY_EXIST
+            else -> Validation.VALID
+        }
+
+        val passwordValidation = when (result) {
+            Validation.INVALID_ADMIN_PASSWORD -> Validation.INVALID_ADMIN_PASSWORD
+            Validation.TOO_SHORT -> Validation.TOO_SHORT
+            Validation.NO_UPPERCASE_LETTER -> Validation.NO_UPPERCASE_LETTER
+            Validation.NO_LOWERCASE_LETTER -> Validation.NO_LOWERCASE_LETTER
+            Validation.NO_DIGIT -> Validation.NO_DIGIT
+            Validation.NO_SPECIAL_CHARACTER -> Validation.NO_SPECIAL_CHARACTER
+            else -> Validation.VALID
+        }
+
+        val loginValidation = when (result) {
+            Validation.EMPTY_LOGIN -> Validation.EMPTY_LOGIN
+            Validation.TOO_SHORT_LOGIN -> Validation.TOO_SHORT_LOGIN
+            Validation.INVALID_CHARACTERS_IN_LOGIN -> Validation.INVALID_CHARACTERS_IN_LOGIN
+            else -> Validation.VALID
+        }
+
+        return ValidationResults(
+            emailValidation = emailValidation,
+            passwordValidation = passwordValidation,
+            loginValidation = loginValidation
+        )
     }
 
 }

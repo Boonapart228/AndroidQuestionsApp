@@ -20,6 +20,7 @@ import com.balan.androidquestionsapp.domain.repository.TestRepository
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.repository.UserValidator
 import com.balan.androidquestionsapp.domain.usecase.auth.AuthenticateAdminUseCase
+import com.balan.androidquestionsapp.domain.usecase.auth.MapValidationResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
 import com.balan.androidquestionsapp.domain.usecase.result.GetQuestionScoreUseCase
@@ -205,5 +206,12 @@ class DataModule {
         userSession: UserSession
     ): GetQuestionTitleUseCase {
         return GetQuestionTitleUseCase(testRepository, userSession)
+    }
+
+    @Provides
+    fun provideMapValidationResultUseCase(
+        userValidator: UserValidator
+    ): MapValidationResultUseCase {
+        return MapValidationResultUseCase(userValidator)
     }
 }

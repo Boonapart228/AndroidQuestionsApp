@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
+import com.balan.androidquestionsapp.domain.usecase.auth.MapValidationResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
-import com.balan.androidquestionsapp.presentation.sign_up.model.ValidationResults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,13 +16,13 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Provider
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: Provider<SignUpUseCase>,
+    private val mapValidationResultUseCase: Provider<MapValidationResultUseCase>,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignUpState> =
@@ -30,13 +30,9 @@ class SignUpViewModel @Inject constructor(
 
     val state = _state.asStateFlow()
 
-    private val _event = MutableSharedFlow<SignUpNavigationEvent>()
+    private val _event = MutableSharedFlow<SignUpEvent>()
 
     val event = _event.asSharedFlow()
-
-    private val _toastEvent = MutableSharedFlow<SignUpToastEvent>()
-
-    val toastEvent = _toastEvent.asSharedFlow()
 
 
     init {
@@ -80,7 +76,7 @@ class SignUpViewModel @Inject constructor(
 
     fun onSignInClick() {
         viewModelScope.launch {
-            _event.emit(SignUpNavigationEvent.NavigationToSignIn)
+            _event.emit(SignUpEvent.NavigationToSignIn)
         }
     }
 
@@ -93,9 +89,10 @@ class SignUpViewModel @Inject constructor(
             val signUpResult =
                 signUpUseCase.get().execute(login = name, password = password, email = email)
 
-            val (emailValidation, passwordValidation, loginValidation) = mapValidationResult(
-                signUpResult
-            )
+            val (emailValidation, passwordValidation, loginValidation) = mapValidationResultUseCase.get()
+                .execute(
+                    signUpResult
+                )
 
             _state.update {
                 it.copy(
@@ -105,44 +102,9 @@ class SignUpViewModel @Inject constructor(
                 )
             }
             if (signUpResult == Validation.VALID) {
-
-                withContext(Dispatchers.Main) {
-                    _toastEvent.emit(SignUpToastEvent.SuccessRegistration)
-                    _event.emit(SignUpNavigationEvent.NavigationToSignIn)
-                }
+                _event.emit(SignUpEvent.NavigationSuccessRegistrationToSignIn)
             }
         }
-    }
-
-    private fun mapValidationResult(result: Validation): ValidationResults {
-        val emailValidation = when (result) {
-            Validation.INVALID_EMAIL -> Validation.INVALID_EMAIL
-            Validation.EMAIL_ALREADY_EXIST -> Validation.EMAIL_ALREADY_EXIST
-            else -> Validation.VALID
-        }
-
-        val passwordValidation = when (result) {
-            Validation.INVALID_ADMIN_PASSWORD -> Validation.INVALID_ADMIN_PASSWORD
-            Validation.TOO_SHORT -> Validation.TOO_SHORT
-            Validation.NO_UPPERCASE_LETTER -> Validation.NO_UPPERCASE_LETTER
-            Validation.NO_LOWERCASE_LETTER -> Validation.NO_LOWERCASE_LETTER
-            Validation.NO_DIGIT -> Validation.NO_DIGIT
-            Validation.NO_SPECIAL_CHARACTER -> Validation.NO_SPECIAL_CHARACTER
-            else -> Validation.VALID
-        }
-
-        val loginValidation = when (result) {
-            Validation.EMPTY_LOGIN -> Validation.EMPTY_LOGIN
-            Validation.TOO_SHORT_LOGIN -> Validation.TOO_SHORT_LOGIN
-            Validation.INVALID_CHARACTERS_IN_LOGIN -> Validation.INVALID_CHARACTERS_IN_LOGIN
-            else -> Validation.VALID
-        }
-
-        return ValidationResults(
-            emailValidation = emailValidation,
-            passwordValidation = passwordValidation,
-            loginValidation = loginValidation
-        )
     }
 
 

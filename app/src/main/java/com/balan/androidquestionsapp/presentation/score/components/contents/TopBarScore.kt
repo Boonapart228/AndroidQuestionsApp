@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.presentation.score.components.ScoreState
-import com.balan.androidquestionsapp.ui.theme.ButtonColor
 import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
@@ -47,7 +46,7 @@ fun TopBarScore(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize64),
-                    tint = ButtonColor
+                    tint = LocalColors.current.buttonColor
                 )
             }
         },
@@ -58,7 +57,7 @@ fun TopBarScore(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize64),
-                    tint = ButtonColor
+                    tint = LocalColors.current.buttonColor
                 )
             }
             DropdownMenu(

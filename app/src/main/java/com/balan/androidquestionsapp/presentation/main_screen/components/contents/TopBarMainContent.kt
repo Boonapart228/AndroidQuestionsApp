@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.balan.androidquestionsapp.R
-import com.balan.androidquestionsapp.ui.theme.ButtonColor
 import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
@@ -45,7 +44,7 @@ fun TopBarMainContent(
                 imageVector = imageVector,
                 contentDescription = null,
                 modifier = Modifier.size(LocalDimen.current.iconSize64),
-                tint = ButtonColor
+                tint = LocalColors.current.buttonColor
             )
         }
     }

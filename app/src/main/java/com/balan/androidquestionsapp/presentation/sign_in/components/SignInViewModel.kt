@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -29,13 +28,9 @@ class SignInViewModel @Inject constructor(
 
     val state = _state.asStateFlow()
 
-    private val _event = MutableSharedFlow<SignInNavigationEvent>()
+    private val _event = MutableSharedFlow<SignInEvent>()
 
     val event = _event.asSharedFlow()
-
-    private val _toastEvent = MutableSharedFlow<SignInToastEvent>()
-
-    val toastEvent = _toastEvent.asSharedFlow()
 
 
     init {
@@ -78,17 +73,14 @@ class SignInViewModel @Inject constructor(
                 )
             }
             if (signInResult) {
-                withContext(Dispatchers.Main) {
-                    _toastEvent.emit(SignInToastEvent.SuccessAuthorization)
-                    _event.emit(SignInNavigationEvent.NavigationToSignIn)
-                }
+                _event.emit(SignInEvent.NavigationToSignIn)
             }
         }
     }
 
     fun onSignUpClick() {
         viewModelScope.launch {
-            _event.emit(SignInNavigationEvent.NavigationToSignUp)
+            _event.emit(SignInEvent.NavigationToSignUp)
         }
     }
 

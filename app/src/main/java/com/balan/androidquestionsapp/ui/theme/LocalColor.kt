@@ -13,5 +13,7 @@ data class Colors(
     val warningRed: Color = Color(0xFFFF0000),
     val uiElementBlack: Color = Color(0xFF000000),
     val uiElementGreen: Color = Color(0xFFFFFFFF),
-    val background: Color = Color(0xFF9CECA9)
+    val background: Color = Color(0xFF9CECA9),
+    val buttonColor: Color = Color(0xFF5C9A66)
+
 )

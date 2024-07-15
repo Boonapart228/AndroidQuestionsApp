@@ -8,8 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.presentation.sign_in.components.SignInContent
-import com.balan.androidquestionsapp.presentation.sign_in.components.SignInNavigationEvent
-import com.balan.androidquestionsapp.presentation.sign_in.components.SignInToastEvent
+import com.balan.androidquestionsapp.presentation.sign_in.components.SignInEvent
 import com.balan.androidquestionsapp.presentation.sign_in.components.SignInViewModel
 import kotlinx.coroutines.launch
 
@@ -25,22 +24,17 @@ fun SignInScreen(
         launch {
             viewModel.event.collect {
                 when (it) {
-                    is SignInNavigationEvent.NavigationToSignIn -> navigateToSignIn()
-                    is SignInNavigationEvent.NavigationToSignUp -> navigateToSignUp()
-                }
-            }
-        }
-        launch {
-            viewModel.toastEvent.collect {
-                when (it) {
-                    is SignInToastEvent.SuccessAuthorization -> {
+                    is SignInEvent.NavigationToSignIn -> {
                         Toast.makeText(
                             context,
                             R.string.successful_authorization,
                             Toast.LENGTH_SHORT
                         )
                             .show()
+                        navigateToSignIn()
                     }
+
+                    is SignInEvent.NavigationToSignUp -> navigateToSignUp()
                 }
             }
         }

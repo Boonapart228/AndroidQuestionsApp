@@ -32,7 +32,7 @@ class UserLocalSourceImpl(
         return userDao.findUser(email, password)?.toUser()
     }
 
-    override fun isUserInDatabase(email: String): Boolean {
+    override fun isExists(email: String): Boolean {
         return userDao.findUser(email)
     }
 

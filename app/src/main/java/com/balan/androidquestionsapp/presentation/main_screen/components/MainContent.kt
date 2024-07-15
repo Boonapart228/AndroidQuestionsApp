@@ -66,9 +66,9 @@ fun MainContent(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(LocalDimen.current.arrangementSpaceBy12)
             ) {
-                items(state.mainButtons) { (testType, messageResId) ->
+                items(state.mainButtons) { testType ->
                     MainButton(
-                        messageResId = messageResId,
+                        messageResId = testType.messageResId,
                         onClick = { onTestClick(testType) },
                         onAdminDoubleClick = { onTestDoubleClick(testType) }
                     )

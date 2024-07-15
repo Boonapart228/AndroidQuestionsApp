@@ -83,8 +83,6 @@ fun ScoreContent(
             DeleteUserConfirmationDialog(
                 onDismissRequest = { onConfirmationClick(DialogAction.DISMISS) },
                 onConfirmation = { onConfirmationClick(DialogAction.CONFIRM) },
-                title = stringResource(id = R.string.alert_delete_score),
-                text = stringResource(id = R.string.alert_delete_score_message),
                 icon = Icons.Filled.Info
             )
         }
@@ -159,8 +157,6 @@ fun ScoreItem(
 fun DeleteUserConfirmationDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
-    title: String,
-    text: String,
     icon: ImageVector,
 ) {
     AlertDialog(
@@ -168,19 +164,16 @@ fun DeleteUserConfirmationDialog(
             Icon(icon, contentDescription = null)
         },
         title = {
-            Text(text = title)
+            Text(text = stringResource(id = R.string.alert_delete_score))
         },
         text = {
-            Text(text = text)
+            Text(text = stringResource(id = R.string.alert_delete_score_message))
         },
-        onDismissRequest = {
-            onDismissRequest()
-        },
+        onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
-                onClick = {
-                    onConfirmation()
-                }
+                onClick = onConfirmation
+
             ) {
                 Text(stringResource(id = R.string.action_confirm))
             }
