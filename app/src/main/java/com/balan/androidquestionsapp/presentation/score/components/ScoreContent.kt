@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -24,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
+import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
 import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.domain.models.User
@@ -45,7 +49,8 @@ fun ScoreContent(
     onMainClick: () -> Unit,
     viewModel: ScoreViewModel,
     onSortClick: (SortDirection) -> Unit,
-    onActiveClick : () -> Unit,
+    onActiveClick: () -> Unit,
+    onConfirmationClick: (DialogAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsState()
@@ -72,6 +77,12 @@ fun ScoreContent(
                     isTestPassed = viewModel::isTestPassed
                 )
             }
+        }
+        if (state.isDeleteDialogVisible) {
+            DeleteUserConfirmationDialog(
+                onDismissRequest = { onConfirmationClick(DialogAction.DISMISS) },
+                onConfirmation = { onConfirmationClick(DialogAction.CONFIRM) },
+            )
         }
     }
 }
@@ -122,7 +133,7 @@ fun ScoreItem(
                     shape = CircleShape,
                     modifier = Modifier.size(LocalDimen.current.buttonSize),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (testPassed) LocalColors.current.green else LocalColors.current.red
+                        containerColor = if (testPassed) LocalColors.current.testPassedGreen else LocalColors.current.warningRed
                     )
                 ) {}
                 Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
@@ -134,10 +145,48 @@ fun ScoreItem(
                         contentDescription = null,
                     )
                 }
+
             }
         }
     }
 }
+
+@Composable
+fun DeleteUserConfirmationDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+) {
+    AlertDialog(
+        icon = {
+            Icon(imageVector = Icons.Filled.Info, contentDescription = null)
+        },
+        title = {
+            Text(text = stringResource(id = R.string.alert_delete_score))
+        },
+        text = {
+            Text(text = stringResource(id = R.string.alert_delete_score_message))
+        },
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(
+                onClick = onConfirmation
+
+            ) {
+                Text(stringResource(id = R.string.action_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text(stringResource(id = R.string.action_dismiss))
+            }
+        }
+    )
+}
+
 
 @Preview(
     showBackground = true,
@@ -157,6 +206,8 @@ fun ScoreContentPreview() {
                 senior = 7
             )
         ),
-        onDeleteUserScoreClick = {}, getScore = { 5 }, isTestPassed = { false },
+        onDeleteUserScoreClick = {},
+        getScore = { 5 },
+        isTestPassed = { false },
     )
 }

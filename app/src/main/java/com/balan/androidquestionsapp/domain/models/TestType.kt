@@ -1,7 +1,9 @@
 package com.balan.androidquestionsapp.domain.models
 
-enum class TestType {
-    JUNIOR,
-    MIDDLE,
-    SENIOR
+import com.balan.androidquestionsapp.R
+
+enum class TestType(val messageResId: Int) {
+    JUNIOR(R.string.question_junior),
+    MIDDLE(R.string.question_middle),
+    SENIOR(R.string.question_senior)
 }

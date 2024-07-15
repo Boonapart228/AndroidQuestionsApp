@@ -15,7 +15,7 @@ import com.balan.androidquestionsapp.presentation.test_screen.components.content
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TestCheckContent
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TestFieldContent
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TestRadioContent
-import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TopBarTestScreen
+import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TopBarTest
 
 @Composable
 fun TestContent(
@@ -35,9 +35,10 @@ fun TestContent(
     ) {
         Scaffold(
             topBar = {
-                TopBarTestScreen(
+                TopBarTest(
                     count = state.questionNumber,
                     size = state.questions.size,
+                    title = state.title,
                     onMainClick = onMainClick
                 )
             },

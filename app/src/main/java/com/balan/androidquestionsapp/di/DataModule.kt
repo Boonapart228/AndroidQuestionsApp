@@ -9,6 +9,7 @@ import com.balan.androidquestionsapp.data.ScoreRepositoryImpl
 import com.balan.androidquestionsapp.data.TestRepositoryImpl
 import com.balan.androidquestionsapp.data.UserLocalSourceImpl
 import com.balan.androidquestionsapp.data.UserSessionImpl
+import com.balan.androidquestionsapp.data.UserValidatorImpl
 import com.balan.androidquestionsapp.domain.database.AppDataBase
 import com.balan.androidquestionsapp.domain.database.dao.UserDao
 import com.balan.androidquestionsapp.domain.repository.AssetManager
@@ -17,12 +18,15 @@ import com.balan.androidquestionsapp.domain.repository.ResultRepository
 import com.balan.androidquestionsapp.domain.repository.ScoreRepository
 import com.balan.androidquestionsapp.domain.repository.TestRepository
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
+import com.balan.androidquestionsapp.domain.repository.UserValidator
 import com.balan.androidquestionsapp.domain.usecase.auth.AuthenticateAdminUseCase
+import com.balan.androidquestionsapp.domain.usecase.auth.MapValidationResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
 import com.balan.androidquestionsapp.domain.usecase.result.GetQuestionScoreUseCase
 import com.balan.androidquestionsapp.domain.usecase.result.SetQuestionSizeUseCase
 import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
+import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionTitleUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionsUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.UpdateScoreUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
@@ -45,8 +49,11 @@ import javax.inject.Singleton
 class DataModule {
     @Provides
     @Singleton
-    fun provideAuthRepository(userLocalSource: UserLocalSource): AuthRepository {
-        return AuthRepositoryImpl(userLocalSource)
+    fun provideAuthRepository(
+        userLocalSource: UserLocalSource,
+        userValidator: UserValidator
+    ): AuthRepository {
+        return AuthRepositoryImpl(userLocalSource, userValidator)
     }
 
     @Provides
@@ -78,6 +85,12 @@ class DataModule {
     fun provideUserLocalSource(userDao: UserDao): UserLocalSource {
         return UserLocalSourceImpl(userDao)
     }
+
+    @Provides
+    fun provideUserValidator(userLocalSource: UserLocalSource): UserValidator {
+        return UserValidatorImpl(userLocalSource)
+    }
+
 
     @Provides
     @Singleton
@@ -149,8 +162,11 @@ class DataModule {
     }
 
     @Provides
-    fun provideDeleteResultUseCase(scoreRepository: ScoreRepository): DeleteResultUseCase {
-        return DeleteResultUseCase(scoreRepository)
+    fun provideDeleteResultUseCase(
+        scoreRepository: ScoreRepository,
+        userSession: UserSession
+    ): DeleteResultUseCase {
+        return DeleteResultUseCase(scoreRepository, userSession)
     }
 
     @Provides
@@ -182,5 +198,20 @@ class DataModule {
     @Provides
     fun provideAdminAccessUseCase(authRepository: AuthRepository): AuthenticateAdminUseCase {
         return AuthenticateAdminUseCase(authRepository)
+    }
+
+    @Provides
+    fun provideGetQuestionTitleUseCase(
+        testRepository: TestRepository,
+        userSession: UserSession
+    ): GetQuestionTitleUseCase {
+        return GetQuestionTitleUseCase(testRepository, userSession)
+    }
+
+    @Provides
+    fun provideMapValidationResultUseCase(
+        userValidator: UserValidator
+    ): MapValidationResultUseCase {
+        return MapValidationResultUseCase(userValidator)
     }
 }

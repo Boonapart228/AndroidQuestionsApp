@@ -6,5 +6,6 @@ data class SignInState(
     val email: String = "",
     val password: String = "",
     val showPassword: Boolean = true,
+    val fieldsIsNotEmpty : Boolean = false,
     val validation: Validation = Validation.VALID
 )

@@ -2,6 +2,7 @@ package com.balan.androidquestionsapp.presentation.sign_in.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +11,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,9 +28,33 @@ class SignInViewModel @Inject constructor(
 
     val state = _state.asStateFlow()
 
-    private val _event = MutableSharedFlow<SignInNavigationEvent>()
+    private val _event = MutableSharedFlow<SignInEvent>()
 
     val event = _event.asSharedFlow()
+
+
+    init {
+        observeFieldsNotEmptyState()
+    }
+
+    private fun observeFieldsNotEmptyState() {
+        viewModelScope.launch {
+            state
+                .map { fieldsNotEmpty(it.email, it.password) }
+                .distinctUntilChanged()
+                .collect { fieldsIsNotEmpty ->
+                    _state.update {
+                        it.copy(fieldsIsNotEmpty = fieldsIsNotEmpty)
+                    }
+                }
+        }
+    }
+
+
+
+    private fun fieldsNotEmpty(email: String, password: String): Boolean {
+        return email.isNotEmpty() && password.isNotEmpty()
+    }
 
     fun setEmail(email: String) {
         _state.update {
@@ -52,23 +79,29 @@ class SignInViewModel @Inject constructor(
                 )
             }
             if (signInResult) {
-                _event.emit(SignInNavigationEvent.NavigationToSignIn)
+                _event.emit(SignInEvent.NavigationToMain)
             }
         }
     }
 
     fun onSignUpClick() {
         viewModelScope.launch {
-            _event.emit(SignInNavigationEvent.NavigationToSignUp)
+            _event.emit(SignInEvent.NavigationToSignUp)
         }
     }
-
-    fun isFieldsNotEmpty() = !(_state.value.email.isEmpty() || _state.value.password.isEmpty())
 
     fun onShowPasswordClick() {
         _state.update {
             it.copy(showPassword = !_state.value.showPassword)
         }
     }
+
+    fun onClearClick(inputFieldType: InputFieldType) {
+        when (inputFieldType) {
+            InputFieldType.EMAIL -> _state.update { it.copy(email = "") }
+            else -> return
+        }
+    }
+
 
 }

@@ -11,10 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -34,8 +34,8 @@ fun BottomBar(
             onClick = onIndexMinusClick,
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
             colors = ButtonDefaults.buttonColors(
-                contentColor = Color.Black,
-                containerColor = Color.White
+                contentColor = LocalColors.current.uiElementBlack,
+                containerColor = LocalColors.current.uiElementGreen
             ),
         ) {
             Text(text = stringResource(id = R.string.button_back),
@@ -45,8 +45,8 @@ fun BottomBar(
             onClick = onIndexPlusClick,
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
             colors = ButtonDefaults.buttonColors(
-                contentColor = Color.Black,
-                containerColor = Color.White
+                contentColor = LocalColors.current.uiElementBlack,
+                containerColor = LocalColors.current.uiElementGreen
             ),
         ) {
             Text(text = stringResource(id = R.string.button_next),

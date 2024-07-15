@@ -15,14 +15,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.SortDirection
 import com.balan.androidquestionsapp.presentation.score.components.ScoreState
-import com.balan.androidquestionsapp.ui.theme.Background
-import com.balan.androidquestionsapp.ui.theme.ButtonColor
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,8 +35,8 @@ fun TopBarScore(
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Background,
-            titleContentColor = Color.Black,
+            containerColor = LocalColors.current.background,
+            titleContentColor = LocalColors.current.uiElementBlack,
         ),
         title = {},
         navigationIcon = {
@@ -48,7 +46,7 @@ fun TopBarScore(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize64),
-                    tint = ButtonColor
+                    tint = LocalColors.current.buttonColor
                 )
             }
         },
@@ -59,7 +57,7 @@ fun TopBarScore(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize64),
-                    tint = ButtonColor
+                    tint = LocalColors.current.buttonColor
                 )
             }
             DropdownMenu(
