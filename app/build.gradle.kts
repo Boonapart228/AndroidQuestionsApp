@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     //Hilt
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
 
@@ -56,12 +56,12 @@ dependencies {
 
     //Room
     implementation("androidx.room:room-runtime:2.5.0") // Библиотека "Room"
-    kapt("androidx.room:room-compiler:2.5.0") // Кодогенератор
+    ksp("androidx.room:room-compiler:2.5.0") // Кодогенератор
     implementation("androidx.room:room-ktx:2.5.0") // Дополнительно для Kotlin Coroutines, Kotlin Flows
 
     //Hilt
     implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    ksp("com.google.dagger:hilt-android-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     //Material Design
     implementation("androidx.compose.material:material:1.0.5")
@@ -93,7 +93,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
-kapt {
-    arguments { arg("room.schemaLocation", "$projectDir/schemas") } // Room
-    correctErrorTypes = true
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
