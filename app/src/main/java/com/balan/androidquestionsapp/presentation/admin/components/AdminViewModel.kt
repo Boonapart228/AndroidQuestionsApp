@@ -29,9 +29,13 @@ class AdminViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     init {
+        observeFieldNotEmptyState()
+    }
+
+    private fun observeFieldNotEmptyState() {
         viewModelScope.launch {
             state
-                .map { distinctUntilChanged(it.password) }
+                .map { fieldNotEmpty(it.password) }
                 .distinctUntilChanged()
                 .collect { fieldsIsNotEmpty ->
                     _state.update {
@@ -41,7 +45,7 @@ class AdminViewModel @Inject constructor(
         }
     }
 
-    private fun distinctUntilChanged(password: String): Boolean {
+    private fun fieldNotEmpty(password: String): Boolean {
         return password.isNotEmpty()
     }
 

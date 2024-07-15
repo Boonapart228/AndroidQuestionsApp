@@ -36,9 +36,13 @@ class SignUpViewModel @Inject constructor(
 
 
     init {
+        observeFieldsNotEmptyState()
+    }
+
+    private fun observeFieldsNotEmptyState() {
         viewModelScope.launch {
             state
-                .map { distinctUntilChangedByTextFieldValue(it.email, it.password, it.name) }
+                .map { fieldsNotEmpty(it.email, it.password, it.name) }
                 .distinctUntilChanged()
                 .collect { fieldsIsNotEmpty ->
                     _state.update {
@@ -48,7 +52,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun distinctUntilChangedByTextFieldValue(
+    private fun fieldsNotEmpty(
         email: String,
         password: String,
         name: String

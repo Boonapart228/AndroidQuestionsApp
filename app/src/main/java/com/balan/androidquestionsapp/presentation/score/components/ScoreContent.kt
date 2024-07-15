@@ -33,7 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
@@ -83,7 +82,6 @@ fun ScoreContent(
             DeleteUserConfirmationDialog(
                 onDismissRequest = { onConfirmationClick(DialogAction.DISMISS) },
                 onConfirmation = { onConfirmationClick(DialogAction.CONFIRM) },
-                icon = Icons.Filled.Info
             )
         }
     }
@@ -157,11 +155,10 @@ fun ScoreItem(
 fun DeleteUserConfirmationDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
-    icon: ImageVector,
 ) {
     AlertDialog(
         icon = {
-            Icon(icon, contentDescription = null)
+            Icon(imageVector = Icons.Filled.Info, contentDescription = null)
         },
         title = {
             Text(text = stringResource(id = R.string.alert_delete_score))

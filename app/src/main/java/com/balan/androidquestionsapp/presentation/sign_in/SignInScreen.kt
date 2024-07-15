@@ -24,7 +24,7 @@ fun SignInScreen(
         launch {
             viewModel.event.collect {
                 when (it) {
-                    is SignInEvent.NavigationToSignIn -> {
+                    is SignInEvent.NavigationToMain -> {
                         Toast.makeText(
                             context,
                             R.string.successful_authorization,
