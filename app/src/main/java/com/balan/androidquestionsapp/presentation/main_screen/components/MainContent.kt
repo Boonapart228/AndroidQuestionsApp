@@ -7,11 +7,9 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -36,7 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.TestType
 import com.balan.androidquestionsapp.presentation.main_screen.components.contents.TopBarMainContent
-import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 import com.balan.androidquestionsapp.ui.theme.LocalProperty
 
@@ -45,8 +43,7 @@ fun MainContent(
     state: MainState,
     onSignInClick: () -> Unit,
     onTestClick: (TestType) -> Unit,
-    onTestDoubleClick: (TestType) -> Unit,
-    modifier: Modifier = Modifier
+    onTestDoubleClick: (TestType) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -56,25 +53,21 @@ fun MainContent(
             )
         }
     ) {
-        Box(
-            modifier = modifier
-                .padding(it)
+        LazyColumn(
+            modifier = Modifier
                 .fillMaxSize()
-                .background(LocalColors.current.background)
+                .padding(it),
+            verticalArrangement = Arrangement.spacedBy(LocalDimen.current.arrangementSpaceBy12)
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(LocalDimen.current.arrangementSpaceBy12)
-            ) {
-                items(state.mainButtons) { testType ->
-                    MainButton(
-                        messageResId = testType.messageResId,
-                        onClick = { onTestClick(testType) },
-                        onAdminDoubleClick = { onTestDoubleClick(testType) }
-                    )
-                }
+            items(state.mainButtons) { testType ->
+                MainButton(
+                    messageResId = testType.messageResId,
+                    onClick = { onTestClick(testType) },
+                    onAdminDoubleClick = { onTestDoubleClick(testType) }
+                )
             }
         }
+
     }
 
 }
@@ -113,7 +106,7 @@ fun MainButton(messageResId: Int, onAdminDoubleClick: () -> Unit, onClick: () ->
                     .border(
                         width = LocalDimen.current.borderWidth2,
                         shape = RoundedCornerShape(LocalDimen.current.roundedCornerShape16),
-                        color = LocalColors.current.uiElementBlack
+                        color = Color.Black
                     )
                     .fillMaxWidth()
                     .graphicsLayer { rotationZ = sway }
@@ -131,10 +124,9 @@ fun MainButton(messageResId: Int, onAdminDoubleClick: () -> Unit, onClick: () ->
 @Composable
 fun MainContentPreview() {
     MainContent(
-        onSignInClick = {},
-        modifier = Modifier, onTestClick = { }, onTestDoubleClick = { },
         state = MainState(
-            mainButtons = listOf()
+            mainButtons = listOf(TestType.SENIOR, TestType.JUNIOR)
         ),
-    )
+        onSignInClick = {}, onTestClick = { },
+    ) { }
 }

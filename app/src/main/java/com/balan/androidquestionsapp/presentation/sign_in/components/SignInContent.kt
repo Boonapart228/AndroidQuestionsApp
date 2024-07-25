@@ -1,6 +1,6 @@
 package com.balan.androidquestionsapp.presentation.sign_in.components
 
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,16 +20,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -46,10 +44,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.InputFieldType
-import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignInContent(
     state: SignInState,
@@ -67,7 +63,6 @@ fun SignInContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .background(LocalColors.current.background)
             .padding(LocalDimen.current.paddingAll16),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(space = LocalDimen.current.spacerHeight16),
@@ -82,7 +77,6 @@ fun SignInContent(
             text = stringResource(id = R.string.authorization),
             textAlign = TextAlign.Center,
             fontSize = LocalDimen.current.textSize24,
-            color = LocalColors.current.uiElementBlack
         )
         TextFieldWithValidation(
             value = state.email,
@@ -110,7 +104,6 @@ fun SignInContent(
                 keyboardController?.hide()
                 onSignInClick()
             },
-            colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
             enabled = state.fieldsIsNotEmpty,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(LocalDimen.current.buttonShape)
@@ -127,8 +120,8 @@ fun SignInContent(
                 .fillMaxWidth()
 
         ) {
+
             Divider(
-                color = LocalColors.current.uiElementBlack,
                 thickness = LocalDimen.current.driverThickness,
                 modifier = Modifier.weight(1f)
             )
@@ -138,18 +131,17 @@ fun SignInContent(
                 modifier = Modifier.padding(horizontal = LocalDimen.current.horizontalPadding8)
             )
             Divider(
-                color = LocalColors.current.uiElementBlack,
                 thickness = LocalDimen.current.driverThickness,
                 modifier = Modifier.weight(1f)
             )
         }
-        TextButton(onClick = {
+        OutlinedButton(onClick = {
             keyboardController?.hide()
             onSignUpClick()
-        }) {
+        },
+            modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = stringResource(id = R.string.sign_up),
-                color = LocalColors.current.uiElementBlack,
                 fontSize = LocalDimen.current.textSize16,
                 fontWeight = FontWeight.Bold,
             )
@@ -157,7 +149,6 @@ fun SignInContent(
         }
         Text(
             text = stringResource(id = state.validation.textResId),
-            color = LocalColors.current.uiElementBlack,
             fontSize = LocalDimen.current.textSize16,
             fontWeight = FontWeight.Bold
         )
@@ -183,7 +174,6 @@ fun SignInScreenPreview() {
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TextFieldWithValidation(
     value: String,

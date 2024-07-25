@@ -42,4 +42,5 @@
     <string name="alert_delete_score_message">Ви впевнені, що хочете видалити цей результат?</string>
     <string name="action_confirm">Підтвердити</string>
     <string name="action_dismiss">Ні</string>
+    <string name="password_do_not_match">Паролі не співпадають</string>
 </resources>

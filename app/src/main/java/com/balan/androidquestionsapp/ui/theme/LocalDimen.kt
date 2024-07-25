@@ -76,4 +76,6 @@ data class Dimensions(
     val roundedCornerShape16: Dp = 16.dp,
     val driverThickness: Dp = 1.dp,
     val horizontalPadding8: Dp = 8.dp,
+    val borderAnswerWidth: Dp = 1.dp,
+    val shapeAnswer: Dp = 6.dp,
 )

@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 
@@ -37,8 +36,6 @@ fun TopBarTest(
     ) {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = LocalColors.current.background,
-                titleContentColor = LocalColors.current.uiElementBlack,
             ),
             title = {
                 Column(

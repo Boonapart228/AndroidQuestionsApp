@@ -35,8 +35,6 @@ fun TopBarScore(
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = LocalColors.current.background,
-            titleContentColor = LocalColors.current.uiElementBlack,
         ),
         title = {},
         navigationIcon = {
@@ -46,7 +44,6 @@ fun TopBarScore(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize64),
-                    tint = LocalColors.current.buttonColor
                 )
             }
         },
@@ -57,7 +54,6 @@ fun TopBarScore(
                     contentDescription = null,
                     modifier = Modifier
                         .size(LocalDimen.current.iconSize64),
-                    tint = LocalColors.current.buttonColor
                 )
             }
             DropdownMenu(

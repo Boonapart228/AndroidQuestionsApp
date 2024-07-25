@@ -42,7 +42,7 @@ class SignUpViewModel @Inject constructor(
     private fun observeFieldsNotEmptyState() {
         viewModelScope.launch {
             state
-                .map { fieldsNotEmpty(it.email, it.password, it.name) }
+                .map { fieldsNotEmpty(it.email, it.password, it.secondaryPassword, it.name) }
                 .distinctUntilChanged()
                 .collect { fieldsIsNotEmpty ->
                     _state.update {
@@ -55,9 +55,10 @@ class SignUpViewModel @Inject constructor(
     private fun fieldsNotEmpty(
         email: String,
         password: String,
+        secondaryPassword: String,
         name: String
     ): Boolean {
-        return email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty()
+        return email.isNotEmpty() && password.isNotEmpty() && secondaryPassword.isNotEmpty() && name.isNotEmpty()
     }
 
     fun setName(name: String) {
@@ -69,6 +70,12 @@ class SignUpViewModel @Inject constructor(
     fun setPassword(password: String) {
         _state.update {
             it.copy(password = password)
+        }
+    }
+
+    fun setSecondaryPassword(secondaryPassword: String) {
+        _state.update {
+            it.copy(secondaryPassword = secondaryPassword)
         }
     }
 
@@ -89,9 +96,15 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val name = _state.value.name
             val password = _state.value.password
+            val secondPassword = _state.value.secondaryPassword
             val email = _state.value.email
             val signUpResult =
-                signUpUseCase.get().execute(login = name, password = password, email = email)
+                signUpUseCase.get().execute(
+                    login = name,
+                    password = password,
+                    secondPassword = secondPassword,
+                    email = email
+                )
 
             val (emailValidation, passwordValidation, loginValidation) = mapValidationResultUseCase.get()
                 .execute(
@@ -115,7 +128,13 @@ class SignUpViewModel @Inject constructor(
     fun onClearClick(inputFieldType: InputFieldType) {
         when (inputFieldType) {
             InputFieldType.LOGIN -> _state.update { it.copy(name = "") }
-            InputFieldType.PASSWORD -> _state.update { it.copy(password = "") }
+            InputFieldType.PASSWORD -> _state.update {
+                it.copy(
+                    password = "",
+                    secondaryPassword = ""
+                )
+            }
+
             InputFieldType.EMAIL -> _state.update { it.copy(email = "") }
         }
     }

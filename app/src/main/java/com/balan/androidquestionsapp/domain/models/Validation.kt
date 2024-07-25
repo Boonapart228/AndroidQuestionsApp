@@ -4,6 +4,7 @@ import com.balan.androidquestionsapp.R
 
 enum class Validation(val textResId: Int) {
     VALID(R.string.valid),
+    PASSWORD_DO_NOT_MATCH(R.string.password_do_not_match),
     INVALID(R.string.in_valid),
     INVALID_EMAIL(R.string.in_valid_email),
     EMAIL_ALREADY_EXIST(R.string.email_already_exists),

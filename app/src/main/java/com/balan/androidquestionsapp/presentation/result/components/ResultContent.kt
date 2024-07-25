@@ -12,11 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +50,6 @@ fun ResultContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(LocalColors.current.background)
             .padding(LocalDimen.current.paddingAll16),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -72,14 +71,12 @@ fun ResultContent(
         Spacer(modifier = Modifier.height(LocalDimen.current.spacerPaddingAll32))
         Button(
             onClick = onMainClick,
-            colors = ButtonDefaults.buttonColors(LocalColors.current.uiElementBlack),
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(LocalDimen.current.buttonShape)
         ) {
             Text(
                 text = stringResource(id = R.string.menu),
                 fontSize = LocalDimen.current.textSize16,
-                color = LocalColors.current.uiElementGreen
             )
         }
     }

@@ -5,7 +5,7 @@ import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.presentation.sign_up.model.ValidationResults
 
 interface UserValidator {
-    fun validateSignUp(user: User): Validation
+    fun validateSignUp(user: User, secondPassword : String): Validation
     fun mapValidationResult(result: Validation): ValidationResults
 
 }

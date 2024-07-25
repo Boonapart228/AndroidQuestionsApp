@@ -16,7 +16,7 @@ class UserValidatorImpl(
         const val MIN_LENGTH_LOGIN = 3
     }
 
-    override fun validateSignUp(user: User): Validation {
+    override fun validateSignUp(user: User, secondPassword: String): Validation {
         val emailValidation = isEmailAvailableForRegistration(email = user.email)
         if (emailValidation != Validation.VALID) {
             return emailValidation
@@ -25,12 +25,13 @@ class UserValidatorImpl(
         if (loginValidation != Validation.VALID) {
             return loginValidation
         }
-        return validatePassword(password = user.password)
+        return validatePassword(password = user.password, secondPassword = secondPassword)
     }
 
-    private fun validatePassword(password: String): Validation {
+    private fun validatePassword(password: String, secondPassword: String): Validation {
         return when {
             password.length < MIN_PASSWORD_LENGTH -> Validation.TOO_SHORT
+            password != secondPassword -> Validation.PASSWORD_DO_NOT_MATCH
             !password.any { it.isUpperCase() } -> Validation.NO_UPPERCASE_LETTER
             !password.any { it.isLowerCase() } -> Validation.NO_LOWERCASE_LETTER
             !password.any { it.isDigit() } -> Validation.NO_DIGIT
@@ -59,7 +60,7 @@ class UserValidatorImpl(
         return Validation.VALID
     }
 
-     override fun mapValidationResult(result: Validation): ValidationResults {
+    override fun mapValidationResult(result: Validation): ValidationResults {
         val emailValidation = when (result) {
             Validation.INVALID_EMAIL -> Validation.INVALID_EMAIL
             Validation.EMAIL_ALREADY_EXIST -> Validation.EMAIL_ALREADY_EXIST
@@ -68,6 +69,7 @@ class UserValidatorImpl(
 
         val passwordValidation = when (result) {
             Validation.INVALID_ADMIN_PASSWORD -> Validation.INVALID_ADMIN_PASSWORD
+            Validation.PASSWORD_DO_NOT_MATCH -> Validation.PASSWORD_DO_NOT_MATCH
             Validation.TOO_SHORT -> Validation.TOO_SHORT
             Validation.NO_UPPERCASE_LETTER -> Validation.NO_UPPERCASE_LETTER
             Validation.NO_LOWERCASE_LETTER -> Validation.NO_LOWERCASE_LETTER
