@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
-import com.balan.androidquestionsapp.domain.models.SortDirection
+import com.balan.androidquestionsapp.domain.models.SortDirections
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
@@ -70,9 +70,9 @@ class ScoreViewModel @Inject constructor(
         toggleDialogAlert()
     }
 
-    fun sort(sortDirection: SortDirection) {
+    fun sort(sortDirections: SortDirections) {
         viewModelScope.launch(Dispatchers.IO) {
-            update(sortByDirectionUseCase.get().execute(sortDirection))
+            update(sortByDirectionUseCase.get().execute(sortDirections))
         }
     }
 

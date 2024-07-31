@@ -11,6 +11,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE email = :email Limit 1")
     fun findUser(email: String): Boolean
 
+    @Query("SELECT * FROM users WHERE email = :email")
+    fun getUserByEmail(email: String): UserEntity?
+
     @Update(entity = UserEntity::class)
     fun updateScore(userEntity: UserEntity)
 
@@ -26,7 +29,17 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE email = :email AND password = :password")
     fun findUser(email: String, password: String): UserEntity?
 
-    @Query("SELECT * FROM users ORDER BY name")
+    @Query(
+        """
+        SELECT * FROM users
+        ORDER BY
+        CASE
+            WHEN name GLOB '[0-9]*' THEN 1
+            ELSE 0
+        END, 
+        LOWER(name) ASC
+    """
+    )
     fun sortUserByName(): List<UserEntity>
 
     @Query("SELECT * FROM users ORDER BY CASE WHEN :ascending THEN junior ELSE NULL END ASC, CASE WHEN :ascending THEN middle ELSE NULL END ASC, CASE WHEN :ascending THEN senior ELSE NULL END ASC, CASE WHEN :ascending THEN NULL ELSE junior END DESC, CASE WHEN :ascending THEN NULL ELSE middle END DESC, CASE WHEN :ascending THEN NULL ELSE senior END DESC")

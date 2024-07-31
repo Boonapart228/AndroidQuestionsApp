@@ -3,10 +3,8 @@ package com.balan.androidquestionsapp.presentation.admin.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -14,8 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -24,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,11 +29,14 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
@@ -70,13 +71,13 @@ fun AdminContent(
 ) {
     val scrollState = rememberScrollState()
     val keyboardController = LocalSoftwareKeyboardController.current
-
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.animation_admin_auth))
     Scaffold(
         topBar = {
             TopBar(
                 onClick = onMainClick,
                 text = stringResource(id = R.string.results_panel),
-                imageVector = Icons.Filled.Home
+                imageVector = Icons.Filled.ArrowBack
             )
         }
     ) {
@@ -90,22 +91,15 @@ fun AdminContent(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.spacedBy(LocalDimen.current.paddingAll16),
                 modifier = Modifier.padding(LocalDimen.current.paddingAll16)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = null,
-                    modifier = Modifier.size(LocalDimen.current.iconSize130)
+                LottieAnimation(
+                    composition = composition,
+                    iterations = LottieConstants.IterateForever,
+                    isPlaying = true,
+                    modifier = Modifier.size(LocalDimen.current.lottieAnimationSize)
                 )
-                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
-                Text(
-                    text = stringResource(id = R.string.results_panel),
-                    textAlign = TextAlign.Center,
-                    fontSize = LocalDimen.current.textSize24,
-                    fontWeight = FontWeight.Bold,
-                )
-                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
                 TextFieldWithValidation(
                     value = state.password,
                     text = stringResource(R.string.input_password),
@@ -116,7 +110,6 @@ fun AdminContent(
                     isFieldInvalid = isFieldInvalid,
                     onClearClick = { onClearClick(InputFieldType.PASSWORD) },
                 )
-                Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
                 Button(
                     onClick = {
                         keyboardController?.hide()
@@ -179,9 +172,10 @@ fun TextFieldWithValidation(
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Password,
                 imeAction = imeAction
             ),
+            visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
             isError = isFieldInvalid(textError)
         )

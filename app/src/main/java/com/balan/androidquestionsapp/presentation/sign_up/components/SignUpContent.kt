@@ -38,7 +38,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -111,7 +110,7 @@ fun SignUpContent(
             ) {
                 LottieAnimation(
                     composition = composition,
-                    modifier = Modifier.size(200.dp),
+                    modifier = Modifier.size(LocalDimen.current.lottieAnimationSize),
                     isPlaying = true,
                     iterations = LottieConstants.IterateForever
                 )
@@ -150,12 +149,12 @@ fun SignUpContent(
                 )
                 TextFieldWithValidation(
                     value = state.secondaryPassword,
-                    text = stringResource(id = R.string.input_password),
+                    text = stringResource(id = R.string.repeat_password),
                     imageVector = ImageVector.vectorResource(R.drawable.baseline_password_24),
                     onValueChange = onSecondPasswordChange,
                     imeAction = ImeAction.Done,
                     textVisible = false,
-                    textError = state.passwordValidation,
+                    textError = if (state.passwordValidation == Validation.PASSWORD_DO_NOT_MATCH) state.passwordValidation else Validation.VALID,
                     isFieldInvalid = isFieldInvalid,
                     onClearClick = { onClearClick(InputFieldType.PASSWORD) }
                 )

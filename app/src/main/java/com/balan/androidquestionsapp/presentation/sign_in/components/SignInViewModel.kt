@@ -2,9 +2,12 @@ package com.balan.androidquestionsapp.presentation.sign_in.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
+import com.balan.androidquestionsapp.domain.usecase.validate.MapValidationSignInResultUseCase
+import com.balan.androidquestionsapp.domain.usecase.validate.ValidateSignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,6 +24,8 @@ import javax.inject.Provider
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val signInUseCase: Provider<SignInUseCase>,
+    private val mapValidationSignInResultUseCase: Provider<MapValidationSignInResultUseCase>,
+    private val validateSignInUseCase: Provider<ValidateSignInUseCase>,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignInState> =
@@ -51,7 +56,6 @@ class SignInViewModel @Inject constructor(
     }
 
 
-
     private fun fieldsNotEmpty(email: String, password: String): Boolean {
         return email.isNotEmpty() && password.isNotEmpty()
     }
@@ -73,9 +77,16 @@ class SignInViewModel @Inject constructor(
             val password = _state.value.password
             val email = _state.value.email
             val signInResult = signInUseCase.get().execute(email = email, password = password)
+            val signInValidationResult =
+                validateSignInUseCase.get().execute(email = email, password = password)
+            val (emailValidation, passwordValidation) = mapValidationSignInResultUseCase.get()
+                .execute(
+                    signInValidationResult
+                )
             _state.update {
                 it.copy(
-                    validation = if (!signInResult) Validation.INVALID else Validation.VALID
+                    validationEmail = emailValidation,
+                    validationPassword = passwordValidation
                 )
             }
             if (signInResult) {
@@ -83,6 +94,7 @@ class SignInViewModel @Inject constructor(
             }
         }
     }
+
 
     fun onSignUpClick() {
         viewModelScope.launch {
@@ -103,5 +115,28 @@ class SignInViewModel @Inject constructor(
         }
     }
 
+    fun isErrorValidation(validation: Validation) =
+        validation != Validation.VALID && validation != Validation.DEFAULT
 
+    fun onExitAppClick() {
+        _state.update {
+            it.copy(isExitDialogVisible = !_state.value.isExitDialogVisible)
+
+        }
+    }
+
+    private fun toggleDialogAlert() {
+        _state.update {
+            it.copy(isExitDialogVisible = !_state.value.isExitDialogVisible)
+        }
+    }
+
+    fun handleDialogAction(dialogAction: DialogAction) {
+        if (dialogAction == DialogAction.CONFIRM) {
+            viewModelScope.launch {
+                _event.emit(SignInEvent.ExitApp)
+            }
+        }
+        toggleDialogAlert()
+    }
 }

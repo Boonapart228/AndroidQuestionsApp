@@ -3,7 +3,7 @@ package com.balan.androidquestionsapp.data
 import com.balan.androidquestionsapp.domain.database.dao.UserDao
 import com.balan.androidquestionsapp.domain.database.toEntity
 import com.balan.androidquestionsapp.domain.database.toUser
-import com.balan.androidquestionsapp.domain.models.SortDirection
+import com.balan.androidquestionsapp.domain.models.SortDirections
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 
@@ -11,19 +11,23 @@ class UserLocalSourceImpl(
     private val userDao: UserDao
 ) : UserLocalSource {
 
-    override fun sortByDirection(sortDirection: SortDirection): List<User> {
-        return when (sortDirection) {
-            SortDirection.INCREASING ->{
+    override fun getByEmail(email: String): User? {
+        return userDao.getUserByEmail(email = email)?.toUser()
+    }
+
+    override fun sortByDirection(sortDirections: SortDirections): List<User> {
+        return when (sortDirections) {
+            SortDirections.INCREASING -> {
                 userDao.sortByScore(true)
                     .map { userDbEntity -> userDbEntity.toUser() }
             }
 
-            SortDirection.DECREASING ->{
+            SortDirections.DECREASING -> {
                 userDao.sortByScore(false)
                     .map { userDbEntity -> userDbEntity.toUser() }
             }
 
-            SortDirection.NAME -> userDao.sortUserByName()
+            SortDirections.NAME -> userDao.sortUserByName()
                 .map { userDbEntity -> userDbEntity.toUser() }
         }
     }
@@ -39,6 +43,7 @@ class UserLocalSourceImpl(
     override fun getById(accountId: Long): User? {
         return userDao.getUserById(accountId = accountId)?.toUser()
     }
+
 
     override fun updateScore(user: User) {
         userDao.updateScore(userEntity = user.toEntity())

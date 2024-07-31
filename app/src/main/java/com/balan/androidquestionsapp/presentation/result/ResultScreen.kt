@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.presentation.result.components.ResultContent
 import com.balan.androidquestionsapp.presentation.result.components.ResultNavigationEvent
 import com.balan.androidquestionsapp.presentation.result.components.ResultViewModel
@@ -25,7 +24,7 @@ fun ResultScreen(
     val state by viewModel.state.collectAsState()
     ResultContent(
         state = state,
-        textResult = R.string.result,
+        getAnimation = viewModel::getAnimation,
         onMainClick = viewModel::onMainClick
     )
 }

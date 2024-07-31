@@ -20,7 +20,6 @@ import com.balan.androidquestionsapp.domain.repository.TestRepository
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.repository.UserValidator
 import com.balan.androidquestionsapp.domain.usecase.auth.AuthenticateAdminUseCase
-import com.balan.androidquestionsapp.domain.usecase.auth.MapValidationResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
 import com.balan.androidquestionsapp.domain.usecase.result.GetQuestionScoreUseCase
@@ -36,6 +35,9 @@ import com.balan.androidquestionsapp.domain.usecase.user_session.SetUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateUserInfoUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
+import com.balan.androidquestionsapp.domain.usecase.validate.MapValidationSignInResultUseCase
+import com.balan.androidquestionsapp.domain.usecase.validate.MapValidationSignUpResultUseCase
+import com.balan.androidquestionsapp.domain.usecase.validate.ValidateSignInUseCase
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.Module
 import dagger.Provides
@@ -211,7 +213,21 @@ class DataModule {
     @Provides
     fun provideMapValidationResultUseCase(
         userValidator: UserValidator
-    ): MapValidationResultUseCase {
-        return MapValidationResultUseCase(userValidator)
+    ): MapValidationSignUpResultUseCase {
+        return MapValidationSignUpResultUseCase(userValidator)
+    }
+
+    @Provides
+    fun provideMapValidationSignInResultUseCase(
+        userValidator: UserValidator
+    ): MapValidationSignInResultUseCase {
+        return MapValidationSignInResultUseCase(userValidator)
+    }
+
+    @Provides
+    fun provideValidateSignInUseCase(
+        userValidator: UserValidator
+    ): ValidateSignInUseCase {
+        return ValidateSignInUseCase(userValidator)
     }
 }

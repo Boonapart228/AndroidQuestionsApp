@@ -4,10 +4,11 @@ import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.repository.UserValidator
-import com.balan.androidquestionsapp.presentation.sign_up.model.ValidationResults
+import com.balan.androidquestionsapp.presentation.sign_in.model.ValidationSignInResults
+import com.balan.androidquestionsapp.presentation.sign_up.model.ValidationSignUpResults
 
 class UserValidatorImpl(
-    private val userLocalSource: UserLocalSource
+    private val userLocalSource: UserLocalSource,
 ) : UserValidator {
 
     companion object {
@@ -15,6 +16,35 @@ class UserValidatorImpl(
         const val SPECIAL_CHARACTERS = "!@#$%^&*()-_=+{}[]|:;'<>,.?/~`"
         const val MIN_LENGTH_LOGIN = 3
     }
+
+    override fun validateSignIn(password: String, email: String): Validation {
+        val user = userLocalSource.getByEmail(email)
+        user?.let {
+            if (user.password != password) return Validation.INVALID_PASSWORD
+        }
+        if (user == null) {
+            return Validation.EMAIL_NOT_FOUND
+        }
+        return Validation.VALID
+    }
+
+
+    override fun mapValidationSignInResult(result: Validation): ValidationSignInResults {
+        val emailValidation = when (result) {
+            Validation.EMAIL_NOT_FOUND -> Validation.EMAIL_NOT_FOUND
+            else -> Validation.VALID
+        }
+
+        val passwordValidation = when (result) {
+            Validation.INVALID_PASSWORD -> Validation.INVALID_PASSWORD
+            else -> Validation.VALID
+        }
+        return ValidationSignInResults(
+            emailValidation = emailValidation,
+            passwordValidation = passwordValidation,
+        )
+    }
+
 
     override fun validateSignUp(user: User, secondPassword: String): Validation {
         val emailValidation = isEmailAvailableForRegistration(email = user.email)
@@ -60,7 +90,7 @@ class UserValidatorImpl(
         return Validation.VALID
     }
 
-    override fun mapValidationResult(result: Validation): ValidationResults {
+    override fun mapValidationResult(result: Validation): ValidationSignUpResults {
         val emailValidation = when (result) {
             Validation.INVALID_EMAIL -> Validation.INVALID_EMAIL
             Validation.EMAIL_ALREADY_EXIST -> Validation.EMAIL_ALREADY_EXIST
@@ -85,7 +115,7 @@ class UserValidatorImpl(
             else -> Validation.VALID
         }
 
-        return ValidationResults(
+        return ValidationSignUpResults(
             emailValidation = emailValidation,
             passwordValidation = passwordValidation,
             loginValidation = loginValidation

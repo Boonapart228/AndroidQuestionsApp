@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +34,7 @@ fun TopBar(
         navigationIcon = {
             IconButton(
                 onClick = onClick,
-                modifier = Modifier.padding(start = 16.dp, end = 24.dp)
+                modifier = Modifier.padding(start = LocalDimen.current.iconStartPadding, end = LocalDimen.current.iconEndPadding)
             ) {
                 Icon(
                     imageVector = imageVector,

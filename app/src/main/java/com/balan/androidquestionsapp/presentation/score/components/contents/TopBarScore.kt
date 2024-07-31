@@ -1,72 +1,89 @@
 package com.balan.androidquestionsapp.presentation.score.components.contents
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.balan.androidquestionsapp.domain.models.SortDirection
+import com.balan.androidquestionsapp.R
+import com.balan.androidquestionsapp.domain.models.SortDirections
 import com.balan.androidquestionsapp.presentation.score.components.ScoreState
-import com.balan.androidquestionsapp.ui.theme.LocalColors
+import com.balan.androidquestionsapp.presentation.score.components.model.sortDirection
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarScore(
-    imageVector: ImageVector,
     state: ScoreState,
     onClick: () -> Unit,
     onToggleMenuClick: () -> Unit,
-    onSelectOptionClick: (SortDirection) -> Unit
+    onSelectOptionClick: (SortDirections) -> Unit
 ) {
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
-        colors = TopAppBarDefaults.topAppBarColors(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.primary,
         ),
-        title = {},
+        title = { Text(text = stringResource(id = R.string.score_screen)) },
         navigationIcon = {
-            IconButton(onClick = onClick) {
+            IconButton(
+                onClick = onClick,
+                modifier = Modifier.padding(
+                    start = LocalDimen.current.iconStartPadding,
+                    end = LocalDimen.current.iconEndPadding
+                )
+            ) {
                 Icon(
-                    imageVector = imageVector,
+                    imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(LocalDimen.current.iconSize64),
                 )
             }
         },
         actions = {
             IconButton(onClick = onToggleMenuClick) {
                 Icon(
-                    imageVector = Icons.Filled.Search,
+                    imageVector = Icons.Default.Menu,
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(LocalDimen.current.iconSize64),
                 )
             }
             DropdownMenu(
                 expanded = state.menuExpanded,
                 onDismissRequest = { state.menuExpanded }
             ) {
-                SortDirection.entries.forEach { type ->
-                    DropdownMenuItem(
-                        text = { Text(text = stringResource(id = type.textId)) },
-                        onClick = {
-                            onSelectOptionClick(type)
-                            onToggleMenuClick()
-                        })
+                sortDirection.forEach { item ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = null,
+                            modifier = Modifier.padding(start = LocalDimen.current.iconStartPadding)
+                        )
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(id = item.type.textId)) },
+                            onClick = {
+                                onSelectOptionClick(item.type)
+                                onToggleMenuClick()
+                            })
+                    }
                 }
             }
         }
@@ -81,7 +98,6 @@ fun TopBarScore(
 @Composable
 fun PreviewTopBarScore() {
     TopBarScore(
-        imageVector = Icons.Filled.Home,
         onSelectOptionClick = { },
         state = ScoreState(),
         onClick = {}, onToggleMenuClick = { })

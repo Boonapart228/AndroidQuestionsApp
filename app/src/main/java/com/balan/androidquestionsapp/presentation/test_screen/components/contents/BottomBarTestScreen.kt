@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
-import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -42,8 +41,6 @@ fun BottomBar(
         Button(
             onClick = onIndexPlusClick,
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
-            colors = ButtonDefaults.buttonColors(
-            ),
         ) {
             Text(text = stringResource(id = R.string.button_next),
                 fontSize = LocalDimen.current.buttonTextSize18)

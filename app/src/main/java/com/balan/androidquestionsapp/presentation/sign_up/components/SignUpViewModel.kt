@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
-import com.balan.androidquestionsapp.domain.usecase.auth.MapValidationResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
+import com.balan.androidquestionsapp.domain.usecase.validate.MapValidationSignUpResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,7 +22,7 @@ import javax.inject.Provider
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: Provider<SignUpUseCase>,
-    private val mapValidationResultUseCase: Provider<MapValidationResultUseCase>,
+    private val mapValidationSignUpResultUseCase: Provider<MapValidationSignUpResultUseCase>,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignUpState> =
@@ -106,7 +106,7 @@ class SignUpViewModel @Inject constructor(
                     email = email
                 )
 
-            val (emailValidation, passwordValidation, loginValidation) = mapValidationResultUseCase.get()
+            val (emailValidation, passwordValidation, loginValidation) = mapValidationSignUpResultUseCase.get()
                 .execute(
                     signUpResult
                 )
