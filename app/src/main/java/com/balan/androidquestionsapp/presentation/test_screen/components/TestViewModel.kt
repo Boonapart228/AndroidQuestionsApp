@@ -50,7 +50,6 @@ class TestViewModel @Inject constructor(
     fun nextQuestion() {
         viewModelScope.launch(Dispatchers.IO) {
             if (_state.value.answered) {
-                val question = getLevelUseCase.get().execute()
                 checkAnswer()
                 if (_state.value.questionNumber < _state.value.questions.lastIndex) {
                     _state.update {
@@ -59,18 +58,23 @@ class TestViewModel @Inject constructor(
                         )
                     }
                 } else if (_state.value.questionNumber == _state.value.questions.lastIndex) {
-                    val currentUser = getCurrentUserUseCase.get().execute()
-                    currentUser?.let {
-                        val user = updateScoreUseCase.get().execute(
-                            score = _state.value.score,
-                            user = currentUser,
-                            questionLevel = question
-                        )
-                        updateUserInfoUseCase.get().execute(user)
-                        navigateResultScreen()
-                    }
+                    finishTest()
                 }
             }
+        }
+    }
+
+    private fun finishTest() {
+        val question = getLevelUseCase.get().execute()
+        val currentUser = getCurrentUserUseCase.get().execute()
+        currentUser?.let {
+            val user = updateScoreUseCase.get().execute(
+                score = _state.value.score,
+                user = currentUser,
+                questionLevel = question
+            )
+            updateUserInfoUseCase.get().execute(user)
+            navigateResultScreen()
         }
     }
 
@@ -85,8 +89,11 @@ class TestViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     questionNumber = 0,
-                    score = if (it.score != 0) it.score - 1 else 0,
-                    answered = false
+                    score = 0,
+                    answered = false,
+                    selectedRadioAnswer = null,
+                    selectedCheckAnswer = listOf(),
+                    writtenAnswer = ""
                 )
             }
         }
@@ -97,14 +104,6 @@ class TestViewModel @Inject constructor(
             it.copy(writtenAnswer = text)
         }
         setAnswered()
-    }
-
-    private fun setAnswered() {
-        _state.update {
-            it.copy(
-                answered = true
-            )
-        }
     }
 
     fun onAnswerRadioButtonClick(answer: Answer) {
@@ -125,6 +124,14 @@ class TestViewModel @Inject constructor(
                     selectedRadioAnswer = copySelectedRadioAnswer,
                 )
             }
+        }
+    }
+
+    private fun setAnswered() {
+        _state.update {
+            it.copy(
+                answered = true
+            )
         }
     }
 
@@ -188,7 +195,6 @@ class TestViewModel @Inject constructor(
             }
         }
     }
-
 
     fun onMainClick() {
         viewModelScope.launch {
