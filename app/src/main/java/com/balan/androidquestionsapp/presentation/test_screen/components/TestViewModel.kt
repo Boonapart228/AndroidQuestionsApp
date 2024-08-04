@@ -1,5 +1,6 @@
 package com.balan.androidquestionsapp.presentation.test_screen.components
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Answer
@@ -137,7 +138,8 @@ class TestViewModel @Inject constructor(
 
     private fun checkCheckBoxAnswer() {
         val copySelectedCheckAnswer: List<Answer> = emptyList()
-        if (_state.value.selectedCheckAnswer.size > 1 && _state.value.selectedCheckAnswer.all { it.isTrue }) {
+        Log.d("asd", "${_state.value.selectedCheckAnswer}")
+        if (_state.value.selectedCheckAnswer.isNotEmpty() && _state.value.selectedCheckAnswer.all { it.isTrue }) {
             _state.update {
                 it.copy(
                     score = it.score + 1,
@@ -145,7 +147,9 @@ class TestViewModel @Inject constructor(
                 )
             }
         }
+        Log.d("asd", "SCORE ${_state.value.score}")
     }
+
 
     private fun checkTextFieldAnswer() {
         val questionNumber = _state.value.questionNumber
@@ -171,7 +175,15 @@ class TestViewModel @Inject constructor(
                 selectedCheckAnswer = answers,
             )
         }
-        setAnswered()
+        if (answers.isNotEmpty()) {
+            setAnswered()
+        } else {
+            _state.update {
+                it.copy(
+                    answered = false
+                )
+            }
+        }
     }
 
     private fun checkAnswer() {
