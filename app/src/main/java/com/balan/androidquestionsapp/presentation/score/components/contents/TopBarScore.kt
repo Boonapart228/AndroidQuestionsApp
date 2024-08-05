@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.SortDirections
 import com.balan.androidquestionsapp.presentation.score.components.ScoreState
-import com.balan.androidquestionsapp.presentation.score.components.model.sortDirection
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,12 +67,12 @@ fun TopBarScore(
                 expanded = state.menuExpanded,
                 onDismissRequest = onToggleMenuClick
             ) {
-                sortDirection.forEach { item ->
+                SortDirections.entries.forEach { item ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.clickable {
-                            onSelectOptionClick(item.type)
+                            onSelectOptionClick(item)
                             onToggleMenuClick()
                         }
                     ) {
@@ -83,9 +82,9 @@ fun TopBarScore(
                             modifier = Modifier.padding(start = LocalDimen.current.iconStartPadding)
                         )
                         DropdownMenuItem(
-                            text = { Text(text = stringResource(id = item.type.textId)) },
+                            text = { Text(text = stringResource(id = item.textId)) },
                             onClick = {
-                                onSelectOptionClick(item.type)
+                                onSelectOptionClick(item)
                                 onToggleMenuClick()
                             },
                         )

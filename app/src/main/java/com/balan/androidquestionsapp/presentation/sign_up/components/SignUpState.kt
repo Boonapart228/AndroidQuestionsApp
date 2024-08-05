@@ -1,6 +1,5 @@
 package com.balan.androidquestionsapp.presentation.sign_up.components
 
-import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.Validation
 
 data class SignUpState(
@@ -15,5 +14,4 @@ data class SignUpState(
     val confirmPasswordValidation: Validation = Validation.DEFAULT,
     val emailValidation: Validation = Validation.DEFAULT,
     val loginValidation: Validation = Validation.DEFAULT,
-    val animationIcon: Int = R.raw.animation_registration
 )

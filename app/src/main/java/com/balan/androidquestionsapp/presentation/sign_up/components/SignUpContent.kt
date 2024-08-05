@@ -46,7 +46,6 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.Validation
-import com.balan.androidquestionsapp.presentation.sign_up.models.ShowPasswordType
 import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
@@ -67,6 +66,7 @@ fun SignUpScreenPreview() {
         isFieldInvalid = { false },
         modifier = Modifier,
         onShowPasswordClick = { },
+        onShowConfirmPasswordClick = {}
     )
 }
 
@@ -77,7 +77,8 @@ fun SignUpContent(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
-    onShowPasswordClick: (ShowPasswordType) -> Unit,
+    onShowPasswordClick: () -> Unit,
+    onShowConfirmPasswordClick: () -> Unit,
     onSignUpClick: () -> Unit,
     onSignInClick: () -> Unit,
     isFieldInvalid: (Validation) -> Boolean,
@@ -85,7 +86,7 @@ fun SignUpContent(
 ) {
     val scrollState = rememberScrollState()
     val keyboardController = LocalSoftwareKeyboardController.current
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(state.animationIcon))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_registration))
     Scaffold(
         topBar = {
             TopBar(
@@ -124,7 +125,7 @@ fun SignUpContent(
                     imeAction = ImeAction.Next,
                     textError = state.emailValidation,
                     isFieldInvalid = isFieldInvalid,
-                    onShowPasswordClick = {return@TextFieldWithValidation},
+                    onShowPasswordClick = { return@TextFieldWithValidation },
                     showPassword = state.showPassword,
                     isPasswordField = false
                 )
@@ -136,7 +137,7 @@ fun SignUpContent(
                     imeAction = ImeAction.Next,
                     textError = state.loginValidation,
                     isFieldInvalid = isFieldInvalid,
-                    onShowPasswordClick = {return@TextFieldWithValidation},
+                    onShowPasswordClick = { return@TextFieldWithValidation },
                     showPassword = state.showPassword,
                     isPasswordField = false
                 )
@@ -148,7 +149,7 @@ fun SignUpContent(
                     imeAction = ImeAction.Next,
                     textError = state.passwordValidation,
                     isFieldInvalid = isFieldInvalid,
-                    onShowPasswordClick = {onShowPasswordClick(ShowPasswordType.PASSWORD)},
+                    onShowPasswordClick = onShowPasswordClick,
                     showPassword = state.showPassword,
                     isPasswordField = true
                 )
@@ -160,7 +161,7 @@ fun SignUpContent(
                     imeAction = ImeAction.Done,
                     textError = state.confirmPasswordValidation,
                     isFieldInvalid = isFieldInvalid,
-                    onShowPasswordClick = {onShowPasswordClick(ShowPasswordType.CONFIRM_PASSWORD)},
+                    onShowPasswordClick = onShowConfirmPasswordClick,
                     showPassword = state.showConfirmPassword,
                     isPasswordField = true
                 )

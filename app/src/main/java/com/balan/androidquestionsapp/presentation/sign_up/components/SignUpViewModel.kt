@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
-import com.balan.androidquestionsapp.presentation.sign_up.models.ShowPasswordType
 import com.balan.androidquestionsapp.presentation.sign_up.util.mapToSignUpResults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -90,23 +89,22 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun onShowPasswordClick(showPasswordType: ShowPasswordType) {
+    fun onShowPasswordClick() {
         viewModelScope.launch {
-            when (showPasswordType) {
-                ShowPasswordType.PASSWORD -> {
-                    _state.update {
-                        it.copy(
-                            showPassword = !_state.value.showPassword,
-                        )
-                    }
-                }
-                ShowPasswordType.CONFIRM_PASSWORD -> {
-                    _state.update {
-                        it.copy(
-                            showConfirmPassword = !_state.value.showConfirmPassword,
-                        )
-                    }
-                }
+            _state.update {
+                it.copy(
+                    showPassword = !_state.value.showPassword,
+                )
+            }
+        }
+    }
+
+    fun onShowConfirmPasswordClick() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    showConfirmPassword = !_state.value.showConfirmPassword,
+                )
             }
         }
     }

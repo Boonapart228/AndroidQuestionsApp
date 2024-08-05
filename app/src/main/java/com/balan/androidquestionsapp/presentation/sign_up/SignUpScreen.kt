@@ -50,5 +50,6 @@ fun SignUpScreen(
         onSignInClick = viewModel::onSignInClick,
         isFieldInvalid = viewModel::isErrorValidation,
         onShowPasswordClick = viewModel::onShowPasswordClick,
+        onShowConfirmPasswordClick = viewModel::onShowConfirmPasswordClick,
     )
 }

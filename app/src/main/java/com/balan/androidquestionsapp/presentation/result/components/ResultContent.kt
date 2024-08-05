@@ -41,9 +41,10 @@ fun ResultContent(
 ) {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
-            state.animationResult
+            checkNotNull(state.animationResult) { "Animation result not found" }
         )
     )
+
     BackHandler {
         onMainClick()
     }

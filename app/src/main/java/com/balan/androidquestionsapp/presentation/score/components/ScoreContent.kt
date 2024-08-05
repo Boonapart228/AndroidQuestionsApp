@@ -131,7 +131,7 @@ fun ScoreItem(
                     shape = CircleShape,
                     modifier = Modifier.size(LocalDimen.current.buttonSize),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (testPassed) LocalColors.current.testPassedGreen else LocalColors.current.warningRed
+                        containerColor = if (testPassed) LocalColors.current.testPassedGreen else LocalColors.current.testFailedRed
                     )
                 ) {}
                 Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
