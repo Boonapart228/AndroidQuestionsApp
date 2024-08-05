@@ -44,11 +44,11 @@ fun SignUpScreen(
         state = state,
         onLoginChange = viewModel::setName,
         onPasswordChange = viewModel::setPassword,
-        onSecondPasswordChange = viewModel::setSecondaryPassword,
+        onConfirmPasswordChange = viewModel::setConfirmPassword,
         onEmailChange = viewModel::setEmail,
         onSignUpClick = viewModel::onSignUpClick,
         onSignInClick = viewModel::onSignInClick,
         isFieldInvalid = viewModel::isErrorValidation,
-        onClearClick = viewModel::onClearClick,
+        onShowPasswordClick = viewModel::onShowPasswordClick,
     )
 }

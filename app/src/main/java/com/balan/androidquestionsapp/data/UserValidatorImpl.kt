@@ -5,7 +5,7 @@ import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.repository.UserValidator
 import com.balan.androidquestionsapp.presentation.sign_in.model.ValidationSignInResults
-import com.balan.androidquestionsapp.presentation.sign_up.model.ValidationSignUpResults
+import com.balan.androidquestionsapp.presentation.sign_up.models.ValidationSignUpResults
 
 class UserValidatorImpl(
     private val userLocalSource: UserLocalSource,
@@ -46,7 +46,7 @@ class UserValidatorImpl(
     }
 
 
-    override fun validateSignUp(user: User, secondPassword: String): Validation {
+    override fun validateSignUp(user: User, confirmPassword: String): Validation {
         val emailValidation = isEmailAvailableForRegistration(email = user.email)
         if (emailValidation != Validation.VALID) {
             return emailValidation
@@ -55,7 +55,7 @@ class UserValidatorImpl(
         if (loginValidation != Validation.VALID) {
             return loginValidation
         }
-        return validatePassword(password = user.password, secondPassword = secondPassword)
+        return validatePassword(password = user.password, secondPassword = confirmPassword)
     }
 
     private fun validatePassword(password: String, secondPassword: String): Validation {
@@ -121,5 +121,4 @@ class UserValidatorImpl(
             loginValidation = loginValidation
         )
     }
-
 }

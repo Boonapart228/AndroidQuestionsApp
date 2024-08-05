@@ -1,5 +1,6 @@
 package com.balan.androidquestionsapp.presentation.score.components.contents
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,12 +66,16 @@ fun TopBarScore(
             }
             DropdownMenu(
                 expanded = state.menuExpanded,
-                onDismissRequest = { state.menuExpanded }
+                onDismissRequest = onToggleMenuClick
             ) {
                 sortDirection.forEach { item ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.clickable {
+                            onSelectOptionClick(item.type)
+                            onToggleMenuClick()
+                        }
                     ) {
                         Icon(
                             imageVector = item.icon,
@@ -82,7 +87,8 @@ fun TopBarScore(
                             onClick = {
                                 onSelectOptionClick(item.type)
                                 onToggleMenuClick()
-                            })
+                            },
+                        )
                     }
                 }
             }

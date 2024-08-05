@@ -1,4 +1,4 @@
-package com.balan.androidquestionsapp.presentation.sign_up.model
+package com.balan.androidquestionsapp.presentation.sign_up.models
 
 import com.balan.androidquestionsapp.domain.models.Validation
 

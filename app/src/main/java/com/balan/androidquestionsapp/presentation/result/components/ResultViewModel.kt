@@ -35,6 +35,7 @@ class ResultViewModel @Inject constructor(
     init {
         setQuestionSize()
         setQuestionScore()
+        setAnimation()
     }
 
     private fun setQuestionSize() {
@@ -58,8 +59,16 @@ class ResultViewModel @Inject constructor(
         }
     }
 
-    fun getAnimation() = if(_state.value.score >= 7) R.raw.animation_test_success else R.raw.animation_test_failed
+    private fun setAnimation() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    animationResult = if (_state.value.score >= 7) R.raw.animation_test_success else R.raw.animation_test_failed
+                )
+            }
+        }
 
+    }
 
     fun onMainClick() {
         viewModelScope.launch {

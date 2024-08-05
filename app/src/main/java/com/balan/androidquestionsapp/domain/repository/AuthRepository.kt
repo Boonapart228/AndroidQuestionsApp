@@ -6,5 +6,5 @@ import com.balan.androidquestionsapp.domain.models.Validation
 interface AuthRepository {
     fun signIn(email: String, password: String): User?
     fun adminAccess(password: String): Boolean
-    fun signUp(login: String, password: String, secondPassword : String,email: String): Validation
+    fun signUp(login: String, password: String, confirmPassword : String, email: String): Validation
 }

@@ -1,8 +1,10 @@
 package com.balan.androidquestionsapp.presentation.admin.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -32,13 +35,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.balan.androidquestionsapp.R
-import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
@@ -54,7 +57,9 @@ fun AdminContentPreview() {
         onPanelScoreClick = {},
         setPassword = {},
         modifier = Modifier,
-        onMainClick = {}, isFieldInvalid = { false }, onClearClick = { },
+        onMainClick = {},
+        isFieldInvalid = { false },
+        onShowPasswordClick = { },
 
         )
 }
@@ -65,13 +70,16 @@ fun AdminContent(
     setPassword: (String) -> Unit,
     onPanelScoreClick: () -> Unit,
     onMainClick: () -> Unit,
+    onShowPasswordClick: () -> Unit,
     isFieldInvalid: (Validation) -> Boolean,
-    onClearClick: (InputFieldType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.animation_admin_auth))
+    BackHandler {
+        onMainClick()
+    }
     Scaffold(
         topBar = {
             TopBar(
@@ -108,7 +116,8 @@ fun AdminContent(
                     imeAction = ImeAction.Done,
                     textError = state.passwordValidation,
                     isFieldInvalid = isFieldInvalid,
-                    onClearClick = { onClearClick(InputFieldType.PASSWORD) },
+                    showPassword = state.showPassword,
+                    onShowPasswordClick = onShowPasswordClick,
                 )
                 Button(
                     onClick = {
@@ -134,11 +143,12 @@ fun AdminContent(
 fun TextFieldWithValidation(
     value: String,
     imeAction: ImeAction,
+    showPassword: Boolean,
     text: String,
     textError: Validation,
     onValueChange: (String) -> Unit,
+    onShowPasswordClick: () -> Unit,
     isFieldInvalid: (Validation) -> Boolean,
-    onClearClick: () -> Unit,
     imageVector: ImageVector,
 ) {
     Column {
@@ -158,24 +168,39 @@ fun TextFieldWithValidation(
                 Icon(
                     imageVector = imageVector,
                     contentDescription = null,
-                    modifier = Modifier.size(LocalDimen.current.iconSize30)
+                    modifier = Modifier.size(LocalDimen.current.iconSize24)
                 )
             },
             trailingIcon = {
-                Icon(
-                    imageVector = Icons.Rounded.Close,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(LocalDimen.current.iconSize30)
-                        .clickable(onClick = onClearClick)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = LocalDimen.current.iconDeleteEndPadding)
+                ) {
+                    IconButton(onClick = onShowPasswordClick) {
+                        Icon(
+                            imageVector = if (!showPassword)
+                                ImageVector.vectorResource(id = R.drawable.baseline_visibility_off_24)
+                            else
+                                ImageVector.vectorResource(id = R.drawable.baseline_visibility_24),
+                            contentDescription = null,
+                            modifier = Modifier.size(LocalDimen.current.iconSize24)
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(LocalDimen.current.iconSize24)
+                            .clickable { onValueChange("") }
+                    )
+                }
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = imeAction
             ),
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (!showPassword) PasswordVisualTransformation() else VisualTransformation.None,
             modifier = Modifier.fillMaxWidth(),
             isError = isFieldInvalid(textError)
         )

@@ -9,13 +9,13 @@ class SignUpUseCase(
     fun execute(
         login: String,
         password: String,
-        secondPassword: String,
+        confirmPassword: String,
         email: String
     ): Validation {
         return authRepository.signUp(
             login = login,
             password = password,
-            secondPassword = secondPassword,
+            confirmPassword = confirmPassword,
             email = email
         )
     }

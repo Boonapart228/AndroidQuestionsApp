@@ -3,11 +3,10 @@ package com.balan.androidquestionsapp.presentation.sign_in.components
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.DialogAction
-import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
-import com.balan.androidquestionsapp.domain.usecase.validate.MapValidationSignInResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.validate.ValidateSignInUseCase
+import com.balan.androidquestionsapp.presentation.sign_in.util.mapToSignInResults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,7 +23,6 @@ import javax.inject.Provider
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val signInUseCase: Provider<SignInUseCase>,
-    private val mapValidationSignInResultUseCase: Provider<MapValidationSignInResultUseCase>,
     private val validateSignInUseCase: Provider<ValidateSignInUseCase>,
 ) : ViewModel() {
 
@@ -79,10 +77,7 @@ class SignInViewModel @Inject constructor(
             val signInResult = signInUseCase.get().execute(email = email, password = password)
             val signInValidationResult =
                 validateSignInUseCase.get().execute(email = email, password = password)
-            val (emailValidation, passwordValidation) = mapValidationSignInResultUseCase.get()
-                .execute(
-                    signInValidationResult
-                )
+            val (emailValidation, passwordValidation) = signInValidationResult.mapToSignInResults()
             _state.update {
                 it.copy(
                     validationEmail = emailValidation,
@@ -105,13 +100,6 @@ class SignInViewModel @Inject constructor(
     fun onShowPasswordClick() {
         _state.update {
             it.copy(showPassword = !_state.value.showPassword)
-        }
-    }
-
-    fun onClearClick(inputFieldType: InputFieldType) {
-        when (inputFieldType) {
-            InputFieldType.EMAIL -> _state.update { it.copy(email = "") }
-            else -> return
         }
     }
 

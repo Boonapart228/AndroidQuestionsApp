@@ -24,7 +24,6 @@ fun ResultScreen(
     val state by viewModel.state.collectAsState()
     ResultContent(
         state = state,
-        getAnimation = viewModel::getAnimation,
         onMainClick = viewModel::onMainClick
     )
 }

@@ -64,7 +64,7 @@ data class Dimensions(
     val titleBorderShape: Dp = 8.dp,
     val titleBorderWidth: Dp = 2.dp,
     val titleBackgroundShape: Dp = 8.dp,
-    val iconSize30: Dp = 30.dp,
+    val iconSize24: Dp = 24.dp,
     val spacerHeight32: Dp = 32.dp,
     val spacerHeight8: Dp = 8.dp,
     val iconSize130: Dp = 130.dp,
@@ -84,4 +84,5 @@ data class Dimensions(
     val verticalRowPadding: Dp = 8.dp,
     val iconStartPadding: Dp = 16.dp,
     val iconEndPadding: Dp = 24.dp,
+    val iconDeleteEndPadding: Dp = 12.dp,
 )

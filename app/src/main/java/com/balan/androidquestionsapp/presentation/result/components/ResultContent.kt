@@ -30,58 +30,56 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 )
 @Composable
 fun PreviewResultContent() {
-    ResultContent(onMainClick = {}, state = ResultState(), getAnimation = { 0 })
+    ResultContent(onMainClick = {}, state = ResultState())
 }
 
 
 @Composable
 fun ResultContent(
     state: ResultState,
-    getAnimation: () -> Int,
     onMainClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
-            getAnimation()
+            state.animationResult
         )
     )
     BackHandler {
         onMainClick()
     }
     Scaffold(topBar = { TopBarResult() }) {
-        Column(modifier = modifier.padding(it)) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(
-                    LocalDimen.current.paddingAll16,
-                    alignment = Alignment.CenterVertically
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(LocalDimen.current.paddingAll16),
+        Column(
+            verticalArrangement = Arrangement.spacedBy(
+                LocalDimen.current.paddingAll16,
+                alignment = Alignment.CenterVertically
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+                .padding(LocalDimen.current.paddingAll16),
+        ) {
+            LottieAnimation(
+                composition = composition,
+                isPlaying = true,
+                modifier = Modifier.size(LocalDimen.current.lottieAnimationSize)
+            )
+            Text(
+                "${state.score}/${state.questionSize}",
+                fontSize = LocalDimen.current.textSize64
+            )
+            Button(
+                onClick = onMainClick,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(LocalDimen.current.buttonShape)
             ) {
-                LottieAnimation(
-                    composition = composition,
-                    isPlaying = true,
-                    modifier = Modifier.size(LocalDimen.current.lottieAnimationSize)
-                )
                 Text(
-                    "${state.score}/${state.questionSize}",
-                    fontSize = LocalDimen.current.textSize64
+                    text = stringResource(id = R.string.menu),
+                    fontSize = LocalDimen.current.textSize16,
                 )
-                Button(
-                    onClick = onMainClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(LocalDimen.current.buttonShape)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.menu),
-                        fontSize = LocalDimen.current.textSize16,
-                    )
-                }
             }
         }
+
     }
 
 }

@@ -35,8 +35,6 @@ import com.balan.androidquestionsapp.domain.usecase.user_session.SetUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateUserInfoUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
-import com.balan.androidquestionsapp.domain.usecase.validate.MapValidationSignInResultUseCase
-import com.balan.androidquestionsapp.domain.usecase.validate.MapValidationSignUpResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.validate.ValidateSignInUseCase
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.Module
@@ -208,20 +206,6 @@ class DataModule {
         userSession: UserSession
     ): GetQuestionTitleUseCase {
         return GetQuestionTitleUseCase(testRepository, userSession)
-    }
-
-    @Provides
-    fun provideMapValidationResultUseCase(
-        userValidator: UserValidator
-    ): MapValidationSignUpResultUseCase {
-        return MapValidationSignUpResultUseCase(userValidator)
-    }
-
-    @Provides
-    fun provideMapValidationSignInResultUseCase(
-        userValidator: UserValidator
-    ): MapValidationSignInResultUseCase {
-        return MapValidationSignInResultUseCase(userValidator)
     }
 
     @Provides

@@ -12,7 +12,7 @@ interface UserDao {
     fun findUser(email: String): Boolean
 
     @Query("SELECT * FROM users WHERE email = :email")
-    fun getUserByEmail(email: String): UserEntity?
+    fun getByEmail(email: String): UserEntity?
 
     @Update(entity = UserEntity::class)
     fun updateScore(userEntity: UserEntity)

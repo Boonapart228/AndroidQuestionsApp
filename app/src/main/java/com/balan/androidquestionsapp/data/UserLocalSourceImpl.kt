@@ -12,7 +12,7 @@ class UserLocalSourceImpl(
 ) : UserLocalSource {
 
     override fun getByEmail(email: String): User? {
-        return userDao.getUserByEmail(email = email)?.toUser()
+        return userDao.getByEmail(email = email)?.toUser()
     }
 
     override fun sortByDirection(sortDirections: SortDirections): List<User> {

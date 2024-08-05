@@ -49,7 +49,6 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.DialogAction
-import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.presentation.sign_in.contents.ExitAppConfirmationDialog
 import com.balan.androidquestionsapp.presentation.sign_in.contents.TopBarSignIn
@@ -65,7 +64,6 @@ fun SignInContent(
     onExitAppClick: () -> Unit,
     isFieldInvalid: (Validation) -> Boolean,
     onConfirmationClick: (DialogAction) -> Unit,
-    onClearClick: (InputFieldType) -> Unit,
     onShowPasswordClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -104,8 +102,8 @@ fun SignInContent(
                     imeAction = ImeAction.Next,
                     isFieldInvalid = isFieldInvalid,
                     textError = state.validationEmail,
-                    onTrailingIconClick = { onClearClick(InputFieldType.EMAIL) }
-                )
+
+                    )
                 TextFieldWithValidation(
                     value = state.password,
                     text = stringResource(id = R.string.input_password),
@@ -195,7 +193,6 @@ fun SignInScreenPreview() {
         onSignInClick = {},
         onSignUpClick = {},
         onShowPasswordClick = {},
-        onClearClick = {},
         isFieldInvalid = { false },
         onConfirmationClick = {},
         onExitAppClick = {})
@@ -211,7 +208,6 @@ fun TextFieldWithValidation(
     textError: Validation,
     isFieldInvalid: (Validation) -> Boolean,
     imeAction: ImeAction = ImeAction.Default,
-    onTrailingIconClick: () -> Unit = {},
     isPasswordField: Boolean = false,
     showPassword: Boolean = false,
     onShowPasswordClick: () -> Unit = {},
@@ -242,19 +238,31 @@ fun TextFieldWithValidation(
                 Icon(
                     imageVector = leadingIcon,
                     contentDescription = null,
-                    modifier = Modifier.size(LocalDimen.current.iconSize30)
+                    modifier = Modifier.size(LocalDimen.current.iconSize24)
                 )
             },
             trailingIcon = {
                 if (isPasswordField) {
-                    IconButton(onClick = onShowPasswordClick) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(end = LocalDimen.current.iconDeleteEndPadding)
+                    ) {
+                        IconButton(onClick = onShowPasswordClick) {
+                            Icon(
+                                imageVector = if (!showPassword)
+                                    ImageVector.vectorResource(id = R.drawable.baseline_visibility_off_24)
+                                else
+                                    ImageVector.vectorResource(id = R.drawable.baseline_visibility_24),
+                                contentDescription = null,
+                                modifier = Modifier.size(LocalDimen.current.iconSize24)
+                            )
+                        }
                         Icon(
-                            imageVector = if (showPassword)
-                                ImageVector.vectorResource(id = R.drawable.baseline_visibility_off_24)
-                            else
-                                ImageVector.vectorResource(id = R.drawable.baseline_visibility_24),
+                            imageVector = Icons.Rounded.Close,
                             contentDescription = null,
-                            modifier = Modifier.size(LocalDimen.current.iconSize30)
+                            modifier = Modifier
+                                .size(LocalDimen.current.iconSize24)
+                                .clickable { onValueChange("") }
                         )
                     }
                 } else {
@@ -262,8 +270,8 @@ fun TextFieldWithValidation(
                         imageVector = trailingIcon,
                         contentDescription = null,
                         modifier = Modifier
-                            .size(LocalDimen.current.iconSize30)
-                            .clickable(onClick = onTrailingIconClick)
+                            .size(LocalDimen.current.iconSize24)
+                            .clickable { onValueChange("") }
                     )
                 }
             },
