@@ -1,6 +1,5 @@
 package com.balan.androidquestionsapp.presentation.test_screen.components
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.Answer
@@ -70,7 +69,7 @@ class TestViewModel @Inject constructor(
         val currentUser = getCurrentUserUseCase.get().execute()
         currentUser?.let {
             val user = updateScoreUseCase.get().execute(
-                score = _state.value.score,
+                score = getScore(),
                 user = currentUser,
                 questionLevel = question
             )
@@ -89,7 +88,7 @@ class TestViewModel @Inject constructor(
         if (_state.value.questionNumber != 0) {
             _state.update {
                 it.copy(
-                    questionNumber = 0,
+                    questionNumber = it.questionNumber - 1,
                     score = 0,
                     answered = false,
                     selectedRadioAnswer = null,
@@ -97,6 +96,7 @@ class TestViewModel @Inject constructor(
                     writtenAnswer = ""
                 )
             }
+            removeLastAnswerScore()
         }
     }
 
@@ -116,16 +116,19 @@ class TestViewModel @Inject constructor(
         setAnswered()
     }
 
+
     private fun checkRadioButtonAnswer() {
-        val copySelectedRadioAnswer = _state.value.selectedRadioAnswer?.copy(isTrue = false)
-        if (_state.value.selectedRadioAnswer?.isTrue == true) {
-            _state.update {
-                it.copy(
-                    score = it.score + 1,
-                    selectedRadioAnswer = copySelectedRadioAnswer,
-                )
-            }
+        val selectedRadioAnswer = _state.value.selectedRadioAnswer
+        val copySelectedRadioAnswer = selectedRadioAnswer?.copy(isTrue = false)
+
+        _state.update {
+            it.copy(
+                selectedRadioAnswer = if (selectedRadioAnswer?.isTrue == true) copySelectedRadioAnswer else selectedRadioAnswer,
+                point = if (selectedRadioAnswer?.isTrue == true) 1 else 0
+            )
         }
+
+        addAnswerScore(_state.value.point)
     }
 
     private fun setAnswered() {
@@ -136,32 +139,61 @@ class TestViewModel @Inject constructor(
         }
     }
 
-    private fun checkCheckBoxAnswer() {
-        val copySelectedCheckAnswer: List<Answer> = emptyList()
-        Log.d("asd", "${_state.value.selectedCheckAnswer}")
-        if (_state.value.selectedCheckAnswer.isNotEmpty() && _state.value.selectedCheckAnswer.all { it.isTrue }) {
+    private fun addAnswerScore(point: Int) {
+        val scores = _state.value.answersScores.toMutableList()
+        scores.add(point)
+        _state.update {
+            it.copy(
+                answersScores = scores
+            )
+        }
+    }
+
+    private fun getScore() = _state.value.answersScores.sum()
+
+    private fun removeLastAnswerScore() {
+        val scoreList = _state.value.answersScores.toMutableList()
+        if (scoreList.isNotEmpty()) {
+            scoreList.removeLast()
             _state.update {
                 it.copy(
-                    score = it.score + 1,
-                    selectedCheckAnswer = copySelectedCheckAnswer,
+                    answersScores = scoreList
                 )
             }
         }
-        Log.d("asd", "SCORE ${_state.value.score}")
+    }
+
+
+    private fun checkCheckBoxAnswer() {
+        val selectedCheckAnswer = _state.value.selectedCheckAnswer
+        _state.update {
+            it.copy(
+                point = if (selectedCheckAnswer.isNotEmpty() && selectedCheckAnswer.size > 1 && selectedCheckAnswer.all { answer -> answer.isTrue }) 1 else 0,
+                selectedCheckAnswer = if (_state.value.point == 1) emptyList() else selectedCheckAnswer
+            )
+        }
+
+        addAnswerScore(_state.value.point)
     }
 
 
     private fun checkTextFieldAnswer() {
         val questionNumber = _state.value.questionNumber
-        if (_state.value.writtenAnswer.lowercase() == _state.value.questions[questionNumber].answers[0].title.lowercase()) {
-            _state.update {
-                it.copy(
-                    score = it.score + 1,
-                    writtenAnswer = "",
-                )
-            }
+        val writtenAnswer = _state.value.writtenAnswer.lowercase()
+        val correctAnswer = _state.value.questions[questionNumber].answers[0].title.lowercase()
+
+        val isCorrectAnswer = writtenAnswer == correctAnswer
+        val point = if (isCorrectAnswer) 1 else 0
+
+        _state.update {
+            it.copy(
+                writtenAnswer = ""
+            )
         }
+
+        addAnswerScore(point)
     }
+
 
     fun onAnswerCheckButtonClick(answer: Answer) {
         val answers = _state.value.selectedCheckAnswer.toMutableList()
@@ -175,15 +207,7 @@ class TestViewModel @Inject constructor(
                 selectedCheckAnswer = answers,
             )
         }
-        if (answers.isNotEmpty()) {
-            setAnswered()
-        } else {
-            _state.update {
-                it.copy(
-                    answered = false
-                )
-            }
-        }
+        if (answers.isNotEmpty()) setAnswered() else _state.update { it.copy(answered = false) }
     }
 
     private fun checkAnswer() {

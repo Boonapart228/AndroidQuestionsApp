@@ -11,5 +11,7 @@ data class TestState(
     val selectedCheckAnswer: List<Answer> = emptyList(),
     val writtenAnswer: String = "",
     val score: Int = 0,
-    val title : String = ""
+    val point: Int = 0,
+    val answersScores: List<Int> = listOf(),
+    val title: String = ""
 )
