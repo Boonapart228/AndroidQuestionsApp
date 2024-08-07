@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -38,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
-import com.balan.androidquestionsapp.domain.models.SortDirection
+import com.balan.androidquestionsapp.domain.models.SortDirections
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.presentation.score.components.contents.TopBarScore
 import com.balan.androidquestionsapp.ui.theme.LocalColors
@@ -48,7 +47,7 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 fun ScoreContent(
     onMainClick: () -> Unit,
     viewModel: ScoreViewModel,
-    onSortClick: (SortDirection) -> Unit,
+    onSortClick: (SortDirections) -> Unit,
     onActiveClick: () -> Unit,
     onConfirmationClick: (DialogAction) -> Unit,
     modifier: Modifier = Modifier
@@ -61,7 +60,6 @@ fun ScoreContent(
         topBar = {
             TopBarScore(
                 onClick = onMainClick,
-                imageVector = Icons.Filled.Home,
                 onSelectOptionClick = onSortClick,
                 state = state,
                 onToggleMenuClick = onActiveClick
@@ -133,7 +131,7 @@ fun ScoreItem(
                     shape = CircleShape,
                     modifier = Modifier.size(LocalDimen.current.buttonSize),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (testPassed) LocalColors.current.testPassedGreen else LocalColors.current.warningRed
+                        containerColor = if (testPassed) LocalColors.current.testPassedGreen else LocalColors.current.testFailedRed
                     )
                 ) {}
                 Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))

@@ -2,7 +2,6 @@ package com.balan.androidquestionsapp.presentation.admin.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.AuthenticateAdminUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,6 +60,7 @@ class AdminViewModel @Inject constructor(
         viewModelScope.launch {
             val adminAccess = authenticateAdminUseCase.get().execute(_state.value.password)
             if (adminAccess) {
+                _state.update { it.copy(passwordValidation = Validation.VALID) }
                 _event.emit(AdminNavigationEvent.NavigationToScore)
             } else {
                 _state.update { it.copy(passwordValidation = Validation.INVALID_ADMIN_PASSWORD) }
@@ -74,13 +74,17 @@ class AdminViewModel @Inject constructor(
         }
     }
 
+    fun onShowPasswordClick() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    showPassword = !it.showPassword
+                )
+            }
+        }
+    }
+
     fun isErrorValidation(validation: Validation) =
         validation != Validation.VALID && validation != Validation.DEFAULT
 
-    fun onClearClick(inputFieldType: InputFieldType) {
-        when (inputFieldType) {
-            InputFieldType.PASSWORD -> _state.update { it.copy(password = "") }
-            else -> return
-        }
-    }
 }

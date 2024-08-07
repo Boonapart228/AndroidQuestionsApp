@@ -4,6 +4,7 @@
     <string name="in_valid_email">Невірний формат пошти</string>
     <string name="email_already_exists">Пошта вже існує</string>
     <string name="in_valid_admin_password">Невірний пароль</string>
+    <string name="in_valid_password">Невірний пароль</string>
     <string name="valid" />
     <string name="input_login">Введіть логін</string>
     <string name="input_password">Введіть пароль</string>
@@ -17,7 +18,7 @@
     <string name="button_back">Назад</string>
     <string name="result">Результат</string>
     <string name="result_score">Результат:</string>
-    <string name="results_panel">панель результатів</string>
+    <string name="results_panel">Панель результатів</string>
     <string name="increasing">Зростанням</string>
     <string name="decreasing">Спаданням</string>
     <string name="name">Ім\'ям</string>
@@ -40,6 +41,12 @@
     <string name="test_selection">Вибір тестів</string>
     <string name="alert_delete_score">Підтвердження видалення результату</string>
     <string name="alert_delete_score_message">Ви впевнені, що хочете видалити цей результат?</string>
+    <string name="alert_exit_app">Завершння застосунку</string>
+    <string name="alert_exit_app_message">Підтвердити вихід?</string>
     <string name="action_confirm">Підтвердити</string>
     <string name="action_dismiss">Ні</string>
+    <string name="password_do_not_match">Паролі не співпадають</string>
+    <string name="repeat_password">Повторіть пароль</string>
+    <string name="email_not_found">Пошту не знайдено</string>
+    <string name="score_screen">Результати тесту</string>
 </resources>
