@@ -53,10 +53,10 @@ class SignUpViewModel @Inject constructor(
     private fun fieldsNotEmpty(
         email: String,
         password: String,
-        secondaryPassword: String,
+        confirmPassword: String,
         name: String
     ): Boolean {
-        return email.isNotEmpty() && password.isNotEmpty() && secondaryPassword.isNotEmpty() && name.isNotEmpty()
+        return email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && name.isNotEmpty()
     }
 
     fun setName(name: String) {
