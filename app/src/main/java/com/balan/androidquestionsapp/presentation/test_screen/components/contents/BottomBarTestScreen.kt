@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
-import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -36,8 +35,6 @@ fun BottomBar(
             onClick = onIndexMinusClick,
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
             colors = ButtonDefaults.buttonColors(
-                contentColor = LocalColors.current.uiElementBlack,
-                containerColor = LocalColors.current.uiElementGreen
             ),
             enabled = questionNumber > 0
         ) {
@@ -54,6 +51,7 @@ fun BottomBar(
                 containerColor = LocalColors.current.uiElementGreen
             ),
             enabled = answered
+
         ) {
             Text(
                 text = stringResource(id = R.string.button_next),

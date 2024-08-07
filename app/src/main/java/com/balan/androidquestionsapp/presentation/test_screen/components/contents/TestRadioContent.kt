@@ -1,6 +1,6 @@
 package com.balan.androidquestionsapp.presentation.test_screen.components.contents
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,10 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.Answer
-import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -40,7 +40,6 @@ fun TestRadioContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(color = LocalColors.current.background)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -62,16 +61,18 @@ fun TestRadioContent(
                 answers.forEach { answer ->
                     Row(
                         modifier = Modifier
-
                             .padding(vertical = LocalDimen.current.questionVerticalPadding)
-                            .clickable(onClick = { onAnswerClick(answer) }),
+                            .clickable(onClick = { onAnswerClick(answer) })
+                            .border(
+                                width = LocalDimen.current.borderAnswerWidth,
+                                color = Color.Black,
+                                shape = RoundedCornerShape(LocalDimen.current.shapeAnswer)
+                            ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         RadioButton(
                             colors = RadioButtonDefaults.colors(
-                                selectedColor = LocalColors.current.uiElementBlack,
-                                unselectedColor = LocalColors.current.uiElementBlack,
                             ),
                             selected = selectedAnswer == answer,
                             onClick = { onAnswerClick(answer) }
@@ -82,7 +83,6 @@ fun TestRadioContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
-                                .background(color = LocalColors.current.uiElementGreen)
                                 .padding(horizontal = LocalDimen.current.horizontalPadding24),
                             textAlign = TextAlign.Start,
                             fontSize = LocalDimen.current.answerTextSize

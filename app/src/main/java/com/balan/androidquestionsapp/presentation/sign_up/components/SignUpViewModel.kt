@@ -2,10 +2,9 @@ package com.balan.androidquestionsapp.presentation.sign_up.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.balan.androidquestionsapp.domain.models.InputFieldType
 import com.balan.androidquestionsapp.domain.models.Validation
-import com.balan.androidquestionsapp.domain.usecase.auth.MapValidationResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
+import com.balan.androidquestionsapp.presentation.sign_up.util.mapToSignUpResults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,7 +21,6 @@ import javax.inject.Provider
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: Provider<SignUpUseCase>,
-    private val mapValidationResultUseCase: Provider<MapValidationResultUseCase>,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignUpState> =
@@ -42,7 +40,7 @@ class SignUpViewModel @Inject constructor(
     private fun observeFieldsNotEmptyState() {
         viewModelScope.launch {
             state
-                .map { fieldsNotEmpty(it.email, it.password, it.name) }
+                .map { fieldsNotEmpty(it.email, it.password, it.confirmPassword, it.name) }
                 .distinctUntilChanged()
                 .collect { fieldsIsNotEmpty ->
                     _state.update {
@@ -55,9 +53,10 @@ class SignUpViewModel @Inject constructor(
     private fun fieldsNotEmpty(
         email: String,
         password: String,
+        confirmPassword: String,
         name: String
     ): Boolean {
-        return email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty()
+        return email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && name.isNotEmpty()
     }
 
     fun setName(name: String) {
@@ -69,6 +68,12 @@ class SignUpViewModel @Inject constructor(
     fun setPassword(password: String) {
         _state.update {
             it.copy(password = password)
+        }
+    }
+
+    fun setConfirmPassword(confirmPassword: String) {
+        _state.update {
+            it.copy(confirmPassword = confirmPassword)
         }
     }
 
@@ -84,24 +89,47 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    fun onShowPasswordClick() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    showPassword = !_state.value.showPassword,
+                )
+            }
+        }
+    }
+
+    fun onShowConfirmPasswordClick() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    showConfirmPassword = !_state.value.showConfirmPassword,
+                )
+            }
+        }
+    }
 
     fun onSignUpClick() {
         viewModelScope.launch(Dispatchers.IO) {
             val name = _state.value.name
             val password = _state.value.password
+            val confirmPassword = _state.value.confirmPassword
             val email = _state.value.email
             val signUpResult =
-                signUpUseCase.get().execute(login = name, password = password, email = email)
-
-            val (emailValidation, passwordValidation, loginValidation) = mapValidationResultUseCase.get()
-                .execute(
-                    signUpResult
+                signUpUseCase.get().execute(
+                    login = name,
+                    password = password,
+                    confirmPassword = confirmPassword,
+                    email = email
                 )
+
+            val (emailValidation, passwordValidation, loginValidation) = signUpResult.mapToSignUpResults()
 
             _state.update {
                 it.copy(
                     emailValidation = emailValidation,
                     passwordValidation = passwordValidation,
+                    confirmPasswordValidation = if (passwordValidation == Validation.PASSWORD_DO_NOT_MATCH) Validation.PASSWORD_DO_NOT_MATCH else Validation.VALID,
                     loginValidation = loginValidation,
                 )
             }
@@ -111,15 +139,8 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-
-    fun onClearClick(inputFieldType: InputFieldType) {
-        when (inputFieldType) {
-            InputFieldType.LOGIN -> _state.update { it.copy(name = "") }
-            InputFieldType.PASSWORD -> _state.update { it.copy(password = "") }
-            InputFieldType.EMAIL -> _state.update { it.copy(email = "") }
-        }
-    }
-
     fun isErrorValidation(validation: Validation) =
         validation != Validation.VALID && validation != Validation.DEFAULT
+
+
 }

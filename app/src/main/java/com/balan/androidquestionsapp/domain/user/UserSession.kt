@@ -7,6 +7,7 @@ interface UserSession {
     fun setQuestionLevel(session: QuestionLevel)
     fun getLevel(): QuestionLevel
 
+
     fun setUser(user: User)
 
     fun getCurrentUser(): User?
