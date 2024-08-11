@@ -49,6 +49,10 @@ fun BottomBar(
         Button(
             onClick = onIndexPlusClick,
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
+            colors = ButtonDefaults.buttonColors(
+                contentColor = LocalColors.current.uiElementBlack,
+                containerColor = LocalColors.current.uiElementGreen
+            ),
             enabled = answered
         ) {
             Text(
