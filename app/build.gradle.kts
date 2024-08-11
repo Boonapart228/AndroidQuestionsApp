@@ -53,9 +53,15 @@ android {
 }
 
 dependencies {
+    //Animation
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
+
+    //Material Design 3
+    implementation("androidx.compose.material3:material3")
 
     //Room
-    implementation("androidx.room:room-runtime:2.5.0") // Библиотека "Room"
+    implementation("androidx.room:room-runtime:2.5.0")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8") // Библиотека "Room"
     ksp("androidx.room:room-compiler:2.5.0") // Кодогенератор
     implementation("androidx.room:room-ktx:2.5.0") // Дополнительно для Kotlin Coroutines, Kotlin Flows
 
@@ -63,8 +69,6 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     ksp("com.google.dagger:hilt-android-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    //Material Design
-    implementation("androidx.compose.material:material:1.0.5")
     //GSON
     implementation("com.google.code.gson:gson:2.8.8")
     //Serializable

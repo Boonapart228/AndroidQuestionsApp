@@ -4,8 +4,10 @@ import com.balan.androidquestionsapp.R
 
 enum class Validation(val textResId: Int) {
     VALID(R.string.valid),
-    INVALID(R.string.in_valid),
+    PASSWORD_DO_NOT_MATCH(R.string.password_do_not_match),
+    EMAIL_NOT_FOUND(R.string.email_not_found),
     INVALID_EMAIL(R.string.in_valid_email),
+    INVALID_PASSWORD(R.string.in_valid_password),
     EMAIL_ALREADY_EXIST(R.string.email_already_exists),
     INVALID_ADMIN_PASSWORD(R.string.in_valid_admin_password),
     TOO_SHORT(R.string.too_short),
@@ -17,4 +19,6 @@ enum class Validation(val textResId: Int) {
     TOO_SHORT_LOGIN(R.string.too_short_login),
     INVALID_CHARACTERS_IN_LOGIN(R.string.invalid_characters_in_login),
     DEFAULT(R.string.valid)
+
+
 }

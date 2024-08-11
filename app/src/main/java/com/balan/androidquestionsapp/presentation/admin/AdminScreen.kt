@@ -29,7 +29,6 @@ fun AdminScreen(
         setPassword = viewModel::setPassword,
         onMainClick = viewModel::onMainClick,
         isFieldInvalid = viewModel::isErrorValidation,
-        onClearClick = viewModel::onClearClick,
-
+        onShowPasswordClick = viewModel::onShowPasswordClick
     )
 }
