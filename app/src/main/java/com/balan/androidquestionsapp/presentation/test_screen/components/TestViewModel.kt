@@ -211,7 +211,6 @@ class TestViewModel @Inject constructor(
         }
         if (answers.isNotEmpty()) setAnswered() else _state.update { it.copy(answered = false) }
     }
-
     private fun checkAnswer() {
         val index = _state.value.questionNumber
         _state.update {
