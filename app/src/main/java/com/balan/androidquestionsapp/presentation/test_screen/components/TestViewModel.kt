@@ -35,7 +35,6 @@ class TestViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     private val _event = MutableSharedFlow<TestNavigationEvent>()
-
     val event = _event.asSharedFlow()
 
     init {
@@ -61,8 +60,18 @@ class TestViewModel @Inject constructor(
                     finishTest()
                 }
             }
+            evaluateButtonEnablement()
         }
     }
+
+    private fun evaluateButtonEnablement() {
+        _state.update {
+            it.copy(
+                enabledButton = it.questionNumber > 0
+            )
+        }
+    }
+
 
     private fun finishTest() {
         val question = getLevelUseCase.get().execute()
@@ -96,8 +105,9 @@ class TestViewModel @Inject constructor(
                     writtenAnswer = ""
                 )
             }
-            removeLastAnswerScore()
         }
+        removeLastAnswerScore()
+        evaluateButtonEnablement()
     }
 
     fun setAnswer(text: String) {
@@ -118,17 +128,13 @@ class TestViewModel @Inject constructor(
 
 
     private fun checkRadioButtonAnswer() {
-        val selectedRadioAnswer = _state.value.selectedRadioAnswer
-        val copySelectedRadioAnswer = selectedRadioAnswer?.copy(isTrue = false)
-
         _state.update {
             it.copy(
-                selectedRadioAnswer = if (selectedRadioAnswer?.isTrue == true) copySelectedRadioAnswer else selectedRadioAnswer,
-                point = if (selectedRadioAnswer?.isTrue == true) 1 else 0
+                point = if (it.selectedRadioAnswer?.isTrue == true) 1 else 0
             )
         }
-
         addAnswerScore(_state.value.point)
+
     }
 
     private fun setAnswered() {
@@ -140,11 +146,9 @@ class TestViewModel @Inject constructor(
     }
 
     private fun addAnswerScore(point: Int) {
-        val scores = _state.value.answersScores.toMutableList()
-        scores.add(point)
         _state.update {
             it.copy(
-                answersScores = scores
+                answersScores = it.answersScores + point
             )
         }
     }
@@ -152,12 +156,10 @@ class TestViewModel @Inject constructor(
     private fun getScore() = _state.value.answersScores.sum()
 
     private fun removeLastAnswerScore() {
-        val scoreList = _state.value.answersScores.toMutableList()
-        if (scoreList.isNotEmpty()) {
-            scoreList.removeLast()
+        if (_state.value.answersScores.isNotEmpty()) {
             _state.update {
                 it.copy(
-                    answersScores = scoreList
+                    answersScores = it.answersScores.dropLast(1)
                 )
             }
         }
@@ -168,7 +170,7 @@ class TestViewModel @Inject constructor(
         val selectedCheckAnswer = _state.value.selectedCheckAnswer
         _state.update {
             it.copy(
-                point = if (selectedCheckAnswer.isNotEmpty() && selectedCheckAnswer.size > 1 && selectedCheckAnswer.all { answer -> answer.isTrue }) 1 else 0,
+                point = if (selectedCheckAnswer.size > 1 && selectedCheckAnswer.all { answer -> answer.isTrue }) 1 else 0,
                 selectedCheckAnswer = if (_state.value.point == 1) emptyList() else selectedCheckAnswer
             )
         }

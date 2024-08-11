@@ -46,7 +46,7 @@ fun TestContent(
                 BottomBar(
                     onIndexPlusClick = onIndexPlusClick,
                     onIndexMinusClick = onIndexMinusClick,
-                    questionNumber = state.questionNumber,
+                    enabled = state.enabledButton,
                     answered = state.answered
                 )
             }) {

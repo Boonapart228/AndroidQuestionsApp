@@ -20,7 +20,7 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 @Composable
 fun BottomBar(
     answered: Boolean,
-    questionNumber: Int,
+    enabled: Boolean,
     onIndexPlusClick: () -> Unit,
     onIndexMinusClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -39,7 +39,7 @@ fun BottomBar(
                 contentColor = LocalColors.current.uiElementBlack,
                 containerColor = LocalColors.current.uiElementGreen
             ),
-            enabled = questionNumber > 0
+            enabled = enabled
         ) {
             Text(
                 text = stringResource(id = R.string.button_back),
@@ -72,6 +72,6 @@ fun BottomBarPreview() {
     BottomBar(
         onIndexPlusClick = { }, onIndexMinusClick = { },
         answered = false,
-        questionNumber = 0,
+        enabled = false,
     )
 }

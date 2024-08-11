@@ -13,5 +13,6 @@ data class TestState(
     val score: Int = 0,
     val point: Int = 0,
     val answersScores: List<Int> = listOf(),
-    val title: String = ""
+    val title: String = "",
+    val enabledButton: Boolean = false
 )
