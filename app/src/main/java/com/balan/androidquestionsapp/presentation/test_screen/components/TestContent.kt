@@ -45,7 +45,9 @@ fun TestContent(
             bottomBar = {
                 BottomBar(
                     onIndexPlusClick = onIndexPlusClick,
-                    onIndexMinusClick = onIndexMinusClick
+                    onIndexMinusClick = onIndexMinusClick,
+                    enabled = state.enabledButton,
+                    answered = state.answered
                 )
             }) {
             Box(modifier = Modifier.padding(it))
