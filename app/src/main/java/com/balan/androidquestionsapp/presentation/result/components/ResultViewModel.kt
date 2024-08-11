@@ -2,6 +2,7 @@ package com.balan.androidquestionsapp.presentation.result.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.usecase.result.GetQuestionScoreUseCase
 import com.balan.androidquestionsapp.domain.usecase.result.SetQuestionSizeUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
@@ -34,6 +35,7 @@ class ResultViewModel @Inject constructor(
     init {
         setQuestionSize()
         setQuestionScore()
+        setAnimation()
     }
 
     private fun setQuestionSize() {
@@ -57,6 +59,16 @@ class ResultViewModel @Inject constructor(
         }
     }
 
+    private fun setAnimation() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    animationResult = if (_state.value.score >= 7) R.raw.animation_test_success else R.raw.animation_test_failed
+                )
+            }
+        }
+
+    }
 
     fun onMainClick() {
         viewModelScope.launch {

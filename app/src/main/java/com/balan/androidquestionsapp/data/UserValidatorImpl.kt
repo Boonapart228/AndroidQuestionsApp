@@ -4,10 +4,11 @@ import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.repository.UserValidator
-import com.balan.androidquestionsapp.presentation.sign_up.model.ValidationResults
+import com.balan.androidquestionsapp.presentation.sign_in.model.ValidationSignInResults
+import com.balan.androidquestionsapp.presentation.sign_up.models.ValidationSignUpResults
 
 class UserValidatorImpl(
-    private val userLocalSource: UserLocalSource
+    private val userLocalSource: UserLocalSource,
 ) : UserValidator {
 
     companion object {
@@ -16,7 +17,36 @@ class UserValidatorImpl(
         const val MIN_LENGTH_LOGIN = 3
     }
 
-    override fun validateSignUp(user: User): Validation {
+    override fun validateSignIn(password: String, email: String): Validation {
+        val user = userLocalSource.getByEmail(email)
+        user?.let {
+            if (user.password != password) return Validation.INVALID_PASSWORD
+        }
+        if (user == null) {
+            return Validation.EMAIL_NOT_FOUND
+        }
+        return Validation.VALID
+    }
+
+
+    override fun mapValidationSignInResult(result: Validation): ValidationSignInResults {
+        val emailValidation = when (result) {
+            Validation.EMAIL_NOT_FOUND -> Validation.EMAIL_NOT_FOUND
+            else -> Validation.VALID
+        }
+
+        val passwordValidation = when (result) {
+            Validation.INVALID_PASSWORD -> Validation.INVALID_PASSWORD
+            else -> Validation.VALID
+        }
+        return ValidationSignInResults(
+            emailValidation = emailValidation,
+            passwordValidation = passwordValidation,
+        )
+    }
+
+
+    override fun validateSignUp(user: User, confirmPassword: String): Validation {
         val emailValidation = isEmailAvailableForRegistration(email = user.email)
         if (emailValidation != Validation.VALID) {
             return emailValidation
@@ -25,12 +55,13 @@ class UserValidatorImpl(
         if (loginValidation != Validation.VALID) {
             return loginValidation
         }
-        return validatePassword(password = user.password)
+        return validatePassword(password = user.password, secondPassword = confirmPassword)
     }
 
-    private fun validatePassword(password: String): Validation {
+    private fun validatePassword(password: String, secondPassword: String): Validation {
         return when {
             password.length < MIN_PASSWORD_LENGTH -> Validation.TOO_SHORT
+            password != secondPassword -> Validation.PASSWORD_DO_NOT_MATCH
             !password.any { it.isUpperCase() } -> Validation.NO_UPPERCASE_LETTER
             !password.any { it.isLowerCase() } -> Validation.NO_LOWERCASE_LETTER
             !password.any { it.isDigit() } -> Validation.NO_DIGIT
@@ -59,7 +90,7 @@ class UserValidatorImpl(
         return Validation.VALID
     }
 
-     override fun mapValidationResult(result: Validation): ValidationResults {
+    override fun mapValidationResult(result: Validation): ValidationSignUpResults {
         val emailValidation = when (result) {
             Validation.INVALID_EMAIL -> Validation.INVALID_EMAIL
             Validation.EMAIL_ALREADY_EXIST -> Validation.EMAIL_ALREADY_EXIST
@@ -68,6 +99,7 @@ class UserValidatorImpl(
 
         val passwordValidation = when (result) {
             Validation.INVALID_ADMIN_PASSWORD -> Validation.INVALID_ADMIN_PASSWORD
+            Validation.PASSWORD_DO_NOT_MATCH -> Validation.PASSWORD_DO_NOT_MATCH
             Validation.TOO_SHORT -> Validation.TOO_SHORT
             Validation.NO_UPPERCASE_LETTER -> Validation.NO_UPPERCASE_LETTER
             Validation.NO_LOWERCASE_LETTER -> Validation.NO_LOWERCASE_LETTER
@@ -83,11 +115,10 @@ class UserValidatorImpl(
             else -> Validation.VALID
         }
 
-        return ValidationResults(
+        return ValidationSignUpResults(
             emailValidation = emailValidation,
             passwordValidation = passwordValidation,
             loginValidation = loginValidation
         )
     }
-
 }

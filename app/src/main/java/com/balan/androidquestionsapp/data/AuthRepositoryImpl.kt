@@ -24,7 +24,7 @@ class AuthRepositoryImpl(
         return null
     }
 
-    override fun signUp(login: String, password: String, email: String): Validation {
+    override fun signUp(login: String, password: String, confirmPassword : String, email: String): Validation {
         val newUser = User(
             id = 0,
             name = login,
@@ -32,7 +32,7 @@ class AuthRepositoryImpl(
             email = email,
             QuestionsScore(junior = 10, middle = 10, senior = 10)
         )
-        val signUpResult = userValidator.validateSignUp(user = newUser)
+        val signUpResult = userValidator.validateSignUp(user = newUser, confirmPassword = confirmPassword)
         if (signUpResult == Validation.VALID) userLocalSource.create(newUser)
         return signUpResult
     }

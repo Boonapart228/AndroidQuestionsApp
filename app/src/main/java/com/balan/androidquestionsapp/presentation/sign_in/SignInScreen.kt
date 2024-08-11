@@ -1,5 +1,6 @@
 package com.balan.androidquestionsapp.presentation.sign_in
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,6 +21,7 @@ fun SignInScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
+    val activity = LocalContext.current as Activity
     LaunchedEffect(Unit) {
         launch {
             viewModel.event.collect {
@@ -35,6 +37,8 @@ fun SignInScreen(
                     }
 
                     is SignInEvent.NavigationToSignUp -> navigateToSignUp()
+
+                    is SignInEvent.ExitApp -> activity.finish()
                 }
             }
         }
@@ -47,7 +51,8 @@ fun SignInScreen(
         onSignInClick = viewModel::onSignInClick,
         onSignUpClick = viewModel::onSignUpClick,
         onShowPasswordClick = viewModel::onShowPasswordClick,
-        onClearClick = viewModel::onClearClick
-
+        isFieldInvalid = viewModel::isErrorValidation,
+        onExitAppClick = viewModel::onExitAppClick,
+        onConfirmationClick = viewModel::handleDialogAction
     )
 }
