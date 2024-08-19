@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
@@ -24,6 +25,7 @@ fun BottomBar(
     onIndexMinusClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -32,7 +34,10 @@ fun BottomBar(
         horizontalArrangement = Arrangement.Absolute.SpaceAround
     ) {
         Button(
-            onClick = onIndexMinusClick,
+            onClick = {
+                keyboardController?.hide()
+                onIndexMinusClick()
+            },
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
             colors = ButtonDefaults.buttonColors(
             ),
@@ -44,7 +49,10 @@ fun BottomBar(
             )
         }
         Button(
-            onClick = onIndexPlusClick,
+            onClick = {
+                keyboardController?.hide()
+                onIndexPlusClick()
+            },
             modifier = Modifier.width(LocalDimen.current.buttonWidth),
             enabled = answered
         ) {
