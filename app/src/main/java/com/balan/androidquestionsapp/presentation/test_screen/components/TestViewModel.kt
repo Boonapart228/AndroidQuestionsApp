@@ -185,17 +185,15 @@ class TestViewModel @Inject constructor(
         val correctAnswer = _state.value.questions[questionNumber].answers[0].title.lowercase()
 
         val isCorrectAnswer = writtenAnswer == correctAnswer
-        val point = if (isCorrectAnswer) 1 else 0
-
         _state.update {
             it.copy(
+                point = if (isCorrectAnswer) 1 else 0,
                 writtenAnswer = ""
             )
         }
 
-        addAnswerScore(point)
+        addAnswerScore(_state.value.point)
     }
-
 
     fun onAnswerCheckButtonClick(answer: Answer) {
         val answers = _state.value.selectedCheckAnswer.toMutableList()
@@ -211,6 +209,7 @@ class TestViewModel @Inject constructor(
         }
         if (answers.isNotEmpty()) setAnswered() else _state.update { it.copy(answered = false) }
     }
+
     private fun checkAnswer() {
         val index = _state.value.questionNumber
         _state.update {
