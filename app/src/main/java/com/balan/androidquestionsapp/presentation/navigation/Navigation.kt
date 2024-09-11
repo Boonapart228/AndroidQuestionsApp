@@ -3,7 +3,12 @@ package com.balan.androidquestionsapp.presentation.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
@@ -26,7 +31,6 @@ import com.balan.androidquestionsapp.presentation.sign_up.SignUpScreen
 import com.balan.androidquestionsapp.presentation.sign_up.components.SignUpViewModel
 import com.balan.androidquestionsapp.presentation.test_screen.TestScreen
 import com.balan.androidquestionsapp.presentation.test_screen.components.TestViewModel
-
 
 @Composable
 fun Navigation(navHostController: NavHostController = rememberNavController()) {
@@ -119,20 +123,36 @@ fun Navigation(navHostController: NavHostController = rememberNavController()) {
 
 }
 
-private fun defaultExitTransition(duration: Int = 1000): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition? {
+private fun defaultEnterTransition(
+    durationMillis: Int = 300,
+    dampingRatio: Float = 0.7f,
+    stiffness: Float = 300f
+): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition? {
     return {
-        slideOutOfContainer(
-            AnimatedContentTransitionScope.SlideDirection.Down,
-            tween(duration)
+        slideInHorizontally(
+            initialOffsetX = { fullWidth -> fullWidth },
+            animationSpec = spring(
+                dampingRatio = dampingRatio,
+                stiffness = stiffness
+            )
+        ) + fadeIn(
+            animationSpec = tween(
+                durationMillis = durationMillis,
+                easing = LinearOutSlowInEasing
+            )
         )
     }
 }
 
-private fun defaultEnterTransition(duration: Int = 1000): AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition? {
+private fun defaultExitTransition(
+    durationMillis: Int = 300
+): AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition? {
     return {
-        slideIntoContainer(
-            AnimatedContentTransitionScope.SlideDirection.Down,
-            tween(duration)
+         fadeOut(
+            animationSpec = tween(
+                durationMillis = durationMillis,
+                easing = LinearOutSlowInEasing
+            )
         )
     }
 }
