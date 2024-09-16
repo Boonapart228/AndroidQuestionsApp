@@ -1,5 +1,6 @@
 package com.balan.androidquestionsapp.presentation.main_screen.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +35,7 @@ fun MainContent(
     onTestClick: (TestType) -> Unit,
     onTestDoubleClick: (TestType) -> Unit
 ) {
+    BackHandler { return@BackHandler }
     Scaffold(
         topBar = {
             TopBar(
