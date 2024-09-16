@@ -12,7 +12,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -55,7 +58,7 @@ fun MainContent(
                 MainButton(
                     messageResId = testType.messageResId,
                     onClick = { onTestClick(testType) },
-                    onAdminDoubleClick = { onTestDoubleClick(testType) }
+                    onAdminClick = { onTestDoubleClick(testType) }
                 )
                 Divider(
                     thickness = LocalDimen.current.driverThickness
@@ -71,20 +74,16 @@ fun MainContent(
 @Composable
 fun MainButton(
     messageResId: Int,
-    onAdminDoubleClick: () -> Unit,
+    onAdminClick: () -> Unit,
     onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .padding(LocalDimen.current.horizontalRowSpace)
-            .combinedClickable(
-                onClick = onClick,
-                onDoubleClick = onAdminDoubleClick
-            )
+            .combinedClickable(onClick = onClick)
             .fillMaxWidth()
             .padding(
-                horizontal = LocalDimen.current.horizontalRowPadding,
-                vertical = LocalDimen.current.verticalRowPadding
+                horizontal = LocalDimen.current.horizontalRowPadding
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(LocalDimen.current.horizontalRowSpace)
@@ -98,6 +97,9 @@ fun MainButton(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(1f)
         )
+        IconButton(onClick = onAdminClick) {
+            Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = null)
+        }
     }
 }
 
