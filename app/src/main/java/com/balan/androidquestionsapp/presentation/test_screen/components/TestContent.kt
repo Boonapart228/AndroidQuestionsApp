@@ -1,5 +1,6 @@
 package com.balan.androidquestionsapp.presentation.test_screen.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,9 @@ fun TestContent(
     onMainClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    BackHandler {
+        onMainClick()
+    }
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
