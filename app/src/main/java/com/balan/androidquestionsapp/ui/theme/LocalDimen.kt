@@ -49,7 +49,7 @@ data class Dimensions(
     val buttonCircleSize: Dp = 40.dp,
     val questionTitleShape: Dp = 32.dp,
     val questionTitleClip: Dp = 32.dp,
-    val questionPaddingHorizontal: Dp = 48.dp,
+    val questionPaddingHorizontal: Dp = 12.dp,
     val questionTitleTextSize: TextUnit = 24.sp,
     val questionTitlePaddingAll: Dp = 8.dp,
     val questionVerticalPadding: Dp = 4.dp,
@@ -85,4 +85,6 @@ data class Dimensions(
     val iconStartPadding: Dp = 16.dp,
     val iconEndPadding: Dp = 24.dp,
     val iconDeleteEndPadding: Dp = 12.dp,
+    val textWidthMax: Dp = 300.dp,
+    val textQuestionVerticalPadding: Dp = 8.dp,
 )

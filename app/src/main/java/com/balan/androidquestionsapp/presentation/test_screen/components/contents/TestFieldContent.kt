@@ -2,8 +2,6 @@ package com.balan.androidquestionsapp.presentation.test_screen.components.conten
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -25,18 +23,17 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 fun TestFieldContent(
     title: String,
     answer: String,
-    setAnswer: (String) -> Unit,
-    modifier: Modifier = Modifier
+    setAnswer: (String) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Column(
-        modifier = modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.spacedBy(
+            LocalDimen.current.spacerHeight16,
+            Alignment.Top
+        )
     ) {
         Column(
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(LocalDimen.current.spacerPaddingAll16),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
@@ -44,7 +41,6 @@ fun TestFieldContent(
                 .weight(1f)
         ) {
             AnswerTitle(title = title)
-            Spacer(modifier = Modifier.padding(LocalDimen.current.spacerPaddingAll16))
             OutlinedTextField(
                 value = answer,
                 onValueChange = setAnswer,
@@ -69,5 +65,5 @@ fun TestFieldContent(
 )
 @Composable
 fun PreviewTextField() {
-    TestFieldContent(title = "qwe", answer = "qwe", setAnswer = { }, modifier = Modifier)
+    TestFieldContent(title = "qwe", answer = "qwe", setAnswer = { })
 }

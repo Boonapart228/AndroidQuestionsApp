@@ -6,12 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -23,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.Answer
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
@@ -38,7 +38,10 @@ fun TestCheckContent(
     Column(
         modifier = modifier
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(
+            LocalDimen.current.spacerHeight16,
+            Alignment.Top
+        ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
@@ -50,13 +53,10 @@ fun TestCheckContent(
         ) {
             AnswerTitle(title = title)
         }
-
-        Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(LocalDimen.current.scrollContainerHeight)
+                .fillMaxHeight()
                 .padding(horizontal = LocalDimen.current.questionPaddingHorizontal)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -77,7 +77,10 @@ fun TestCheckContent(
                             )
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.spacedBy(
+                            LocalDimen.current.spacerWidth8,
+                            Alignment.Start
+                        )
                     ) {
                         Checkbox(
                             checked = selected,
@@ -86,12 +89,14 @@ fun TestCheckContent(
                             },
                             colors = CheckboxDefaults.colors()
                         )
-                        Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
                         Text(
                             text = answer.title,
-                            modifier = Modifier,
+                            modifier = Modifier
+                                .widthIn(max = LocalDimen.current.textWidthMax)
+                                .padding(vertical = LocalDimen.current.textQuestionVerticalPadding),
                             textAlign = TextAlign.Start,
-                            fontSize = LocalDimen.current.answerTextSize
+                            fontSize = LocalDimen.current.answerTextSize,
+                            overflow = TextOverflow.Visible
                         )
                     }
                 }
@@ -108,7 +113,7 @@ fun PreviewCheck() {
         modifier = Modifier,
         selectedAnswers = emptyList(),
         answers = listOf(
-            Answer(isTrue = false, title = "qwe"),
+            Answer(isTrue = false, title = "qwe")
         ),
         onAnswerClick = { })
 }

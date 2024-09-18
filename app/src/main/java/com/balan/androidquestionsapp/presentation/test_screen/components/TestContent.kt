@@ -2,8 +2,8 @@ package com.balan.androidquestionsapp.presentation.test_screen.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -17,6 +17,7 @@ import com.balan.androidquestionsapp.presentation.test_screen.components.content
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TestFieldContent
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TestRadioContent
 import com.balan.androidquestionsapp.presentation.test_screen.components.contents.TopBarTest
+import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
 fun TestContent(
@@ -54,31 +55,33 @@ fun TestContent(
                     answered = state.answered
                 )
             }) {
-            Box(modifier = Modifier.padding(it))
-            when (state.questions[state.questionNumber].type) {
-                QuestionType.RADIO_BUTTON.type -> {
-                    TestRadioContent(
-                        answers = state.questions[state.questionNumber].answers,
-                        selectedAnswer = state.selectedRadioAnswer,
-                        onAnswerClick = onSelectedRadioAnswerClick,
-                        title = state.questions[state.questionNumber].title
-                    )
-                }
+            Column(modifier = Modifier.padding(it)) {
+                Spacer(modifier = Modifier.padding(LocalDimen.current.paddingAll16))
+                when (state.questions[state.questionNumber].type) {
+                    QuestionType.RADIO_BUTTON.type -> {
+                        TestRadioContent(
+                            answers = state.questions[state.questionNumber].answers,
+                            selectedAnswer = state.selectedRadioAnswer,
+                            onAnswerClick = onSelectedRadioAnswerClick,
+                            title = state.questions[state.questionNumber].title
+                        )
+                    }
 
-                QuestionType.CHECK_BOX.type -> {
-                    TestCheckContent(
-                        title = state.questions[state.questionNumber].title,
-                        selectedAnswers = state.selectedCheckAnswer,
-                        answers = state.questions[state.questionNumber].answers,
-                        onAnswerClick = onSelectedCheckAnswerClick,
-                    )
-                }
+                    QuestionType.CHECK_BOX.type -> {
+                        TestCheckContent(
+                            title = state.questions[state.questionNumber].title,
+                            selectedAnswers = state.selectedCheckAnswer,
+                            answers = state.questions[state.questionNumber].answers,
+                            onAnswerClick = onSelectedCheckAnswerClick,
+                        )
+                    }
 
-                QuestionType.TEXT_FIELD.type -> {
-                    TestFieldContent(
-                        title = state.questions[state.questionNumber].title,
-                        answer = state.writtenAnswer, setAnswer = setAnswer
-                    )
+                    QuestionType.TEXT_FIELD.type -> {
+                        TestFieldContent(
+                            title = state.questions[state.questionNumber].title,
+                            answer = state.writtenAnswer, setAnswer = setAnswer
+                        )
+                    }
                 }
             }
         }

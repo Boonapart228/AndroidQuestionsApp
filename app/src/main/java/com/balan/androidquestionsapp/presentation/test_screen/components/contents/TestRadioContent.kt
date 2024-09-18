@@ -5,12 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -20,9 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.domain.models.Answer
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
@@ -36,14 +35,17 @@ fun TestRadioContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(
+                LocalDimen.current.spacerHeight16,
+                Alignment.Top
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
@@ -51,7 +53,6 @@ fun TestRadioContent(
                 .weight(1f)
         ) {
             AnswerTitle(title = title)
-            Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight16))
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -67,25 +68,27 @@ fun TestRadioContent(
                                 width = LocalDimen.current.borderAnswerWidth,
                                 color = Color.Black,
                                 shape = RoundedCornerShape(LocalDimen.current.shapeAnswer)
-                            ),
+                            )
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.spacedBy(
+                            LocalDimen.current.spacerWidth8,
+                            Alignment.Start
+                        )
                     ) {
                         RadioButton(
-                            colors = RadioButtonDefaults.colors(
-                            ),
+                            colors = RadioButtonDefaults.colors(),
                             selected = selectedAnswer == answer,
                             onClick = { onAnswerClick(answer) }
                         )
-                        Spacer(modifier = Modifier.width(LocalDimen.current.spacerWidth8))
                         Text(
                             text = answer.title,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(shape = RoundedCornerShape(LocalDimen.current.answerClip))
-                                .padding(horizontal = LocalDimen.current.horizontalPadding24),
+                                .widthIn(max = LocalDimen.current.textWidthMax)
+                                .padding(vertical = LocalDimen.current.textQuestionVerticalPadding),
                             textAlign = TextAlign.Start,
-                            fontSize = LocalDimen.current.answerTextSize
+                            fontSize = LocalDimen.current.answerTextSize,
+                            overflow = TextOverflow.Visible
                         )
                     }
                 }

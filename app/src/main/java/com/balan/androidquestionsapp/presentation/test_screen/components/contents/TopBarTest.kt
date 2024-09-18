@@ -51,7 +51,7 @@ fun TopBarTest(
                     Text(
                         text = "$count/$size",
                         textAlign = TextAlign.Center,
-                        fontSize = LocalDimen.current.textSize32
+                        fontSize = LocalDimen.current.textSize16
                     )
                 }
             },
@@ -72,5 +72,5 @@ fun TopBarTest(
 )
 @Composable
 fun PreviewTopBar() {
-    TopBarTest(count = 0, size = 4, title = "JUNIOR", onMainClick = {})
+    TopBarTest(count = 0, size = 4, title = "MIDDLE", onMainClick = {})
 }
