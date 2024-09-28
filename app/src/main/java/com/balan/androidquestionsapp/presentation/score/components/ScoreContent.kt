@@ -30,7 +30,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +41,7 @@ import com.balan.androidquestionsapp.domain.models.SortDirections
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.presentation.score.components.contents.ShimmerEffect
 import com.balan.androidquestionsapp.presentation.score.components.contents.TopBarScore
+import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 import com.balan.androidquestionsapp.ui.theme.LocalProperty
 
@@ -199,7 +199,7 @@ fun ScoreItem(
                 Text(
                     text = if (score != null) "${stringResource(R.string.result_score)} $score" else "",
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                    color = if (testPassed) Color.Green else Color.Red,
+                    color = if (testPassed) LocalColors.current.testPassedGreen else LocalColors.current.testFailedRed,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
                         .weight(LocalProperty.current.largeContentWeight),
