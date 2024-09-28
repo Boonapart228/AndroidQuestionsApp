@@ -9,6 +9,6 @@ val LocalColors = compositionLocalOf {
 }
 
 data class Colors(
-    val testPassedGreen: Color = Color(0xFF00FF00),
-    val testFailedRed: Color = Color(0xFFFF0000),
+    val testPassedGreen: Color = Color(0xBF00FF00),
+    val testFailedRed: Color = Color(0xBEFF0000),
 )

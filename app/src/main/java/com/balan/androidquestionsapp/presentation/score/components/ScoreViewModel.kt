@@ -12,6 +12,7 @@ import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCas
 import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -46,6 +47,8 @@ class ScoreViewModel @Inject constructor(
             checkLevel()
             update(getAllUserUseCase.get().execute())
         }
+        sort(SortDirections.INCREASING)
+        triggerLoadingEffect()
     }
 
     private fun checkLevel() {
@@ -58,7 +61,9 @@ class ScoreViewModel @Inject constructor(
 
     private fun update(userList: List<User>) {
         _state.update {
-            it.copy(users = userList)
+            it.copy(
+                users = userList
+            )
         }
     }
 
@@ -119,5 +124,18 @@ class ScoreViewModel @Inject constructor(
                 }
             }
         toggleDialogAlert()
+    }
+
+    private fun triggerLoadingEffect() {
+        viewModelScope.launch {
+            delay(2000)
+            _state.update {
+                it.copy(isLoader = true)
+            }
+        }
+    }
+
+    fun onActive(sortDirections1: SortDirections) {
+        _state.update { it.copy(sortBy = sortDirections1) }
     }
 }
