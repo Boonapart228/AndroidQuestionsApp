@@ -1,10 +1,11 @@
 package com.balan.androidquestionsapp.presentation.score.components
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
-import com.balan.androidquestionsapp.domain.models.SortDirections
+import com.balan.androidquestionsapp.domain.models.SortOption
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
@@ -32,6 +33,8 @@ class ScoreViewModel @Inject constructor(
 ) : ViewModel() {
     companion object {
         const val PASSING_SCORE = 7
+        val TEST_PASSED_GREEN: Color = Color(0xBF00FF00)
+        val TEST_FAILED_RED: Color = Color(0xBEFF0000)
     }
 
     private val _state = MutableStateFlow(ScoreState())
@@ -47,7 +50,7 @@ class ScoreViewModel @Inject constructor(
             checkLevel()
             update(getAllUserUseCase.get().execute())
         }
-        sort(SortDirections.INCREASING)
+        sort(SortOption.INCREASING)
         triggerLoadingEffect()
     }
 
@@ -75,9 +78,9 @@ class ScoreViewModel @Inject constructor(
         toggleDialogAlert()
     }
 
-    fun sort(sortDirections: SortDirections) {
+    fun sort(sortOption: SortOption) {
         viewModelScope.launch(Dispatchers.IO) {
-            update(sortByDirectionUseCase.get().execute(sortDirections))
+            update(sortByDirectionUseCase.get().execute(sortOption))
         }
     }
 
@@ -102,7 +105,10 @@ class ScoreViewModel @Inject constructor(
         }
     }
 
-    fun isTestPassed(score: Int?) = score != null && score >= PASSING_SCORE
+    fun isTestPassed(score: Int?): Color {
+        return if (score != null && score >= PASSING_SCORE) TEST_PASSED_GREEN
+        else TEST_FAILED_RED
+    }
 
     private fun toggleDialogAlert() {
         _state.update {
@@ -130,12 +136,12 @@ class ScoreViewModel @Inject constructor(
         viewModelScope.launch {
             delay(2000)
             _state.update {
-                it.copy(isLoader = true)
+                it.copy(isLoading = true)
             }
         }
     }
 
-    fun onActive(sortDirections1: SortDirections) {
-        _state.update { it.copy(sortBy = sortDirections1) }
+    fun onActive(sortOption: SortOption) {
+        _state.update { it.copy(sortBy = sortOption) }
     }
 }

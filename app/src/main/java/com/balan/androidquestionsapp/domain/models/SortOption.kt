@@ -7,7 +7,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.balan.androidquestionsapp.R
 
-enum class SortDirections(val textId: Int, val icon: ImageVector) {
+enum class SortOption(val textId: Int, val icon: ImageVector) {
     INCREASING(
         textId = R.string.increasing,
         icon = Icons.Default.KeyboardArrowDown,

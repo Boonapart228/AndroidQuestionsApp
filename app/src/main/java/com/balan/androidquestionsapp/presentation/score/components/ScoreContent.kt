@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -29,7 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,11 +35,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.QuestionsScore
-import com.balan.androidquestionsapp.domain.models.SortDirections
+import com.balan.androidquestionsapp.domain.models.SortOption
 import com.balan.androidquestionsapp.domain.models.User
-import com.balan.androidquestionsapp.presentation.score.components.contents.ShimmerEffect
+import com.balan.androidquestionsapp.presentation.score.components.contents.ShimmerLoadingContent
 import com.balan.androidquestionsapp.presentation.score.components.contents.TopBarScore
-import com.balan.androidquestionsapp.ui.theme.LocalColors
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 import com.balan.androidquestionsapp.ui.theme.LocalProperty
 
@@ -49,10 +46,10 @@ import com.balan.androidquestionsapp.ui.theme.LocalProperty
 fun ScoreContent(
     onMainClick: () -> Unit,
     viewModel: ScoreViewModel,
-    onSortClick: (SortDirections) -> Unit,
+    onSortClick: (SortOption) -> Unit,
     onActiveClick: () -> Unit,
     onConfirmationClick: (DialogAction) -> Unit,
-    onActive: (SortDirections) -> Unit,
+    onActiveSortOptionClick: (SortOption) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsState()
@@ -66,7 +63,7 @@ fun ScoreContent(
                 onSelectOptionClick = onSortClick,
                 state = state,
                 onToggleMenuClick = onActiveClick,
-                onActive = onActive
+                onActiveSortOptionClick = onActiveSortOptionClick
             )
         },
     ) { padding ->
@@ -74,10 +71,10 @@ fun ScoreContent(
             items(users) { user ->
                 ScoreItem(
                     user = user,
+                    isLoading = state.isLoading,
                     onDeleteUserScoreClick = { viewModel.onDeleteScoreClick(user) },
-                    getScore = { viewModel.getScore(user) },
-                    isTestPassed = viewModel::isTestPassed,
-                    isLoading = state.isLoader
+                    score = viewModel.getScore(user),
+                    scoreColor = viewModel.isTestPassed(viewModel.getScore(user))
                 )
             }
         }
@@ -93,75 +90,16 @@ fun ScoreContent(
 
 @Composable
 fun ScoreItem(
-    user: User?,
+    user: User,
     isLoading: Boolean,
     onDeleteUserScoreClick: () -> Unit,
-    getScore: () -> Int?,
-    isTestPassed: (Int?) -> Boolean,
+    score: Int?,
+    scoreColor: Color,
     modifier: Modifier = Modifier
 ) {
-    val score = getScore()
-    val testPassed = isTestPassed(score)
-    if (!isLoading) {
-        Card(
-            elevation = CardDefaults.cardElevation(LocalDimen.current.cardElevation),
-            shape = RoundedCornerShape(LocalDimen.current.cardShape),
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = LocalDimen.current.cardHorizontalPadding,
-                    vertical = LocalDimen.current.cardVerticalPadding
-                )
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(LocalDimen.current.rowPadding),
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(LocalDimen.current.verticalSpaced),
-                    modifier = Modifier.weight(LocalProperty.current.largeContentWeight)
-                ) {
-                    ShimmerEffect(
-                        modifier = Modifier
-                            .size(
-                                width = LocalDimen.current.shimmerShortWidth,
-                                height = LocalDimen.current.shimmerHeight
-                            )
-                            .padding(
-                                horizontal = LocalDimen.current.shimmerHorizontalPadding,
-                                vertical = LocalDimen.current.shimmerVerticalPadding
-                            )
-                            .fillMaxWidth()
-                    )
-                    ShimmerEffect(
-                        modifier = Modifier
-                            .height(LocalDimen.current.shimmerHeight)
-                            .padding(
-                                horizontal = LocalDimen.current.shimmerHorizontalPadding,
-                                vertical = LocalDimen.current.shimmerVerticalPadding
-                            )
-                            .fillMaxWidth()
-                    )
-                }
-                ShimmerEffect(
-                    modifier = Modifier
-                        .height(LocalDimen.current.shimmerHeight)
-                        .padding(horizontal = LocalDimen.current.shimmerHorizontalPadding)
-                        .weight(LocalProperty.current.largeContentWeight)
-                        .fillMaxWidth()
-                )
-                ShimmerEffect(
-                    modifier = Modifier
-                        .size(LocalDimen.current.shimmerIconSize)
-                        .clip(CircleShape)
-                        .padding(),
-                )
-            }
-        }
 
+    if (!isLoading) {
+        ShimmerLoadingContent()
     } else {
         Card(
             elevation = CardDefaults.cardElevation(LocalDimen.current.cardElevation),
@@ -185,21 +123,21 @@ fun ScoreItem(
                     modifier = Modifier.weight(LocalProperty.current.largeContentWeight)
                 ) {
                     Text(
-                        text = user?.name ?: "",
+                        text = user.name,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(horizontal = LocalDimen.current.textHorizontalPadding)
                     )
                     Text(
-                        text = user?.email ?: "",
+                        text = user.email,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(horizontal = LocalDimen.current.textHorizontalPadding),
                     )
                 }
 
                 Text(
-                    text = if (score != null) "${stringResource(R.string.result_score)} $score" else "",
+                    text = "${stringResource(R.string.result_score)} $score",
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                    color = if (testPassed) LocalColors.current.testPassedGreen else LocalColors.current.testFailedRed,
+                    color = scoreColor,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
                         .weight(LocalProperty.current.largeContentWeight),
@@ -277,8 +215,8 @@ fun ScoreContentPreview() {
             )
         ),
         onDeleteUserScoreClick = {},
-        getScore = { 10 },
-        isTestPassed = { true },
-        isLoading = false
+        isLoading = true,
+        score = 0,
+        scoreColor = Color.Red,
     )
 }
