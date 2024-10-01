@@ -47,7 +47,7 @@ fun ScoreContent(
     onMainClick: () -> Unit,
     viewModel: ScoreViewModel,
     onSortClick: (SortOption) -> Unit,
-    onActiveClick: () -> Unit,
+    onActiveToggleMenuClick: () -> Unit,
     onConfirmationClick: (DialogAction) -> Unit,
     onActiveSortOptionClick: (SortOption) -> Unit,
     modifier: Modifier = Modifier
@@ -62,7 +62,7 @@ fun ScoreContent(
                 onClick = onMainClick,
                 onSelectOptionClick = onSortClick,
                 state = state,
-                onToggleMenuClick = onActiveClick,
+                onToggleMenuClick = onActiveToggleMenuClick,
                 onActiveSortOptionClick = onActiveSortOptionClick
             )
         },
@@ -74,7 +74,7 @@ fun ScoreContent(
                     isLoading = state.isLoading,
                     onDeleteUserScoreClick = { viewModel.onDeleteScoreClick(user) },
                     score = viewModel.getScore(user),
-                    scoreColor = viewModel.isTestPassed(viewModel.getScore(user))
+                    scoreColor = viewModel.getColorByScore(viewModel.getScore(user))
                 )
             }
         }

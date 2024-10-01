@@ -80,7 +80,7 @@ fun TopBarScore(
                             onToggleMenuClick()
                         }
                     ) {
-                        if (state.sortBy == item) {
+                        if (state.sortOption == item) {
                             Icon(
                                 imageVector = Icons.Default.Check, contentDescription = null,
                                 modifier = Modifier

@@ -12,5 +12,5 @@ data class ScoreState(
     val isDeleteDialogVisible: Boolean = false,
     val isLoading: Boolean = false,
     val sortDirections: List<SortOption> = SortOption.entries,
-    val sortBy: SortOption = SortOption.INCREASING,
+    val sortOption: SortOption = SortOption.INCREASING,
 )

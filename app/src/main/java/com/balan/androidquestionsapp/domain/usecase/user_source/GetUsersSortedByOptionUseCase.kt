@@ -4,10 +4,10 @@ import com.balan.androidquestionsapp.domain.models.SortOption
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 
-class SortByDirectionUseCase(
+class GetUsersSortedByOptionUseCase(
     private val userLocalSource: UserLocalSource
 ) {
     fun execute(sortOption: SortOption) : List<User>{
-       return userLocalSource.sortByDirection(sortOption)
+       return userLocalSource.getUsersSortedByOption(sortOption)
     }
 }

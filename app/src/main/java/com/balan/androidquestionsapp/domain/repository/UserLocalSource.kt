@@ -13,6 +13,6 @@ interface UserLocalSource {
     fun create(user: User)
     fun getAll(): List<User>
     fun updateScore(user: User)
-    fun sortByDirection(sortOption: SortOption): List<User>
+    fun getUsersSortedByOption(sortOption: SortOption): List<User>
 
 }

@@ -10,7 +10,7 @@ import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCase
-import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_source.GetUsersSortedByOptionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -28,7 +28,7 @@ class ScoreViewModel @Inject constructor(
     private val deleteResultUseCase: Provider<DeleteResultUseCase>,
     private val getAllUserUseCase: Provider<GetAllUserUseCase>,
     private val getLevelUseCase: Provider<GetLevelUseCase>,
-    private val sortByDirectionUseCase: Provider<SortByDirectionUseCase>
+    private val getUsersSortedByOptionUseCase: Provider<GetUsersSortedByOptionUseCase>
 
 ) : ViewModel() {
     companion object {
@@ -50,7 +50,7 @@ class ScoreViewModel @Inject constructor(
             checkLevel()
             update(getAllUserUseCase.get().execute())
         }
-        sort(SortOption.INCREASING)
+        setSortOption(SortOption.INCREASING)
         triggerLoadingEffect()
     }
 
@@ -78,9 +78,9 @@ class ScoreViewModel @Inject constructor(
         toggleDialogAlert()
     }
 
-    fun sort(sortOption: SortOption) {
+    fun setSortOption(sortOption: SortOption) {
         viewModelScope.launch(Dispatchers.IO) {
-            update(sortByDirectionUseCase.get().execute(sortOption))
+            update(getUsersSortedByOptionUseCase.get().execute(sortOption))
         }
     }
 
@@ -105,7 +105,7 @@ class ScoreViewModel @Inject constructor(
         }
     }
 
-    fun isTestPassed(score: Int?): Color {
+    fun getColorByScore(score: Int?): Color {
         return if (score != null && score >= PASSING_SCORE) TEST_PASSED_GREEN
         else TEST_FAILED_RED
     }
@@ -141,7 +141,7 @@ class ScoreViewModel @Inject constructor(
         }
     }
 
-    fun onActive(sortOption: SortOption) {
-        _state.update { it.copy(sortBy = sortOption) }
+    fun onActiveSortOptionClick(sortOption: SortOption) {
+        _state.update { it.copy(sortOption = sortOption) }
     }
 }

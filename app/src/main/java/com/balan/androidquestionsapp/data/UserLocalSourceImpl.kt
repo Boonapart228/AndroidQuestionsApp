@@ -15,19 +15,19 @@ class UserLocalSourceImpl(
         return userDao.getByEmail(email = email)?.toUser()
     }
 
-    override fun sortByDirection(sortOption: SortOption): List<User> {
+    override fun getUsersSortedByOption(sortOption: SortOption): List<User> {
         return when (sortOption) {
             SortOption.INCREASING -> {
-                userDao.sortByScore(true)
+                userDao.getUsersSortedByScore(true)
                     .map { userDbEntity -> userDbEntity.toUser() }
             }
 
             SortOption.DECREASING -> {
-                userDao.sortByScore(false)
+                userDao.getUsersSortedByScore(false)
                     .map { userDbEntity -> userDbEntity.toUser() }
             }
 
-            SortOption.NAME -> userDao.sortUserByName()
+            SortOption.NAME -> userDao.getUsersSortedByName()
                 .map { userDbEntity -> userDbEntity.toUser() }
         }
     }
