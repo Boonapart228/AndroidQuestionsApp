@@ -8,6 +8,7 @@ import com.balan.androidquestionsapp.data.ResultRepositoryImpl
 import com.balan.androidquestionsapp.data.ScoreRepositoryImpl
 import com.balan.androidquestionsapp.data.TestRepositoryImpl
 import com.balan.androidquestionsapp.data.UserLocalSourceImpl
+import com.balan.androidquestionsapp.data.UserMangerImpl
 import com.balan.androidquestionsapp.data.UserSessionImpl
 import com.balan.androidquestionsapp.data.UserValidatorImpl
 import com.balan.androidquestionsapp.domain.database.AppDataBase
@@ -20,6 +21,7 @@ import com.balan.androidquestionsapp.domain.repository.TestRepository
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 import com.balan.androidquestionsapp.domain.repository.UserValidator
 import com.balan.androidquestionsapp.domain.usecase.auth.AuthenticateAdminUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_manager.RemoveAutoLoginUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
 import com.balan.androidquestionsapp.domain.usecase.auth.SignUpUseCase
 import com.balan.androidquestionsapp.domain.usecase.result.GetQuestionScoreUseCase
@@ -28,6 +30,9 @@ import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionTitleUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.GetQuestionsUseCase
 import com.balan.androidquestionsapp.domain.usecase.test.UpdateScoreUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_manager.GetSaveEmailUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_manager.StoreUserEmailUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetByEmailUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetCurrentUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.SetQuestionLevelUseCase
@@ -36,6 +41,7 @@ import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateUserInfoU
 import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
 import com.balan.androidquestionsapp.domain.usecase.validate.ValidateSignInUseCase
+import com.balan.androidquestionsapp.domain.user.UserManager
 import com.balan.androidquestionsapp.domain.user.UserSession
 import dagger.Module
 import dagger.Provides
@@ -113,6 +119,12 @@ class DataModule {
     @Singleton
     fun provideAssetManager(@ApplicationContext context: Context): AssetManager {
         return AssetManagerImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserManager(@ApplicationContext context: Context): UserManager {
+        return UserMangerImpl(context)
     }
 
     @Provides
@@ -213,5 +225,33 @@ class DataModule {
         userValidator: UserValidator
     ): ValidateSignInUseCase {
         return ValidateSignInUseCase(userValidator)
+    }
+
+    @Provides
+    fun provideRemoveAutoLoginUseCase(
+        userManager: UserManager
+    ): RemoveAutoLoginUseCase {
+        return RemoveAutoLoginUseCase(userManager)
+    }
+
+    @Provides
+    fun provideGetSaveEmailUseCase(
+        userManager: UserManager
+    ): GetSaveEmailUseCase {
+        return GetSaveEmailUseCase(userManager)
+    }
+
+    @Provides
+    fun provideGetByEmail(
+        userLocalSource: UserLocalSource
+    ): GetByEmailUseCase {
+        return GetByEmailUseCase(userLocalSource)
+    }
+
+    @Provides
+    fun provideStoreUserEmailUseCase(
+        userManager: UserManager
+    ): StoreUserEmailUseCase {
+        return StoreUserEmailUseCase(userManager)
     }
 }

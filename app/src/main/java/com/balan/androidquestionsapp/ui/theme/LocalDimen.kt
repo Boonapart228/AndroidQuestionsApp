@@ -87,4 +87,7 @@ data class Dimensions(
     val iconDeleteEndPadding: Dp = 12.dp,
     val textWidthMax: Dp = 300.dp,
     val textQuestionVerticalPadding: Dp = 8.dp,
+    val textStartPadding: Dp = 16.dp,
+    val checkBoxSize : Dp = 18.dp,
+    val checkBoxStartPadding : Dp = 12.dp
 )

@@ -5,6 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.Validation
 import com.balan.androidquestionsapp.domain.usecase.auth.SignInUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_manager.GetSaveEmailUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_manager.StoreUserEmailUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.GetByEmailUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_session.SetUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.validate.ValidateSignInUseCase
 import com.balan.androidquestionsapp.presentation.sign_in.util.mapToSignInResults
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +21,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -24,6 +29,10 @@ import javax.inject.Provider
 class SignInViewModel @Inject constructor(
     private val signInUseCase: Provider<SignInUseCase>,
     private val validateSignInUseCase: Provider<ValidateSignInUseCase>,
+    private val getSaveEmailUseCase: Provider<GetSaveEmailUseCase>,
+    private val getByEmailUseCase: Provider<GetByEmailUseCase>,
+    private val setUserUseCase: Provider<SetUserUseCase>,
+    private val storeUserEmailUseCase: Provider<StoreUserEmailUseCase>
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SignInState> =
@@ -38,6 +47,7 @@ class SignInViewModel @Inject constructor(
 
     init {
         observeFieldsNotEmptyState()
+        autoLogin()
     }
 
     private fun observeFieldsNotEmptyState() {
@@ -85,6 +95,9 @@ class SignInViewModel @Inject constructor(
                 )
             }
             if (signInResult) {
+                if (_state.value.selectedAutoLogin) {
+                    storeUserEmailUseCase.get().execute(email = email)
+                }
                 _event.emit(SignInEvent.NavigationToMain)
             }
         }
@@ -126,5 +139,25 @@ class SignInViewModel @Inject constructor(
             }
         }
         toggleDialogAlert()
+    }
+
+    private fun autoLogin() {
+        viewModelScope.launch {
+            if (getSaveEmailUseCase.get().execute().isNotEmpty()) {
+                withContext(Dispatchers.IO) {
+                    val user = getByEmailUseCase.get().execute(getSaveEmailUseCase.get().execute())
+                    if (user != null) {
+                        setUserUseCase.get().execute(user)
+                    }
+                }
+                _event.emit(SignInEvent.NavigationToMain)
+            }
+        }
+    }
+
+    fun onAutoLoginClick() {
+        _state.update {
+            it.copy(selectedAutoLogin = !_state.value.selectedAutoLogin)
+        }
     }
 }

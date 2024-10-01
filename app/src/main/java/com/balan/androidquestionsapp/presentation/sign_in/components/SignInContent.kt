@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -62,6 +63,7 @@ fun SignInContent(
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
     onExitAppClick: () -> Unit,
+    onAutoLoginClick: () -> Unit,
     isFieldInvalid: (Validation) -> Boolean,
     onConfirmationClick: (DialogAction) -> Unit,
     onShowPasswordClick: () -> Unit,
@@ -117,6 +119,24 @@ fun SignInContent(
                     textError = state.validationPassword,
                     onShowPasswordClick = onShowPasswordClick
                 )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = state.selectedAutoLogin,
+                        onCheckedChange = { onAutoLoginClick() },
+                        modifier = Modifier
+                            .size(LocalDimen.current.checkBoxSize)
+                            .align(Alignment.CenterVertically)
+                            .padding(start = LocalDimen.current.checkBoxStartPadding)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.remember_me),
+                        modifier = Modifier.padding(start = LocalDimen.current.textStartPadding)
+                    )
+                }
                 Spacer(modifier = Modifier.height(LocalDimen.current.spacerHeight32))
                 Button(
                     onClick = {
@@ -195,7 +215,8 @@ fun SignInScreenPreview() {
         onShowPasswordClick = {},
         isFieldInvalid = { false },
         onConfirmationClick = {},
-        onExitAppClick = {})
+        onExitAppClick = {},
+        onAutoLoginClick = {})
 }
 
 @Composable

@@ -9,5 +9,6 @@ data class SignInState(
     val fieldsIsNotEmpty: Boolean = false,
     val validationPassword: Validation = Validation.DEFAULT,
     val validationEmail: Validation = Validation.DEFAULT,
-    val isExitDialogVisible : Boolean = false
+    val isExitDialogVisible: Boolean = false,
+    val selectedAutoLogin: Boolean = false
 )
