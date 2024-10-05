@@ -1,17 +1,19 @@
 package com.balan.androidquestionsapp.presentation.score.components
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.DialogAction
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
-import com.balan.androidquestionsapp.domain.models.SortDirections
+import com.balan.androidquestionsapp.domain.models.SortOption
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.usecase.score.DeleteResultUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.GetLevelUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCase
-import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_source.GetUsersSortedByOptionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -26,11 +28,13 @@ class ScoreViewModel @Inject constructor(
     private val deleteResultUseCase: Provider<DeleteResultUseCase>,
     private val getAllUserUseCase: Provider<GetAllUserUseCase>,
     private val getLevelUseCase: Provider<GetLevelUseCase>,
-    private val sortByDirectionUseCase: Provider<SortByDirectionUseCase>
+    private val getUsersSortedByOptionUseCase: Provider<GetUsersSortedByOptionUseCase>
 
 ) : ViewModel() {
     companion object {
         const val PASSING_SCORE = 7
+        val TEST_PASSED_GREEN: Color = Color(0xBF00FF00)
+        val TEST_FAILED_RED: Color = Color(0xBEFF0000)
     }
 
     private val _state = MutableStateFlow(ScoreState())
@@ -46,6 +50,8 @@ class ScoreViewModel @Inject constructor(
             checkLevel()
             update(getAllUserUseCase.get().execute())
         }
+        setSortOption(SortOption.INCREASING)
+        triggerLoadingEffect()
     }
 
     private fun checkLevel() {
@@ -58,7 +64,9 @@ class ScoreViewModel @Inject constructor(
 
     private fun update(userList: List<User>) {
         _state.update {
-            it.copy(users = userList)
+            it.copy(
+                users = userList
+            )
         }
     }
 
@@ -70,9 +78,9 @@ class ScoreViewModel @Inject constructor(
         toggleDialogAlert()
     }
 
-    fun sort(sortDirections: SortDirections) {
+    fun setSortOption(sortOption: SortOption) {
         viewModelScope.launch(Dispatchers.IO) {
-            update(sortByDirectionUseCase.get().execute(sortDirections))
+            update(getUsersSortedByOptionUseCase.get().execute(sortOption))
         }
     }
 
@@ -97,7 +105,10 @@ class ScoreViewModel @Inject constructor(
         }
     }
 
-    fun isTestPassed(score: Int?) = score != null && score >= PASSING_SCORE
+    fun getColorByScore(score: Int?): Color {
+        return if (score != null && score >= PASSING_SCORE) TEST_PASSED_GREEN
+        else TEST_FAILED_RED
+    }
 
     private fun toggleDialogAlert() {
         _state.update {
@@ -119,5 +130,18 @@ class ScoreViewModel @Inject constructor(
                 }
             }
         toggleDialogAlert()
+    }
+
+    private fun triggerLoadingEffect() {
+        viewModelScope.launch {
+            delay(2000)
+            _state.update {
+                it.copy(isLoading = true)
+            }
+        }
+    }
+
+    fun onActiveSortOptionClick(sortOption: SortOption) {
+        _state.update { it.copy(sortOption = sortOption) }
     }
 }
