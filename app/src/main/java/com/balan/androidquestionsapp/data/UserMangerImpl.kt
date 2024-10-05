@@ -7,7 +7,6 @@ import androidx.datastore.preferences.preferencesKey
 import androidx.datastore.preferences.remove
 import com.balan.androidquestionsapp.domain.user.UserManager
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class UserMangerImpl(context: Context) : UserManager {
@@ -23,17 +22,17 @@ class UserMangerImpl(context: Context) : UserManager {
         }
     }
 
-    override suspend fun getSaveEmail(): String {
-        return userEmailFlow.first()
+    override suspend fun getSaveEmail(): Flow<String> {
+        return dataStore.data.map { it[USER_EMAIL_KEY] ?: "" }
     }
 
     override suspend fun removeAutologin() {
-            dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences.remove(USER_EMAIL_KEY)
         }
     }
 
-    private val userEmailFlow: Flow<String> = dataStore.data.map {
-        it[USER_EMAIL_KEY] ?: ""
-    }
+//    private val userEmailFlow: Flow<String> = dataStore.data.map {
+//        it[USER_EMAIL_KEY] ?: ""
+//    }
 }

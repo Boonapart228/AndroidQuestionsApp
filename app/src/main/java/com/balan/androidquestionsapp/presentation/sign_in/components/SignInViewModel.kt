@@ -13,15 +13,16 @@ import com.balan.androidquestionsapp.domain.usecase.validate.ValidateSignInUseCa
 import com.balan.androidquestionsapp.presentation.sign_in.util.mapToSignInResults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -141,16 +142,16 @@ class SignInViewModel @Inject constructor(
         toggleDialogAlert()
     }
 
+    private suspend fun getIsAutoLoginAvailable(email: Flow<String>) = email.first().isNotEmpty()
     private fun autoLogin() {
         viewModelScope.launch {
-            if (getSaveEmailUseCase.get().execute().isNotEmpty()) {
-                withContext(Dispatchers.IO) {
-                    val user = getByEmailUseCase.get().execute(getSaveEmailUseCase.get().execute())
-                    if (user != null) {
-                        setUserUseCase.get().execute(user)
-                    }
+            if (getIsAutoLoginAvailable(getSaveEmailUseCase.get().execute())) {
+                val user = getByEmailUseCase.get()
+                    .execute(getSaveEmailUseCase.get().execute().first())
+                if (user != null) {
+                    setUserUseCase.get().execute(user)
+                    _event.emit(SignInEvent.NavigationToMain)
                 }
-                _event.emit(SignInEvent.NavigationToMain)
             }
         }
     }

@@ -70,7 +70,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onSignInClick() {
+    fun onLogOutClick() {
         viewModelScope.launch {
             removeAutoLoginUseCase.get().execute()
             _event.emit(MainNavigationEvent.NavigationToSignIn)

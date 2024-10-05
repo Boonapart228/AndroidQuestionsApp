@@ -122,7 +122,6 @@ class DataModule {
     }
 
     @Provides
-    @Singleton
     fun provideUserManager(@ApplicationContext context: Context): UserManager {
         return UserMangerImpl(context)
     }
