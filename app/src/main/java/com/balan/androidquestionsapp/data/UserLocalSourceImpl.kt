@@ -3,7 +3,7 @@ package com.balan.androidquestionsapp.data
 import com.balan.androidquestionsapp.domain.database.dao.UserDao
 import com.balan.androidquestionsapp.domain.database.toEntity
 import com.balan.androidquestionsapp.domain.database.toUser
-import com.balan.androidquestionsapp.domain.models.SortDirections
+import com.balan.androidquestionsapp.domain.models.SortOption
 import com.balan.androidquestionsapp.domain.models.User
 import com.balan.androidquestionsapp.domain.repository.UserLocalSource
 
@@ -15,19 +15,19 @@ class UserLocalSourceImpl(
         return userDao.getByEmail(email = email)?.toUser()
     }
 
-    override fun sortByDirection(sortDirections: SortDirections): List<User> {
-        return when (sortDirections) {
-            SortDirections.INCREASING -> {
-                userDao.sortByScore(true)
+    override fun getUsersSortedByOption(sortOption: SortOption): List<User> {
+        return when (sortOption) {
+            SortOption.INCREASING -> {
+                userDao.getUsersSortedByScore(true)
                     .map { userDbEntity -> userDbEntity.toUser() }
             }
 
-            SortDirections.DECREASING -> {
-                userDao.sortByScore(false)
+            SortOption.DECREASING -> {
+                userDao.getUsersSortedByScore(false)
                     .map { userDbEntity -> userDbEntity.toUser() }
             }
 
-            SortDirections.NAME -> userDao.sortUserByName()
+            SortOption.NAME -> userDao.getUsersSortedByName()
                 .map { userDbEntity -> userDbEntity.toUser() }
         }
     }

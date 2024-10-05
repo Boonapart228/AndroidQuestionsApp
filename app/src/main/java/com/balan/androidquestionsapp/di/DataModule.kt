@@ -39,7 +39,7 @@ import com.balan.androidquestionsapp.domain.usecase.user_session.SetQuestionLeve
 import com.balan.androidquestionsapp.domain.usecase.user_session.SetUserUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.UpdateUserInfoUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_source.GetAllUserUseCase
-import com.balan.androidquestionsapp.domain.usecase.user_source.SortByDirectionUseCase
+import com.balan.androidquestionsapp.domain.usecase.user_source.GetUsersSortedByOptionUseCase
 import com.balan.androidquestionsapp.domain.usecase.validate.ValidateSignInUseCase
 import com.balan.androidquestionsapp.domain.user.UserManager
 import com.balan.androidquestionsapp.domain.user.UserSession
@@ -186,8 +186,8 @@ class DataModule {
     }
 
     @Provides
-    fun provideSortByDirectionUseCase(userLocalSource: UserLocalSource): SortByDirectionUseCase {
-        return SortByDirectionUseCase(userLocalSource)
+    fun provideGetUsersSortedByOptionUseCase(userLocalSource: UserLocalSource): GetUsersSortedByOptionUseCase {
+        return GetUsersSortedByOptionUseCase(userLocalSource)
     }
 
     @Provides

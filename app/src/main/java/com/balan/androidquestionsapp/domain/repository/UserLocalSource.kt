@@ -1,6 +1,6 @@
 package com.balan.androidquestionsapp.domain.repository
 
-import com.balan.androidquestionsapp.domain.models.SortDirections
+import com.balan.androidquestionsapp.domain.models.SortOption
 import com.balan.androidquestionsapp.domain.models.User
 
 
@@ -13,6 +13,6 @@ interface UserLocalSource {
     fun create(user: User)
     fun getAll(): List<User>
     fun updateScore(user: User)
-    fun sortByDirection(sortDirections: SortDirections): List<User>
+    fun getUsersSortedByOption(sortOption: SortOption): List<User>
 
 }

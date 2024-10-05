@@ -7,9 +7,8 @@ val LocalProperty = compositionLocalOf {
 }
 
 data class Property(
-    val weight1: Float = 1f,
-    val weight05: Float = 0.5f,
-    val initialValueAnimation : Float = -10f,
-    val targetValueAnimation : Float = 10f,
-    val durationMillisAnimation : Int = 1400
+    val initialValueAnimation: Float = -10f,
+    val targetValueAnimation: Float = 10f,
+    val durationMillisAnimation: Int = 1400,
+    val largeContentWeight: Float = 3f,
 )
