@@ -90,4 +90,19 @@ data class Dimensions(
     val textStartPadding: Dp = 16.dp,
     val checkBoxSize : Dp = 18.dp,
     val checkBoxStartPadding : Dp = 12.dp
+    val shimmerEffectShape: Dp = 12.dp,
+    val cardElevation: Dp = 6.dp,
+    val cardShape: Dp = 12.dp,
+    val cardHorizontalPadding: Dp = 8.dp,
+    val cardVerticalPadding: Dp = 4.dp,
+    val rowPadding: Dp = 8.dp,
+    val verticalSpaced: Dp = 4.dp,
+    val shimmerShortWidth: Dp = 100.dp,
+    val shimmerHeight: Dp = 20.dp,
+    val shimmerHorizontalPadding: Dp = 8.dp,
+    val shimmerVerticalPadding: Dp = 4.dp,
+    val shimmerIconSize: Dp = 24.dp,
+    val shimmerClip: Dp = 50.dp,
+    val textHorizontalPadding : Dp = 8.dp,
+    val buttonSelectedSortType : Dp = 18.dp
 )

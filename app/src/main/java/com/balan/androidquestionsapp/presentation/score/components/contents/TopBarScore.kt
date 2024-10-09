@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -23,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
-import com.balan.androidquestionsapp.domain.models.SortDirections
+import com.balan.androidquestionsapp.domain.models.SortOption
 import com.balan.androidquestionsapp.presentation.score.components.ScoreState
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
@@ -33,7 +35,8 @@ fun TopBarScore(
     state: ScoreState,
     onClick: () -> Unit,
     onToggleMenuClick: () -> Unit,
-    onSelectOptionClick: (SortDirections) -> Unit
+    onSelectOptionClick: (SortOption) -> Unit,
+    onActiveSortOptionClick: (SortOption) -> Unit
 ) {
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
@@ -67,15 +70,26 @@ fun TopBarScore(
                 expanded = state.menuExpanded,
                 onDismissRequest = onToggleMenuClick
             ) {
-                SortDirections.entries.forEach { item ->
+                SortOption.entries.forEach { item ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.clickable {
+                            onActiveSortOptionClick(item)
                             onSelectOptionClick(item)
                             onToggleMenuClick()
                         }
                     ) {
+                        if (state.sortOption == item) {
+                            Icon(
+                                imageVector = Icons.Default.Check, contentDescription = null,
+                                modifier = Modifier
+                                    .padding(start = LocalDimen.current.iconStartPadding)
+                                    .size(
+                                        LocalDimen.current.buttonSelectedSortType
+                                    )
+                            )
+                        }
                         Icon(
                             imageVector = item.icon,
                             contentDescription = null,
@@ -84,6 +98,7 @@ fun TopBarScore(
                         DropdownMenuItem(
                             text = { Text(text = stringResource(id = item.textId)) },
                             onClick = {
+                                onActiveSortOptionClick(item)
                                 onSelectOptionClick(item)
                                 onToggleMenuClick()
                             },
@@ -105,5 +120,5 @@ fun PreviewTopBarScore() {
     TopBarScore(
         onSelectOptionClick = { },
         state = ScoreState(),
-        onClick = {}, onToggleMenuClick = { })
+        onClick = {}, onToggleMenuClick = { }, onActiveSortOptionClick = {})
 }
