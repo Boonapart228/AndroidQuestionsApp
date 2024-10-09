@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -43,7 +42,6 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.Validation
-import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Preview(
@@ -82,10 +80,9 @@ fun AdminContent(
     }
     Scaffold(
         topBar = {
-            TopBar(
+            TopBarAdmin(
                 onClick = onMainClick,
-                text = stringResource(id = R.string.results_panel),
-                imageVector = Icons.Filled.ArrowBack
+                text = stringResource(id = R.string.results_panel)
             )
         }
     ) {

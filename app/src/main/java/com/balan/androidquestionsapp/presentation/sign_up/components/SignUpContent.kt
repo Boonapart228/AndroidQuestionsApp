@@ -16,7 +16,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
@@ -46,7 +45,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.Validation
-import com.balan.androidquestionsapp.presentation.topbar.TopBar
+import com.balan.androidquestionsapp.presentation.main_screen.components.TopBarMain
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Preview(
@@ -89,10 +88,9 @@ fun SignUpContent(
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_registration))
     Scaffold(
         topBar = {
-            TopBar(
+            TopBarMain(
                 onClick = onSignInClick,
-                text = stringResource(id = R.string.registration),
-                imageVector = Icons.Filled.ArrowBack
+                text = stringResource(id = R.string.registration)
             )
         }
     ) {
