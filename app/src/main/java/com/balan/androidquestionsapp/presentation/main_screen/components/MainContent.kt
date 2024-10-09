@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -28,7 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.domain.models.TestType
-import com.balan.androidquestionsapp.presentation.topbar.TopBar
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @Composable
@@ -41,10 +39,9 @@ fun MainContent(
     BackHandler { return@BackHandler }
     Scaffold(
         topBar = {
-            TopBar(
+            TopBarMain(
                 onClick = onLogOutClick,
-                text = stringResource(id = R.string.test_selection),
-                imageVector = Icons.Filled.ArrowBack
+                text = stringResource(id = R.string.test_selection)
             )
         }
     ) {

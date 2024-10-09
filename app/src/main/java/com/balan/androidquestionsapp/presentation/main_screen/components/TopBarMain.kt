@@ -1,8 +1,6 @@
-package com.balan.androidquestionsapp.presentation.topbar
+package com.balan.androidquestionsapp.presentation.main_screen.components
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,15 +11,16 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.balan.androidquestionsapp.R
 import com.balan.androidquestionsapp.ui.theme.LocalDimen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(
+fun TopBarMain(
     onClick: () -> Unit,
     text: String,
-    imageVector: ImageVector,
 ) {
     TopAppBar(
         title = {
@@ -34,11 +33,14 @@ fun TopBar(
         navigationIcon = {
             IconButton(
                 onClick = onClick,
-                modifier = Modifier.padding(start = LocalDimen.current.iconStartPadding, end = LocalDimen.current.iconEndPadding)
+                modifier = Modifier.padding(
+                    start = LocalDimen.current.iconStartPadding,
+                    end = LocalDimen.current.iconEndPadding
+                )
             ) {
                 Icon(
-                    imageVector = imageVector,
-                    contentDescription = null,
+                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_logout_24),
+                    contentDescription = null
                 )
             }
         },
@@ -56,5 +58,5 @@ fun TopBar(
 )
 @Composable
 fun TopBarPreview() {
-    TopBar(onClick = {}, imageVector = Icons.Filled.ArrowBack, text = "Топ")
+    TopBarMain(onClick = {}, text = "Топ")
 }
