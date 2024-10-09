@@ -4,6 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserManager {
     suspend fun storeUserEmail(email: String)
-   suspend fun getSaveEmail() : Flow<String>
-   suspend fun removeAutologin()
+    suspend fun getSaveEmail(): Flow<String>
+    suspend fun removeAutologin()
 }

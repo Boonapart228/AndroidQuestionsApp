@@ -32,7 +32,4 @@ class UserMangerImpl(context: Context) : UserManager {
         }
     }
 
-//    private val userEmailFlow: Flow<String> = dataStore.data.map {
-//        it[USER_EMAIL_KEY] ?: ""
-//    }
 }
