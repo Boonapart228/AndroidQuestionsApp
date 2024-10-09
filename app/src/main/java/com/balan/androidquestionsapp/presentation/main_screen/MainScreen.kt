@@ -27,7 +27,7 @@ fun MainScreen(
     }
     MainContent(
         state = state,
-        onSignInClick = viewModel::onSignInClick,
+        onLogOutClick = viewModel::onLogOutClick,
         onTestClick = viewModel::onTestClick,
         onTestDoubleClick = viewModel::onTestDoubleClick
     )

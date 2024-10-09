@@ -53,6 +53,8 @@ android {
 }
 
 dependencies {
+    //Preferences DataStore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0-alpha01")
     //Animation
     implementation("com.airbnb.android:lottie-compose:6.0.0")
 

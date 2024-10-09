@@ -34,7 +34,7 @@ import com.balan.androidquestionsapp.ui.theme.LocalDimen
 @Composable
 fun MainContent(
     state: MainState,
-    onSignInClick: () -> Unit,
+    onLogOutClick: () -> Unit,
     onTestClick: (TestType) -> Unit,
     onTestDoubleClick: (TestType) -> Unit
 ) {
@@ -42,7 +42,7 @@ fun MainContent(
     Scaffold(
         topBar = {
             TopBar(
-                onClick = onSignInClick,
+                onClick = onLogOutClick,
                 text = stringResource(id = R.string.test_selection),
                 imageVector = Icons.Filled.ArrowBack
             )
@@ -114,6 +114,6 @@ fun MainContentPreview() {
         state = MainState(
             mainButtons = listOf(TestType.SENIOR, TestType.JUNIOR)
         ),
-        onSignInClick = {}, onTestClick = { },
+        onLogOutClick = {}, onTestClick = { },
     ) { }
 }

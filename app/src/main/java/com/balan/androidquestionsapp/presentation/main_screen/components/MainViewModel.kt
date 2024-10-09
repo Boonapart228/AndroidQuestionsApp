@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.balan.androidquestionsapp.domain.models.QuestionLevel
 import com.balan.androidquestionsapp.domain.models.TestType
+import com.balan.androidquestionsapp.domain.usecase.user_manager.RemoveAutoLoginUseCase
 import com.balan.androidquestionsapp.domain.usecase.user_session.SetQuestionLevelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +17,8 @@ import javax.inject.Provider
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userSetQuestionLevelUseCase: Provider<SetQuestionLevelUseCase>
+    private val userSetQuestionLevelUseCase: Provider<SetQuestionLevelUseCase>,
+    private val removeAutoLoginUseCase: Provider<RemoveAutoLoginUseCase>
 ) : ViewModel() {
     private val _event = MutableSharedFlow<MainNavigationEvent>()
 
@@ -68,12 +70,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onSignInClick() {
+    fun onLogOutClick() {
         viewModelScope.launch {
+            removeAutoLoginUseCase.get().execute()
             _event.emit(MainNavigationEvent.NavigationToSignIn)
         }
     }
-
 
     fun onTestClick(type: TestType) {
         when (type) {

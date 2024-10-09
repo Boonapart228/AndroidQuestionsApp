@@ -53,6 +53,7 @@ fun SignInScreen(
         onShowPasswordClick = viewModel::onShowPasswordClick,
         isFieldInvalid = viewModel::isErrorValidation,
         onExitAppClick = viewModel::onExitAppClick,
-        onConfirmationClick = viewModel::handleDialogAction
+        onConfirmationClick = viewModel::handleDialogAction,
+        onAutoLoginClick = viewModel::onAutoLoginClick
     )
 }
