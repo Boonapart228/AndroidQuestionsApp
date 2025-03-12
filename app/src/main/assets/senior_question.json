@@ -1,0 +1,190 @@
+[
+  {
+    "title": "Маршрут визначається за допомогою даних типу ___ .",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "@Composable function",
+        "isTrue": false
+      },
+      {
+        "title": "NavHost.Route",
+        "isTrue": false
+      },
+      {
+        "title": "String",
+        "isTrue": true
+      },
+      {
+        "title": "NavRoute",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "З NavHost ви повинні явно вказати початковий екран.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Так",
+        "isTrue": false
+      },
+      {
+        "title": "Ні",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "Вважається найкращою практикою не передавати NavHostController до окремих композицій.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Так",
+        "isTrue": true
+      },
+      {
+        "title": "Ні",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "___ є композицією, яка керує тим, який екран відображається на основі заданого маршруту.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "NavController",
+        "isTrue": false
+      },
+      {
+        "title": "NavHostController",
+        "isTrue": false
+      },
+      {
+        "title": "NavHost",
+        "isTrue": true
+      },
+      {
+        "title": "ComposableNavigator",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Функція composable() , викликана в NavHost, приймає які два параметри?",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Вміст призначення та маршрут",
+        "isTrue": false
+      },
+      {
+        "title": "Маршрут та вміст композиції",
+        "isTrue": true
+      },
+      {
+        "title": "Шлях та композиція",
+        "isTrue": false
+      },
+      {
+        "title": "Композиція та намір",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Ви можете змінити поточно відображений маршрут за допомогою методу ___ .",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "update()",
+        "isTrue": false
+      },
+      {
+        "title": "composable()",
+        "isTrue": false
+      },
+      {
+        "title": "transition()",
+        "isTrue": false
+      },
+      {
+        "title": "navigate()",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "title": "Метод ___ видаляє один або кілька екранів зі стеку назад.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "popToStartDestination()",
+        "isTrue": false
+      },
+      {
+        "title": "popBackStack()",
+        "isTrue": true
+      },
+      {
+        "title": "popComposable()",
+        "isTrue": false
+      },
+      {
+        "title": "popToBackStack()",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "У багатоекранному додатку перехід на новий екран розміщує його внизу стеку назад.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Так",
+        "isTrue": true
+      },
+      {
+        "title": "Ні",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Intent ___ містять додаткові дані, передані в Intent.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "arguments",
+        "isTrue": false
+      },
+      {
+        "title": "extras",
+        "isTrue": true
+      },
+      {
+        "title": "parameters",
+        "isTrue": false
+      },
+      {
+        "title": "properties",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "StateFlow - це потік даних, який видає поточні та нові оновлення стану.",
+    "type": "radioButtons",
+    "answers": [
+      {
+        "title": "Так",
+        "isTrue": true
+      },
+      {
+        "title": "Ні",
+        "isTrue": false
+      }
+    ]
+  }
+]
